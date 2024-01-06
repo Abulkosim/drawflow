@@ -14,9 +14,7 @@
 
     <Modal :showModal="showModal" @close="closeConfirmationModal" @confirm="confirmDeletion" />
 
-    <div v-if="showToast" class="toast" :class="{ success: isSuccessful, failed: !isSuccessful }">
-      {{ toastMessage }}
-    </div>
+    <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
   </div>
 </template>
 
@@ -27,12 +25,14 @@ import './assets/main.css'
 import Node from './components/Node.vue'
 import Menu from './components/Menu.vue'
 import Modal from './components/Modal.vue'
+import Toast from './components/Toast.vue'
 
 export default {
   name: 'App',
   components: {
     Menu,
-    Modal
+    Modal,
+    Toast
   },
   data() {
     return {
@@ -176,13 +176,13 @@ export default {
     },
 
     showSuccessToast() {
-      this.toastMessage = 'Successfully deleted!';
+      this.toastMessage = 'Successfully done!';
       this.isSuccessful = true;
       this.showToast = true;
 
       setTimeout(() => {
         this.showToast = false;
-      }, 1000);
+      }, 2000);
     },
 
     showFailedToast(error) {
@@ -192,7 +192,7 @@ export default {
 
       setTimeout(() => {
         this.showToast = false;
-      }, 1000);
+      }, 2000);
     },
   }
 }
@@ -255,26 +255,5 @@ export default {
   margin: 2px;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.toast {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: white;
-  font-size: 18px;
-  background-color: grey;
-  z-index: 1000;
-  border-radius: 20px 0px 20px 20px;
-}
-
-.toast.success {
-  background-color: lightseagreen;
-}
-
-.toast.failed {
-  background-color: rgba(255, 0, 0, 0.432);
 }
 </style>
