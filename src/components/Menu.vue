@@ -44,7 +44,7 @@ export default {
 }
 
 .context-menu ul li {
-  padding: 8px 15px;
+  padding: 8px 16px;
   cursor: pointer;
 }
 
