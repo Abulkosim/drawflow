@@ -3,7 +3,7 @@
     <ul>
       <li @click="addNewNode">Add Node</li>
       <li @click="editNode">Edit</li>
-      <li @click="openConfirmationModal">Delete</li>
+      <li @click="deleteNode">Delete</li>
     </ul>
   </div>
 </template>
@@ -13,13 +13,16 @@ export default {
   data() {
     return {}
   },
-  mounted() {
-    console.log('hey')
-    console.log(this.props.showMenu)
-  },
+  mounted() { },
   methods: {
-    sendToParent() {
-      this.$emit('customEvent', 'Hello from child component!');
+    addNewNode() {
+      this.$emit('addNewNode');
+    },
+    editNode() {
+      this.$emit('editNode');
+    },
+    deleteNode() {
+      this.$emit('deleteNode');
     }
   }
 }
@@ -31,7 +34,7 @@ export default {
   border: 2px solid #ccc;
   border-radius: 10px;
   background-color: #fff;
-  z-index: 1000;
+  z-index: 100;
 }
 
 .context-menu ul {
