@@ -52,7 +52,7 @@ export default {
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  z-index: 20;
+  z-index: 10;
   align-items: center;
   border-radius: 0.75rem;
   background-color: #ffffff;
@@ -85,7 +85,7 @@ export default {
 }
 
 .close-button:hover {
-  color: #111827;
+  color: #2c3e50;
   background-color: #E5E7EB;
 }
 

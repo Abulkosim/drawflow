@@ -15,6 +15,10 @@
     <Modal :showModal="showModal" @close="closeConfirmationModal" @confirm="confirmDeletion" />
 
     <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
+
+    <div v-if="showInputModal" class="overlay"></div>
+
+    <Input v-if="showInputModal" :showModal="showInputModal" @close="showInputModal = false" />
   </div>
 </template>
 
@@ -26,19 +30,22 @@ import Node from './components/Node.vue'
 import Menu from './components/Menu.vue'
 import Modal from './components/Modal.vue'
 import Toast from './components/Toast.vue'
+import Input from './components/Input.vue'
 
 export default {
   name: 'App',
   components: {
     Menu,
     Modal,
-    Toast
+    Toast,
+    Input
   },
   data() {
     return {
       editor: null,
       showContextMenu: false,
       showModal: false,
+      showInputModal: false,
       contextMenuPosition: { x: 0, y: 0 },
       selectedNodeId: null,
       selectedNode: null,
@@ -58,23 +65,9 @@ export default {
     const node1Id = this.editor.addNode('Node 1', 0, 1, 50, 200, 'nodeOne', data, 'Node', 'vue');
     const node2Id = this.editor.addNode('Node 2', 1, 1, 350, 100, 'nodeTwo', data, 'Node', 'vue');
     const node3Id = this.editor.addNode('Node 3', 1, 1, 350, 300, 'nodeThree', data, 'Node', 'vue');
-    const node4Id = this.editor.addNode('Node 4', 1, 1, 550, 400, 'nodeFour', data, 'Node', 'vue');
-    const node5Id = this.editor.addNode('Node 5', 1, 1, 750, 500, 'nodeFive', data, 'Node', 'vue');
-    const node6Id = this.editor.addNode('Node 6', 1, 1, 950, 400, 'nodeFive', data, 'Node', 'vue');
-    const node7Id = this.editor.addNode('Node 7', 1, 1, 950, 200, 'nodeFive', data, 'Node', 'vue');
-    const node8Id = this.editor.addNode('Node 8', 1, 1, 1000, 300, 'nodeFive', data, 'Node', 'vue');
-    const node9Id = this.editor.addNode('Node 9', 1, 1, 600, 50, 'nodeFive', data, 'Node', 'vue');
-    const node10Id = this.editor.addNode('Node 4', 1, 1, 600, 200, 'nodeThree', data, 'Node', 'vue');
 
     this.editor.addConnection(node1Id, node2Id, 'output_1', 'input_1');
     this.editor.addConnection(node1Id, node3Id, 'output_1', 'input_1');
-    this.editor.addConnection(node2Id, node9Id, 'output_1', 'input_1');
-    this.editor.addConnection(node3Id, node4Id, 'output_1', 'input_1');
-    this.editor.addConnection(node4Id, node5Id, 'output_1', 'input_1');
-    this.editor.addConnection(node4Id, node6Id, 'output_1', 'input_1');
-    this.editor.addConnection(node4Id, node7Id, 'output_1', 'input_1');
-    this.editor.addConnection(node4Id, node8Id, 'output_1', 'input_1');
-    this.editor.addConnection(node3Id, node10Id, 'output_1', 'input_1');
 
     id.addEventListener('contextmenu', this.handleRightClick)
 
@@ -103,6 +96,7 @@ export default {
 
     editNode() {
       this.showContextMenu = false;
+      this.showInputModal = true;
     },
 
     closeModal() {
@@ -121,6 +115,7 @@ export default {
 
     addNewNode() {
       this.showContextMenu = false;
+      this.showInputModal = true
       const data = {};
       const positionX = this.contextMenuPosition.x + 200;
       const positionY = this.contextMenuPosition.y;
@@ -216,8 +211,9 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 2;
   background-color: #6B7280;
-  opacity: 0.7;
+  opacity: 0.5;
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
@@ -238,7 +234,7 @@ export default {
   right: 0;
   bottom: 0;
   font-weight: bold;
-  z-index: 0;
+  z-index: 1;
 }
 
 #buttons button {

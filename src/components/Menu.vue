@@ -34,7 +34,7 @@ export default {
   border: 2px solid #ccc;
   border-radius: 10px;
   background-color: #fff;
-  z-index: 100;
+  z-index: 10;
 }
 
 .context-menu ul {
