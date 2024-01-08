@@ -18,7 +18,7 @@
 
     <div v-if="showInputModal" class="overlay"></div>
 
-    <Input v-if="showInputModal" :showModal="showInputModal" @close="showInputModal = false" />
+    <Input v-if="showInputModal" :showModal="showInputModal" :adding="adding" @close="close" />
   </div>
 </template>
 
@@ -51,7 +51,8 @@ export default {
       selectedNode: null,
       showToast: false,
       isSuccessful: false,
-      toastMessage: ''
+      toastMessage: '',
+      adding: true
     }
   },
   mounted() {
@@ -96,6 +97,7 @@ export default {
 
     editNode() {
       this.showContextMenu = false;
+      this.adding = false;
       this.showInputModal = true;
     },
 
@@ -115,7 +117,8 @@ export default {
 
     addNewNode() {
       this.showContextMenu = false;
-      this.showInputModal = true
+      this.adding = true;
+      this.showInputModal = true;
       const data = {};
       const positionX = this.contextMenuPosition.x + 200;
       const positionY = this.contextMenuPosition.y;
@@ -189,6 +192,10 @@ export default {
         this.showToast = false;
       }, 2000);
     },
+
+    close() {
+      this.showInputModal = false;
+    }
   }
 }
 </script>

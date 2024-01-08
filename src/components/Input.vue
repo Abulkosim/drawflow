@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-heading">
-          Bot Stages
+          {{ heading }}
         </h3>
         <button @click="close" type="button" class="modal-close" data-modal-toggle="crud-modal">
           <svg class="svg-close" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -14,31 +14,38 @@
       </div>
       <form class="form">
         <div class="form-content">
-          <div class="input-container">
+          <div>
             <label for="alias" class="label">Alias</label>
             <input type="text" name="alias" id="alias" class="input" placeholder="stage 2" required>
           </div>
-          <div class="input-container">
+          <div>
             <label for="order" class="label">Order</label>
             <input type="number" name="order" id="order" class="input" placeholder="20" required>
           </div>
-          <div class="input-container">
+          <div>
+            <label for="action" class="label">Action</label>
+            <select id="action" class="input">
+              <option selected>STAGE</option>
+              <option value="url">URL</option>
+            </select>
+          </div>
+          <div>
             <label for="type" class="label">Button Type</label>
             <select id="type" class="input">
               <option selected>REPLY</option>
-              <option value="first">First</option>
-              <option value="second">Second</option>
-              <option value="third">Third</option>
-              <option value="fourth">Fourth</option>
+              <option value="first">FIRST</option>
+              <option value="second">SECOND</option>
+              <option value="third">THIRD</option>
+              <option value="fourth">FOURTH</option>
             </select>
           </div>
-          <div class="input-container">
+          <div>
             <label for="condition" class="label">Condition</label>
             <textarea id="condition" rows="4" class="textarea" placeholder="Write the condition here"></textarea>
           </div>
         </div>
         <button @click="close" type="submit" class="submit-button">
-          Submit
+          Save
         </button>
       </form>
     </div>
@@ -46,21 +53,28 @@
 </template>
 <script>
 export default {
-  props: ['showInputModal'],
+  props: ['showInputModal', 'adding'],
   data() {
-    return {}
+    return {
+      heading: 'Add stage',
+    }
   },
   mounted() {
     document.querySelectorAll('input[required]').forEach(function (input) {
       var label = document.querySelector('label[for="' + input.id + '"]');
       if (label) {
-        label.innerHTML += ' <span class="required-star">*</span>';
+        label.innerHTML += '<span class="required-star">*</span>';
       }
     });
+    if (this.adding) {
+      this.heading = 'Add stage'
+    } else {
+      this.heading = 'Edit stage'
+    }
   },
   methods: {
     close() {
-      this.$emit('close');
+      this.$emit('close')
     }
   }
 }
@@ -132,6 +146,8 @@ export default {
 
 .form {
   padding: 1rem;
+  max-height: calc(100vh - 100px);
+  overflow-y: scroll;
 
   @media (min-width: 768px) {
     padding: 1.25rem;
@@ -139,10 +155,14 @@ export default {
 }
 
 .form-content {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 1rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+
+select {
+  color: #2c3e50;
 }
 
 .label {
@@ -206,10 +226,6 @@ export default {
 
 .submit-button:active {
   background-color: #3f5a77;
-}
-
-.input-container {
-  grid-column: span 2 / span 2;
 }
 
 .svg-close {
