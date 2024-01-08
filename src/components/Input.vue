@@ -42,47 +42,49 @@
             <label for="url" class="label">Callback URL</label>
             <select id="url" class="input">
               <option value="first"></option>
-              <option value="first">FIRST</option>
-              <option value="second">SECOND</option>
-              <option value="third">THIRD</option>
-              <option value="fourth">FOURTH</option>
             </select>
           </div>
           <div class="state" v-if="selected == 'STAGE'">
             <div class="state-type">
               <label for="state-type" class="label">State type</label>
-              <select id="state-type" class="input">
+              <select id="state-type" class="input" v-model="stateType">
                 <option value="" selected></option>
-                <option value="next">next.</option>
-                <option value="url">url.</option>
+                <option value="next.">next.</option>
+                <option value="url.">url.</option>
                 <option value="other">other</option>
               </select>
             </div>
             <div class="state-string">
               <label for="state-string" class="label">State string</label>
-              <input type="text" name="state-string" id="state-string" class="input" placeholder="stage 2">
+              <input type="text" name="state-string" id="state-string" class="input" placeholder="stage 2"
+                v-model="stateString">
+            </div>
+          </div>
+
+          <div class="condition" v-if="selected == 'STAGE'">
+            <label for="condition" class="label">Condition</label>
+            <CodeEditor value="print('Hello World')" width="100%" :wrap="true" :languages="[['python', 'Python']]" />
+          </div>
+
+          <div class="dist" v-if="selected == 'STAGE'">
+            <div>
+              <label for="btn-size" class="label">btn_size</label>
+              <input type="number" name="btn-size" id="btn-size" class="input" placeholder="3">
+            </div>
+
+            <div>
+              <label for="cond-type" class="label">Condition Type</label>
+              <select id="cond-type" class="input">
+                <option value="" selected></option>
+                <option value="update">update</option>
+                <option value="input">input</option>
+              </select>
             </div>
           </div>
 
           <div v-if="selected == 'STAGE'">
-            <label for="btn-size" class="label">btn_size</label>
-            <input type="number" name="btn-size" id="btn-size" class="input" placeholder="3">
-          </div>
-          <div v-if="selected == 'STAGE'">
-            <label for="condition" class="label">Condition</label>
-            <textarea id="condition" rows="4" class="textarea" placeholder="Write the condition here"></textarea>
-          </div>
-          <div v-if="selected == 'STAGE'">
-            <label for="cond-type" class="label">Condition Type</label>
-            <select id="cond-type" class="input">
-              <option value="" selected></option>
-              <option value="update">update</option>
-              <option value="input">input</option>
-            </select>
-          </div>
-          <div v-if="selected == 'STAGE'">
             <label for="user" class="label">User State</label>
-            <input type="text" name="user" id="user" class="input" placeholder="">
+            <input type="text" name="user" id="user" class="input" :value="userState">
           </div>
         </div>
       </form>
@@ -95,12 +97,25 @@
   </div>
 </template>
 <script>
+import hljs from 'highlight.js';
+import CodeEditor from "simple-code-editor";
+
 export default {
+  components: {
+    CodeEditor,
+  },
   props: ['showInputModal', 'adding'],
   data() {
     return {
       heading: 'Add stage',
-      selected: 'STAGE'
+      selected: 'STAGE',
+      stateType: '',
+      stateString: 'stage 2'
+    }
+  },
+  computed: {
+    userState: function () {
+      return this.stateType + this.stateString
     }
   },
   mounted() {
@@ -115,6 +130,7 @@ export default {
     } else {
       this.heading = 'Edit stage'
     }
+
   },
   methods: {
     close() {
@@ -201,7 +217,7 @@ export default {
 .form-content {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.8rem;
 }
 
 .state {
@@ -217,6 +233,15 @@ export default {
   width: 100%;
 }
 
+.dist {
+  display: flex;
+  gap: 1rem
+}
+
+.dist div {
+  flex-basis: 1/2;
+  width: 100%;
+}
 
 select {
   color: #2c3e50;
@@ -224,7 +249,7 @@ select {
 
 .label {
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
   font-weight: 500;
 }
 
@@ -241,24 +266,6 @@ select {
 }
 
 .input:focus {
-  border: 2px solid #2c3e50;
-}
-
-.textarea {
-  display: block;
-  padding: 0.625rem;
-  width: 100%;
-  border-radius: 0.4rem;
-  font-size: 1rem;
-  background-color: #F9FAFB;
-  border: 2px solid lightgray;
-  outline: none;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  letter-spacing: 1px;
-  resize: none;
-}
-
-.textarea:focus {
   border: 2px solid #2c3e50;
 }
 
