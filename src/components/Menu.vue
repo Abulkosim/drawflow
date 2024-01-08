@@ -10,7 +10,7 @@
 <script>
 export default {
   props: ['showMenu', 'position'],
-  data() {  
+  data() {
     return {}
   },
   mounted() { },
@@ -50,7 +50,6 @@ export default {
 
 .context-menu ul li:first-child {
   border-radius: 10px 10px 0 0;
-
 }
 
 .context-menu ul li:last-child {

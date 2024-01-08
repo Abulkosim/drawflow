@@ -24,30 +24,73 @@
           </div>
           <div>
             <label for="action" class="label">Action</label>
-            <select id="action" class="input">
-              <option selected>STAGE</option>
-              <option value="url">URL</option>
+            <select v-model="selected" id="action" class="input">
+              <option value="STAGE" selected>STAGE</option>
+              <option value="URL">URL</option>
             </select>
           </div>
-          <div>
-            <label for="type" class="label">Button Type</label>
+          <div v-if="selected == 'STAGE'">
+            <label for="type" class="label">Button type</label>
             <select id="type" class="input">
-              <option selected>REPLY</option>
+              <option selected>INLINE</option>
+              <option value="first">REPLY</option>
+              <option value="second">CONTACT</option>
+              <option value="third">LOCATION</option>
+            </select>
+          </div>
+          <div v-if="selected == 'URL'">
+            <label for="url" class="label">Callback URL</label>
+            <select id="url" class="input">
+              <option value="first"></option>
               <option value="first">FIRST</option>
               <option value="second">SECOND</option>
               <option value="third">THIRD</option>
               <option value="fourth">FOURTH</option>
             </select>
           </div>
-          <div>
+          <div class="state" v-if="selected == 'STAGE'">
+            <div class="state-type">
+              <label for="state-type" class="label">State type</label>
+              <select id="state-type" class="input">
+                <option value="" selected></option>
+                <option value="next">next.</option>
+                <option value="url">url.</option>
+                <option value="other">other</option>
+              </select>
+            </div>
+            <div class="state-string">
+              <label for="state-string" class="label">State string</label>
+              <input type="text" name="state-string" id="state-string" class="input" placeholder="stage 2">
+            </div>
+          </div>
+
+          <div v-if="selected == 'STAGE'">
+            <label for="btn-size" class="label">btn_size</label>
+            <input type="number" name="btn-size" id="btn-size" class="input" placeholder="3">
+          </div>
+          <div v-if="selected == 'STAGE'">
             <label for="condition" class="label">Condition</label>
             <textarea id="condition" rows="4" class="textarea" placeholder="Write the condition here"></textarea>
           </div>
+          <div v-if="selected == 'STAGE'">
+            <label for="cond-type" class="label">Condition Type</label>
+            <select id="cond-type" class="input">
+              <option value="" selected></option>
+              <option value="update">update</option>
+              <option value="input">input</option>
+            </select>
+          </div>
+          <div v-if="selected == 'STAGE'">
+            <label for="user" class="label">User State</label>
+            <input type="text" name="user" id="user" class="input" placeholder="">
+          </div>
         </div>
+      </form>
+      <div class="modal-save">
         <button @click="close" type="submit" class="submit-button">
           Save
         </button>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -57,6 +100,7 @@ export default {
   data() {
     return {
       heading: 'Add stage',
+      selected: 'STAGE'
     }
   },
   mounted() {
@@ -146,7 +190,7 @@ export default {
 
 .form {
   padding: 1rem;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 200px);
   overflow-y: scroll;
 
   @media (min-width: 768px) {
@@ -157,9 +201,22 @@ export default {
 .form-content {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+}
+
+.state {
+  display: flex;
   gap: 1rem;
 }
+
+.state-type {
+  width: 200px;
+}
+
+.state-string {
+  width: 100%;
+}
+
 
 select {
   color: #2c3e50;
@@ -167,14 +224,14 @@ select {
 
 .label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   font-weight: 500;
 }
 
 .input {
   display: block;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.625rem;
+  border-radius: 0.4rem;
   border: 2px solid lightgray;
   width: 100%;
   font-size: 1rem;
@@ -189,9 +246,9 @@ select {
 
 .textarea {
   display: block;
-  padding: 0.75rem;
+  padding: 0.625rem;
   width: 100%;
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
   font-size: 1rem;
   background-color: #F9FAFB;
   border: 2px solid lightgray;
@@ -207,7 +264,7 @@ select {
 
 .submit-button {
   display: flex;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   align-items: center;
   border-radius: 0.5rem;
   font-size: 1rem;
@@ -231,5 +288,17 @@ select {
 .svg-close {
   width: 0.75rem;
   height: 0.75rem;
+}
+
+.modal-save {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-top: 0.5px solid rgb(233, 233, 233);
+
+  @media (min-width: 768px) {
+    padding: 1.25rem;
+  }
 }
 </style>
