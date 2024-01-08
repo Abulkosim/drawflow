@@ -10,7 +10,7 @@
 <script>
 export default {
   props: ['showMenu', 'position'],
-  data() {
+  data() {  
     return {}
   },
   mounted() { },

@@ -92,7 +92,7 @@ export default {
   z-index: 100;
   padding: 1rem;
   width: 100%;
-  max-width: 580px;
+  max-width: 640px;
   max-height: 100%;
   letter-spacing: 1px;
 }
@@ -146,7 +146,7 @@ export default {
 
 .form {
   padding: 1rem;
-  max-height: calc(100vh - 100px);
+  max-height: calc(100vh - 120px);
   overflow-y: scroll;
 
   @media (min-width: 768px) {
