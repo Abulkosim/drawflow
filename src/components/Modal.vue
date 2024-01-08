@@ -60,10 +60,9 @@ export default {
 
 .confirmation-container {
   position: relative;
-  padding: 2rem;
+  padding: 2rem 1.5rem;
   border-radius: 0.5rem;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .close-button {
@@ -76,12 +75,12 @@ export default {
   border-radius: 0.5rem;
   width: 2rem;
   height: 2rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
   color: #9CA3AF;
-  border: 1px solid #9CA3AF;
+  border: none;
   background-color: transparent;
   cursor: pointer;
+  outline: none;
+  z-index: 1;
 }
 
 .close-button:hover {
@@ -109,13 +108,13 @@ export default {
   padding: 0.625rem 1.25rem;
   align-items: center;
   border-radius: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.25rem;
   font-weight: 500;
   text-align: center;
   color: #ffffff;
-  background-color: #DC2626;
-  outline: 2px solid #c70d0d;
+  background-color: #B91C1C;
+  outline: 2px solid #FCA5A5;
   border: none;
   cursor: pointer;
 }
@@ -130,6 +129,8 @@ export default {
   line-height: 1.25rem;
   font-weight: 500;
   border-radius: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.25rem;
   color: #6B7280;
   background-color: #ffffff;
   border: none;
@@ -143,8 +144,8 @@ export default {
 }
 
 .confirmation {
-  margin-bottom: 1.25rem;
-  font-size: 1.125rem;
+  margin-bottom: 1.75rem;
+  font-size: 1.25rem;
   line-height: 1.75rem;
   color: #6B7280;
 }
