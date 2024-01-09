@@ -160,7 +160,7 @@ export default {
     this.editor.session.setMode('ace/mode/python');
     this.editor.setTheme('ace/theme/cobalt');
     this.editor.renderer.setPadding(10);
-    this.editor.session.setUseWrapMode(true);
+    // this.editor.session.setUseWrapMode(true);
   },
 
   watch: {
@@ -177,7 +177,7 @@ export default {
     conditionType(current) {
       if (this.editor) {
         if (current == 'input') {
-          this.editor.setValue('user["attributes"]["full_name"] = msg_data; update_user(id=user["id"], attributes=user["attributes"])')
+          this.editor.setValue('user["attributes"]["full_name"] = msg_data\nupdate_user(id=user["id"], attributes=user["attributes"])')
         } else if (current == 'update') {
           this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
         }
@@ -323,6 +323,7 @@ export default {
   font-size: 15px;
   border-radius: 5px;
 }
+
 
 select {
   color: #2c3e50;
