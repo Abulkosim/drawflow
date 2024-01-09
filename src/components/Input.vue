@@ -17,11 +17,11 @@
           <div class="first-row">
             <div>
               <label for="alias" class="label required">Alias</label>
-              <input type="text" name="alias" id="alias" class="input" placeholder="stage 2" required>
+              <input type="text" name="alias" id="alias" class="input" placeholder="stage 2" required autocomplete="off">
             </div>
             <div>
               <label for="order" class="label required">Order</label>
-              <input type="number" name="order" id="order" class="input" placeholder="20" required>
+              <input type="number" name="order" id="order" class="input" placeholder="20" required autocomplete="off">
             </div>
             <div>
               <label for="action" class="label">Action</label>
@@ -32,11 +32,11 @@
             </div>
             <div>
               <label for="type" class="label" :class="{ required: stageSelected }">Button type</label>
-              <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected">
-                <option selected>INLINE</option>
-                <option value="first">REPLY</option>
-                <option value="second">CONTACT</option>
-                <option value="third">LOCATION</option>
+              <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="buttonType">
+                <option value="INLINE" selected>INLINE</option>
+                <option value="REPLY">REPLY</option>
+                <option value="CONTACT">CONTACT</option>
+                <option value="LOCATION">LOCATION</option>
               </select>
             </div>
           </div>
@@ -50,38 +50,44 @@
             <div class="state-type">
               <label for="state-type" class="label">State type</label>
               <select id="state-type" class="input" v-model="stateType" @change="stateString = ''">
-                <option value="" selected></option>
+                <option value="" disabled selected hidden></option>
                 <option value="next.">next.</option>
                 <option value="url.">url.</option>
                 <option value="other">other</option>
               </select>
             </div>
-            <div class="state-string">
+            <div class="state-string" v-if="stateType != 'next.'">
               <label for="state-string" class="label">State string</label>
               <input list="datalist" type="text" name="state-string" id="state-string" class="input" v-model="stateString"
-                :disabled="stateType == 'other'">
-              <datalist id="datalist" class="datalist">
+                autocomplete="off">
+              <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
                 <option v-for="item in filteredList" :key="item" :value="item">{{ item }}</option>
               </datalist>
+            </div>
+            <div class="state-string" v-else>
+              <label for="state-string" class="label">State string</label>
+              <select id="state-string" class="input">
+                <option v-for="item in filteredList" :key="item" :value="item">{{ item }}</option>
+              </select>
             </div>
           </div>
 
           <div class="condition" v-if="stageSelected">
             <label for="condition" class="label">Condition</label>
-            <CodeEditor value="print('')" width="100%" :wrap="true" :languages="[['python', 'Python']]" />
+            <CodeEditor v-model="editor" width="100%" :wrap="true" :languages="[['python', 'Python']]" />
           </div>
 
           <div class="dist" v-if="stageSelected">
             <div>
               <label for="btn-size" class="label">btn_size</label>
-              <input type="text" name="btn-size" id="btn-size" class="input" placeholder="3" v-model="btn_size"
-                @change="validate" :class="{ error: error }">
+              <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_size" @change="validate"
+                :class="{ error: error }">
             </div>
 
             <div>
               <label for="cond-type" class="label">Condition Type</label>
-              <select id="cond-type" class="input">
-                <option value="" selected></option>
+              <select id="cond-type" class="input" v-model="conditionType">
+                <option value="" disabled selected hidden></option>
                 <option value="update">update</option>
                 <option value="input">input</option>
               </select>
@@ -90,7 +96,7 @@
 
           <div v-if="stageSelected">
             <label for="user" class="label">User State</label>
-            <input type="text" name="user" id="user" class="input" :value="userState">
+            <input type="text" name="user" id="user" class="input" :value="userState" autocomplete="off">
           </div>
         </div>
       </form>
@@ -117,7 +123,10 @@ export default {
       selected: 'STAGE',
       stateType: '',
       stateString: '',
-      btn_size: '',
+      buttonType: 'INLINE',
+      conditionType: '',
+      // editorValue: '',
+      btn_size: '3',
       error: false,
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
     }
@@ -127,7 +136,7 @@ export default {
       if (this.stateType != 'other') {
         return this.stateType + this.stateString
       } else {
-        return this.stateType
+        return this.stateString
       }
     },
     stageSelected: function () {
@@ -137,6 +146,14 @@ export default {
       return this.items.filter(item => {
         return item.toLowerCase().includes(this.stateString.toLowerCase());
       });
+    },
+    editor: function () {
+      if (this.conditionType == 'input') {
+        this.editorValue = 'user["attributes"]["full_name"] = msg_data; update_user(id=user["id"], attributes=user["attributes"])'
+      } else if (this.conditionType == 'update') {
+        this.editorValue = 'update_user(id=user["id"], user_state=msg_data)'
+      }
+      return this.editorValue
     }
   },
   mounted() {
