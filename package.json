@@ -7,6 +7,7 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
+    "ace-builds": "^1.32.3",
     "drawflow": "^0.0.59",
     "pinia": "^2.0.16",
     "vue": "^2.7.7"

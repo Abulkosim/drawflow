@@ -75,13 +75,14 @@
 
           <div class="condition" v-if="stageSelected">
             <label for="condition" class="label">Condition</label>
+            <div id="condition" ref="editor"></div>
           </div>
 
           <div class="dist" v-if="stageSelected">
             <div>
               <label for="btn-size" class="label">btn_size</label>
               <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_size" @change="validate"
-                :class="{ error: error }">
+                :class="{ error: error }" autocomplete='off'>
             </div>
 
             <div>
@@ -109,6 +110,10 @@
   </div>
 </template>
 <script>
+import ace from 'ace-builds/src-noconflict/ace';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/theme-cobalt';
+
 export default {
   props: ['showInputModal', 'adding'],
   data() {
@@ -119,10 +124,10 @@ export default {
       stateString: '',
       buttonType: 'INLINE',
       conditionType: '',
-      // editorValue: '',
       isDisabled: false,
       btn_size: '3',
       error: false,
+      editor: null,
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
     }
   },
@@ -143,6 +148,21 @@ export default {
       });
     }
   },
+
+  mounted() {
+    if (this.adding) {
+      this.heading = 'Add stage'
+    } else {
+      this.heading = 'Edit stage'
+    }
+
+    this.editor = ace.edit(this.$refs.editor);
+    this.editor.session.setMode('ace/mode/python');
+    this.editor.setTheme('ace/theme/cobalt');
+    this.editor.renderer.setPadding(10);
+    this.editor.session.setUseWrapMode(true);
+  },
+
   watch: {
     buttonType(current) {
       if (current == 'LOCATION' || current == 'CONTACT') {
@@ -154,24 +174,17 @@ export default {
         this.stateString = 'reply'
       }
     },
-    // conditionType(current) {
-    //   if (current == 'input') {
-    //     this.editorValue = 'user["attributes"]["full_name"] = msg_data; update_user(id=user["id"], attributes=user["attributes"])'
-    //     console.log(this.editorValue)
-    //   } else if (current == 'update') {
-    //     this.editorValue = 'update_user(id=user["id"], user_state=msg_data)'
-    //     console.log(this.editorValue)
-    //   }
-    // }
-  },
-
-  mounted() {
-    if (this.adding) {
-      this.heading = 'Add stage'
-    } else {
-      this.heading = 'Edit stage'
+    conditionType(current) {
+      if (this.editor) {
+        if (current == 'input') {
+          this.editor.setValue('user["attributes"]["full_name"] = msg_data; update_user(id=user["id"], attributes=user["attributes"])')
+        } else if (current == 'update') {
+          this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
+        }
+      }
     }
   },
+
   methods: {
     close() {
       this.$emit('close')
@@ -302,6 +315,13 @@ export default {
 .dist div {
   flex-basis: 1/2;
   width: 100%;
+}
+
+#condition {
+  width: 100%;
+  height: 140px;
+  font-size: 15px;
+  border-radius: 5px;
 }
 
 select {
