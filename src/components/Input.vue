@@ -14,40 +14,42 @@
       </div>
       <form class="form">
         <div class="form-content">
-          <div>
-            <label for="alias" class="label">Alias</label>
-            <input type="text" name="alias" id="alias" class="input" placeholder="stage 2" required>
+          <div class="first-row">
+            <div>
+              <label for="alias" class="label required">Alias</label>
+              <input type="text" name="alias" id="alias" class="input" placeholder="stage 2" required>
+            </div>
+            <div>
+              <label for="order" class="label required">Order</label>
+              <input type="number" name="order" id="order" class="input" placeholder="20" required>
+            </div>
+            <div>
+              <label for="action" class="label">Action</label>
+              <select v-model="selected" id="action" class="input">
+                <option value="STAGE" selected>STAGE</option>
+                <option value="URL">URL</option>
+              </select>
+            </div>
+            <div>
+              <label for="type" class="label" :class="{ required: stageSelected }">Button type</label>
+              <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected">
+                <option selected>INLINE</option>
+                <option value="first">REPLY</option>
+                <option value="second">CONTACT</option>
+                <option value="third">LOCATION</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label for="order" class="label">Order</label>
-            <input type="number" name="order" id="order" class="input" placeholder="20" required>
-          </div>
-          <div>
-            <label for="action" class="label">Action</label>
-            <select v-model="selected" id="action" class="input">
-              <option value="STAGE" selected>STAGE</option>
-              <option value="URL">URL</option>
-            </select>
-          </div>
-          <div v-if="selected == 'STAGE'">
-            <label for="type" class="label">Button type</label>
-            <select id="type" class="input">
-              <option selected>INLINE</option>
-              <option value="first">REPLY</option>
-              <option value="second">CONTACT</option>
-              <option value="third">LOCATION</option>
-            </select>
-          </div>
-          <div v-if="selected == 'URL'">
+          <div v-if="!stageSelected">
             <label for="url" class="label">Callback URL</label>
             <select id="url" class="input">
               <option value="first"></option>
             </select>
           </div>
-          <div class="state" v-if="selected == 'STAGE'">
+          <div class="state" v-if="stageSelected">
             <div class="state-type">
               <label for="state-type" class="label">State type</label>
-              <select id="state-type" class="input" v-model="stateType">
+              <select id="state-type" class="input" v-model="stateType" @change="stateString = ''">
                 <option value="" selected></option>
                 <option value="next.">next.</option>
                 <option value="url.">url.</option>
@@ -56,20 +58,27 @@
             </div>
             <div class="state-string">
               <label for="state-string" class="label">State string</label>
-              <input type="text" name="state-string" id="state-string" class="input" placeholder="stage 2"
-                v-model="stateString">
+              <input type="text" name="state-string" id="state-string" class="input" v-model="stateString"
+                :disabled="stateType == 'other'">
+              <!-- <select class="input dropdown">
+                <option value="stage 1">Stage 1</option>
+                <option value="stage 2">Stage 2</option>
+                <option value="stage 3">Stage 3</option>
+                <option value="stage 4">Stage 4</option>
+              </select> -->
             </div>
           </div>
 
-          <div class="condition" v-if="selected == 'STAGE'">
+          <div class="condition" v-if="stageSelected">
             <label for="condition" class="label">Condition</label>
-            <CodeEditor value="print('Hello World')" width="100%" :wrap="true" :languages="[['python', 'Python']]" />
+            <CodeEditor value="print('')" width="100%" :wrap="true" :languages="[['python', 'Python']]" />
           </div>
 
-          <div class="dist" v-if="selected == 'STAGE'">
+          <div class="dist" v-if="stageSelected">
             <div>
               <label for="btn-size" class="label">btn_size</label>
-              <input type="number" name="btn-size" id="btn-size" class="input" placeholder="3">
+              <input type="text" name="btn-size" id="btn-size" class="input" placeholder="3" v-model="btn_size"
+                @change="validate" :class="{ error: error }">
             </div>
 
             <div>
@@ -82,7 +91,7 @@
             </div>
           </div>
 
-          <div v-if="selected == 'STAGE'">
+          <div v-if="stageSelected">
             <label for="user" class="label">User State</label>
             <input type="text" name="user" id="user" class="input" :value="userState">
           </div>
@@ -110,31 +119,37 @@ export default {
       heading: 'Add stage',
       selected: 'STAGE',
       stateType: '',
-      stateString: 'stage 2'
+      stateString: '',
+      btn_size: '',
+      error: false
     }
   },
   computed: {
     userState: function () {
-      return this.stateType + this.stateString
+      if (this.stateType != 'other') {
+        return this.stateType + this.stateString
+      } else {
+        return this.stateType
+      }
+    },
+    stageSelected: function () {
+      return this.selected == 'STAGE'
     }
   },
   mounted() {
-    document.querySelectorAll('input[required]').forEach(function (input) {
-      var label = document.querySelector('label[for="' + input.id + '"]');
-      if (label) {
-        label.innerHTML += '<span class="required-star">*</span>';
-      }
-    });
     if (this.adding) {
       this.heading = 'Add stage'
     } else {
       this.heading = 'Edit stage'
     }
-
   },
   methods: {
     close() {
       this.$emit('close')
+    },
+    validate() {
+      const regex = /^\d+(\:\d+)?(\:\d+)?$/;
+      this.error = !regex.test(this.btn_size);
     }
   }
 }
@@ -220,9 +235,26 @@ export default {
   gap: 0.8rem;
 }
 
+.first-row {
+  display: flex;
+  gap: 0.8rem;
+
+  @media (max-width: 640px) {
+    flex-wrap: wrap;
+  }
+}
+
+.first-row>div {
+  width: 25%;
+
+  @media (max-width: 640px) {
+    width: calc(50% - 0.8rem);
+  }
+}
+
 .state {
   display: flex;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .state-type {
@@ -235,7 +267,7 @@ export default {
 
 .dist {
   display: flex;
-  gap: 1rem
+  gap: 0.8rem
 }
 
 .dist div {
@@ -249,13 +281,13 @@ select {
 
 .label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   font-weight: 500;
 }
 
 .input {
   display: block;
-  padding: 0.625rem;
+  padding: 0.5rem;
   border-radius: 0.4rem;
   border: 2px solid lightgray;
   width: 100%;
@@ -267,6 +299,22 @@ select {
 
 .input:focus {
   border: 2px solid #2c3e50;
+}
+
+/* .dropdown {
+  position: relative;
+  top: -39px;
+} */
+
+.required::after {
+  content: ' *';
+  color: red;
+}
+
+.input.error {
+  color: red;
+  caret-color: #2c3e50;
+  border-color: red;
 }
 
 .submit-button {
@@ -307,5 +355,16 @@ select {
   @media (min-width: 768px) {
     padding: 1.25rem;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 </style>
