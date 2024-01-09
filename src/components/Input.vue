@@ -32,7 +32,8 @@
             </div>
             <div>
               <label for="type" class="label" :class="{ required: stageSelected }">Button type</label>
-              <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="buttonType">
+              <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="buttonType"
+                @change="isDisabled = false; stateString = ''">
                 <option value="INLINE" selected>INLINE</option>
                 <option value="REPLY">REPLY</option>
                 <option value="CONTACT">CONTACT</option>
@@ -49,7 +50,7 @@
           <div class="state" v-if="stageSelected">
             <div class="state-type">
               <label for="state-type" class="label">State type</label>
-              <select id="state-type" class="input" v-model="stateType" @change="stateString = ''">
+              <select id="state-type" class="input" v-model="stateType" @change="stateString = ''" :disabled="isDisabled">
                 <option value="" disabled selected hidden></option>
                 <option value="next.">next.</option>
                 <option value="url.">url.</option>
@@ -64,9 +65,9 @@
                 <option v-for="item in filteredList" :key="item" :value="item">{{ item }}</option>
               </datalist>
             </div>
-            <div class="state-string" v-else>
+            <div class="state-string" v-else-if="stateType == 'next.'">
               <label for="state-string" class="label">State string</label>
-              <select id="state-string" class="input">
+              <select id="state-string" class="input" v-model="stateString">
                 <option v-for="item in filteredList" :key="item" :value="item">{{ item }}</option>
               </select>
             </div>
@@ -126,6 +127,7 @@ export default {
       buttonType: 'INLINE',
       conditionType: '',
       // editorValue: '',
+      isDisabled: false,
       btn_size: '3',
       error: false,
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
@@ -156,6 +158,18 @@ export default {
       return this.editorValue
     }
   },
+  watch: {
+    buttonType(current) {
+      if (current == 'LOCATION' || current == 'CONTACT') {
+        this.stateType = 'next.'
+        this.isDisabled = true
+      } else if (current == 'REPLY') {
+        this.stateType = 'other'
+        this.isDisabled = true
+      }
+    }
+  },
+
   mounted() {
     if (this.adding) {
       this.heading = 'Add stage'
