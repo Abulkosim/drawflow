@@ -60,7 +60,7 @@
             <div class="state-string" v-if="stateType != 'next.'">
               <label for="state-string" class="label">State string</label>
               <input list="datalist" type="text" name="state-string" id="state-string" class="input" v-model="stateString"
-                autocomplete="off">
+                :disabled="stateString == 'reply'" autocomplete="off">
               <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
                 <option v-for="item in filteredList" :key="item" :value="item">{{ item }}</option>
               </datalist>
@@ -75,7 +75,6 @@
 
           <div class="condition" v-if="stageSelected">
             <label for="condition" class="label">Condition</label>
-            <CodeEditor v-model="editor" width="100%" :wrap="true" :languages="[['python', 'Python']]" />
           </div>
 
           <div class="dist" v-if="stageSelected">
@@ -97,7 +96,7 @@
 
           <div v-if="stageSelected">
             <label for="user" class="label">User State</label>
-            <input type="text" name="user" id="user" class="input" :value="userState" autocomplete="off">
+            <input type="text" name="user" id="user" class="input" :value="userState" autocomplete="off" disabled>
           </div>
         </div>
       </form>
@@ -110,13 +109,7 @@
   </div>
 </template>
 <script>
-import hljs from 'highlight.js';
-import CodeEditor from "simple-code-editor";
-
 export default {
-  components: {
-    CodeEditor,
-  },
   props: ['showInputModal', 'adding'],
   data() {
     return {
@@ -148,14 +141,6 @@ export default {
       return this.items.filter(item => {
         return item.toLowerCase().includes(this.stateString.toLowerCase());
       });
-    },
-    editor: function () {
-      if (this.conditionType == 'input') {
-        this.editorValue = 'user["attributes"]["full_name"] = msg_data; update_user(id=user["id"], attributes=user["attributes"])'
-      } else if (this.conditionType == 'update') {
-        this.editorValue = 'update_user(id=user["id"], user_state=msg_data)'
-      }
-      return this.editorValue
     }
   },
   watch: {
@@ -166,8 +151,18 @@ export default {
       } else if (current == 'REPLY') {
         this.stateType = 'other'
         this.isDisabled = true
+        this.stateString = 'reply'
       }
-    }
+    },
+    // conditionType(current) {
+    //   if (current == 'input') {
+    //     this.editorValue = 'user["attributes"]["full_name"] = msg_data; update_user(id=user["id"], attributes=user["attributes"])'
+    //     console.log(this.editorValue)
+    //   } else if (current == 'update') {
+    //     this.editorValue = 'update_user(id=user["id"], user_state=msg_data)'
+    //     console.log(this.editorValue)
+    //   }
+    // }
   },
 
   mounted() {

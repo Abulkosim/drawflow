@@ -9,7 +9,6 @@
   "dependencies": {
     "drawflow": "^0.0.59",
     "pinia": "^2.0.16",
-    "simple-code-editor": "^2.0.9",
     "vue": "^2.7.7"
   },
   "devDependencies": {
