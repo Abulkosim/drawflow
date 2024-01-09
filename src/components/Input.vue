@@ -58,14 +58,11 @@
             </div>
             <div class="state-string">
               <label for="state-string" class="label">State string</label>
-              <input type="text" name="state-string" id="state-string" class="input" v-model="stateString"
+              <input list="datalist" type="text" name="state-string" id="state-string" class="input" v-model="stateString"
                 :disabled="stateType == 'other'">
-              <!-- <select class="input dropdown">
-                <option value="stage 1">Stage 1</option>
-                <option value="stage 2">Stage 2</option>
-                <option value="stage 3">Stage 3</option>
-                <option value="stage 4">Stage 4</option>
-              </select> -->
+              <datalist id="datalist" class="datalist">
+                <option v-for="item in filteredList" :key="item" :value="item">{{ item }}</option>
+              </datalist>
             </div>
           </div>
 
@@ -121,7 +118,8 @@ export default {
       stateType: '',
       stateString: '',
       btn_size: '',
-      error: false
+      error: false,
+      items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
     }
   },
   computed: {
@@ -134,6 +132,11 @@ export default {
     },
     stageSelected: function () {
       return this.selected == 'STAGE'
+    },
+    filteredList: function () {
+      return this.items.filter(item => {
+        return item.toLowerCase().includes(this.stateString.toLowerCase());
+      });
     }
   },
   mounted() {
@@ -301,10 +304,15 @@ select {
   border: 2px solid #2c3e50;
 }
 
-/* .dropdown {
-  position: relative;
-  top: -39px;
-} */
+.datalist {
+  /* position: relative; */
+  padding: 0.5rem;
+  border: 2px solid lightgray;
+  width: 100%;
+  font-size: 1rem;
+  background-color: #F9FAFB;
+  letter-spacing: 1px
+}
 
 .required::after {
   content: ' *';
