@@ -75,7 +75,7 @@
           </div>
 
           <div class="condition" v-if="stageSelected && editorVisible">
-            <label for="condition" class="label">Condition</label>
+            <label for="condition" class="label">Condition <span v-if="output" class="output">{{ output }}</span></label>
             <div id="condition" ref="editor" class="editor"></div>
           </div>
 
@@ -103,7 +103,7 @@
         </div>
       </form>
       <div class="modal-save">
-        <button @click="close" type="submit" class="submit-button">
+        <button @click="submit" type="submit" class="submit-button">
           Save
         </button>
       </div>
@@ -114,9 +114,6 @@
 import ace from 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-cobalt';
-
-import { loadPyodide } from 'https://cdn.jsdelivr.net/pyodide/v0.18.0/full/pyodide.js';
-
 
 export default {
   props: ['showInputModal', 'adding'],
@@ -133,6 +130,7 @@ export default {
       error: false,
       editor: null,
       editorVisible: true,
+      output: '',
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
     }
   },
@@ -182,19 +180,36 @@ export default {
   },
 
   methods: {
+    async checkPythonCode() {
+      const pythonCode = this.editor.getValue();
+
+      try {
+        if (!window.pyodide) {
+          window.pyodide = await loadPyodide();
+        }
+        window.pyodide.runPython(pythonCode);
+        this.output = '';
+      } catch (error) {
+        this.output = '(syntax error!)'
+      }
+    },
+
     close() {
       this.$emit('close')
     },
+
     validate() {
       const regex = /^\d+(\:\d+)?(\:\d+)?$/;
       this.error = !regex.test(this.btn_size);
     },
+
     toggleEditor() {
       this.editorVisible = !this.editorVisible;
       if (this.editorVisible) {
         this.initializeAceEditor();
       }
     },
+
     initializeAceEditor() {
       this.$nextTick(() => {
         if (this.editor) {
@@ -206,7 +221,13 @@ export default {
         this.editor.renderer.setPadding(10);
         this.editor.session.setUseWrapMode(true);
       });
+    },
 
+    submit() {
+      this.checkPythonCode();
+      if (!this.output) {
+        this.close();
+      }
     }
   }
 }
@@ -433,6 +454,11 @@ input::-webkit-inner-spin-button {
 }
 
 input[type=number] {
-  -moz-appearance: textfield;
+  appearance: none;
+}
+
+.output {
+  font-weight: 500;
+  color: red;
 }
 </style>
