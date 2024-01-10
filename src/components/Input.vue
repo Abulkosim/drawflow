@@ -25,7 +25,7 @@
             </div>
             <div>
               <label for="action" class="label">Action</label>
-              <select v-model="selected" id="action" class="input">
+              <select v-model="selected" @change="toggleEditor" id="action" class="input">
                 <option value="STAGE" selected>STAGE</option>
                 <option value="URL">URL</option>
               </select>
@@ -73,9 +73,9 @@
             </div>
           </div>
 
-          <div class="condition" v-if="stageSelected">
+          <div class="condition" v-if="stageSelected && editorVisible">
             <label for="condition" class="label">Condition</label>
-            <div id="condition" ref="editor"></div>
+            <div id="condition" ref="editor" class="editor"></div>
           </div>
 
           <div class="dist" v-if="stageSelected">
@@ -128,6 +128,7 @@ export default {
       btn_size: '3',
       error: false,
       editor: null,
+      editorVisible: true,
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
     }
   },
@@ -156,11 +157,7 @@ export default {
       this.heading = 'Edit stage'
     }
 
-    this.editor = ace.edit(this.$refs.editor);
-    this.editor.session.setMode('ace/mode/python');
-    this.editor.setTheme('ace/theme/cobalt');
-    this.editor.renderer.setPadding(10);
-    this.editor.session.setUseWrapMode(true);
+    this.initializeAceEditor()
   },
 
   watch: {
@@ -192,6 +189,25 @@ export default {
     validate() {
       const regex = /^\d+(\:\d+)?(\:\d+)?$/;
       this.error = !regex.test(this.btn_size);
+    },
+    toggleEditor() {
+      this.editorVisible = !this.editorVisible;
+      if (this.editorVisible) {
+        this.initializeAceEditor();
+      }
+    },
+    initializeAceEditor() {
+      this.$nextTick(() => {
+        if (this.editor) {
+          this.editor.destroy();
+        }
+        this.editor = ace.edit(this.$refs.editor);
+        this.editor.session.setMode('ace/mode/python');
+        this.editor.setTheme('ace/theme/cobalt');
+        this.editor.renderer.setPadding(10);
+        this.editor.session.setUseWrapMode(true);
+      });
+
     }
   }
 }
@@ -317,13 +333,12 @@ export default {
   width: 100%;
 }
 
-#condition {
+.editor {
   width: 100%;
   height: 140px;
   font-size: 15px;
   border-radius: 5px;
 }
-
 
 select {
   color: #2c3e50;
