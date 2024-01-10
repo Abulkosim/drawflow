@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import { createPinia, PiniaVuePlugin } from 'pinia'
-import VeeValidate from 'vee-validate'
+import VeeValidate, { ValidationObserver, ValidationProvider } from 'vee-validate';
+
+Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('ValidationProvider', ValidationProvider);
 
 import App from './App.vue'
 
 import './assets/main.css'
 
-Vue.use(VeeValidate)
+Vue.use(VeeValidate);
 Vue.use(PiniaVuePlugin)
 
 new Vue({

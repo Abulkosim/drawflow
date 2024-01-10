@@ -12,101 +12,105 @@
           </svg>
         </button>
       </div>
-      <form class="form">
-        <div class="form-content">
-          <div class="first-row">
-            <div>
-              <label for="alias" class="label required">Alias</label>
-              <input type="text" name="alias" id="alias" class="input" value="stage 2" required autocomplete="off">
+      <ValidationObserver v-slot="{ invalid }">
+        <form class="form">
+          <div class="form-content">
+            <div class="first-row">
+              <div>
+                <label for="alias" class="label required">Alias</label>
+                <input type="text" name="alias" id="alias" class="input" value="stage 2" required autocomplete="off">
+              </div>
+              <div>
+                <label for="order" class="label required">Order</label>
+                <input type="number" name="order" id="order" class="input" value="20" required autocomplete="off">
+              </div>
+              <div>
+                <label for="action" class="label">Action</label>
+                <select v-model="selected" @change="toggleEditor" id="action" class="input">
+                  <option value="STAGE" selected>STAGE</option>
+                  <option value="URL">URL</option>
+                </select>
+              </div>
+              <div>
+                <label for="type" class="label" :class="{ required: stageSelected }">Button type</label>
+                <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="buttonType"
+                  @change="isDisabled = false; stateString = ''">
+                  <option value="INLINE" selected>INLINE</option>
+                  <option value="REPLY">REPLY</option>
+                  <option value="CONTACT">CONTACT</option>
+                  <option value="LOCATION">LOCATION</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label for="order" class="label required">Order</label>
-              <input type="number" name="order" id="order" class="input" value="20" required autocomplete="off">
-            </div>
-            <div>
-              <label for="action" class="label">Action</label>
-              <select v-model="selected" @change="toggleEditor" id="action" class="input">
-                <option value="STAGE" selected>STAGE</option>
-                <option value="URL">URL</option>
-              </select>
-            </div>
-            <div>
-              <label for="type" class="label" :class="{ required: stageSelected }">Button type</label>
-              <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="buttonType"
-                @change="isDisabled = false; stateString = ''">
-                <option value="INLINE" selected>INLINE</option>
-                <option value="REPLY">REPLY</option>
-                <option value="CONTACT">CONTACT</option>
-                <option value="LOCATION">LOCATION</option>
-              </select>
-            </div>
-          </div>
-          <div v-if="!stageSelected">
-            <label for="url" class="label">Callback URL</label>
-            <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off">
-            <datalist id="datalist" class="datalist">
-              <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
-            </datalist>
-          </div>
-          <div class="state" v-if="stageSelected">
-            <div class="state-type">
-              <label for="state-type" class="label">State type</label>
-              <select id="state-type" class="input" v-model="stateType" @change="stateString = ''" :disabled="isDisabled">
-                <option value="" disabled selected hidden></option>
-                <option value="next.">next.</option>
-                <option value="url.">url.</option>
-                <option value="other">other</option>
-              </select>
-            </div>
-            <div class="state-string" v-if="stateType != 'next.'">
-              <label for="state-string" class="label">State string</label>
-              <input list="datalist" type="text" name="state-string" id="state-string" class="input" v-model="stateString"
-                :disabled="stateString == 'reply'" autocomplete="off">
-              <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
+            <div v-if="!stageSelected">
+              <label for="url" class="label">Callback URL</label>
+              <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off">
+              <datalist id="datalist" class="datalist">
                 <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
               </datalist>
             </div>
-            <div class="state-string" v-else-if="stateType == 'next.'">
-              <label for="state-string" class="label">State string</label>
-              <select id="state-string" class="input" v-model="stateString">
-                <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
-              </select>
+            <div class="state" v-if="stageSelected">
+              <div class="state-type">
+                <label for="state-type" class="label">State type</label>
+                <select id="state-type" class="input" v-model="stateType" @change="stateString = ''"
+                  :disabled="isDisabled">
+                  <option value="" disabled selected hidden></option>
+                  <option value="next.">next.</option>
+                  <option value="url.">url.</option>
+                  <option value="other">other</option>
+                </select>
+              </div>
+              <div class="state-string" v-if="stateType != 'next.'">
+                <label for="state-string" class="label">State string</label>
+                <input list="datalist" type="text" name="state-string" id="state-string" class="input"
+                  v-model="stateString" :disabled="stateString == 'reply'" autocomplete="off">
+                <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
+                  <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
+                </datalist>
+              </div>
+              <div class="state-string" v-else-if="stateType == 'next.'">
+                <label for="state-string" class="label">State string</label>
+                <select id="state-string" class="input" v-model="stateString">
+                  <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="condition" v-if="stageSelected && editorVisible">
+              <label for="condition" class="label">Condition <span v-if="output" class="output">{{ output
+              }}</span></label>
+              <div id="condition" ref="editor" class="editor"></div>
+            </div>
+
+            <div class="dist" v-if="stageSelected">
+              <div>
+                <label for="btn-size" class="label">btn_size</label>
+                <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_size" @change="validate"
+                  :class="{ error: error }" autocomplete='off'>
+              </div>
+
+              <div>
+                <label for="cond-type" class="label">Condition Type</label>
+                <select id="cond-type" class="input" v-model="conditionType">
+                  <option value="" disabled selected hidden></option>
+                  <option value="update">update</option>
+                  <option value="input">input</option>
+                </select>
+              </div>
+            </div>
+
+            <div v-if="stageSelected">
+              <label for="user" class="label">User State</label>
+              <input type="text" name="user" id="user" class="input" :value="userState" autocomplete="off" disabled>
             </div>
           </div>
-
-          <div class="condition" v-if="stageSelected && editorVisible">
-            <label for="condition" class="label">Condition <span v-if="output" class="output">{{ output }}</span></label>
-            <div id="condition" ref="editor" class="editor"></div>
-          </div>
-
-          <div class="dist" v-if="stageSelected">
-            <div>
-              <label for="btn-size" class="label">btn_size</label>
-              <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_size" @change="validate"
-                :class="{ error: error }" autocomplete='off'>
-            </div>
-
-            <div>
-              <label for="cond-type" class="label">Condition Type</label>
-              <select id="cond-type" class="input" v-model="conditionType">
-                <option value="" disabled selected hidden></option>
-                <option value="update">update</option>
-                <option value="input">input</option>
-              </select>
-            </div>
-          </div>
-
-          <div v-if="stageSelected">
-            <label for="user" class="label">User State</label>
-            <input type="text" name="user" id="user" class="input" :value="userState" autocomplete="off" disabled>
-          </div>
+        </form>
+        <div class="modal-save">
+          <button @click="submit" type="submit" class="submit-button" :disabled="invalid">
+            Save
+          </button>
         </div>
-      </form>
-      <div class="modal-save">
-        <button @click="submit" type="submit" class="submit-button">
-          Save
-        </button>
-      </div>
+      </ValidationObserver>
     </div>
   </div>
 </template>
