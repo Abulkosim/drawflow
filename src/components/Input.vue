@@ -115,6 +115,9 @@ import ace from 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-cobalt';
 
+import { loadPyodide } from 'https://cdn.jsdelivr.net/pyodide/v0.18.0/full/pyodide.js';
+
+
 export default {
   props: ['showInputModal', 'adding'],
   data() {
@@ -429,7 +432,6 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-/* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
 }
