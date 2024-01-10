@@ -16,16 +16,21 @@
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
             <div class="first-row">
-              <div>
-                <label for="alias" class="label required">Alias</label>
-                <input type="text" name="alias" id="alias" class="input" v-model="alias" rules="required" required
-                  autocomplete="off">
-              </div>
-              <div>
-                <label for="order" class="label required">Order</label>
-                <input type="number" name="order" id="order" class="input" v-model="order" rules="required" required
-                  autocomplete="off">
-              </div>
+              <ValidationProvider rules="required" v-slot="{ errors }">
+                <div>
+                  <label for="alias" class="label required">Alias</label>
+                  <input type="text" name="alias" id="alias" class="input" v-model="alias" autocomplete="off">
+                  <span v-if="errors[0]" class="output">Required field!</span>
+                </div>
+              </ValidationProvider>
+              <ValidationProvider rules="required" v-slot="{ errors }">
+                <div>
+                  <label for="order" class="label required">Order</label>
+                  <input type="number" name="order" id="order" class="input" v-model="order" autocomplete="off">
+                  <span v-if="errors[0]" class="output">Required field!</span>
+                </div>
+              </ValidationProvider>
+
               <div>
                 <label for="action" class="label">Action</label>
                 <select v-model="selected" @change="toggleEditor" id="action" class="input">
@@ -85,11 +90,14 @@
             </div>
 
             <div class="dist" v-if="stageSelected">
-              <div>
-                <label for="btn-size" class="label">btn_size</label>
-                <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_size" @change="validate"
-                  :class="{ error: error }" autocomplete='off'>
-              </div>
+              <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(\:\d+)?(\:\d+)?$/ }">
+                <div>
+                  <label for="btn-size" class="label">btn_size</label>
+                  <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_size" @change="validateSize"
+                    autocomplete='off'>
+                  <span v-if="errors[0]" class="output">Invalid format!</span>
+                </div>
+              </ValidationProvider>
 
               <div>
                 <label for="cond-type" class="label">Condition Type</label>
@@ -206,7 +214,7 @@ export default {
       this.$emit('close')
     },
 
-    validate() {
+    validateSize() {
       const regex = /^\d+(\:\d+)?(\:\d+)?$/;
       this.error = !regex.test(this.btn_size);
     },
@@ -231,12 +239,12 @@ export default {
       });
     },
 
-    submit() {
-      // this.checkPythonCode();
-      // if (!this.output) {
-      //   this.close();
-      // }
-      console.log('valid')
+    async submit() {
+      await this.checkPythonCode();
+
+      if (!this.output) {
+        this.close();
+      }
     }
   }
 }
@@ -414,6 +422,13 @@ select {
   color: red;
   caret-color: #2c3e50;
   border-color: red;
+  background-color: rgb(255, 230, 230);
+}
+
+.validationError {
+  color: red;
+  font-style: italic;
+  font-size: 14px;
 }
 
 .submit-button {
