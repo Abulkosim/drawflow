@@ -12,17 +12,19 @@
           </svg>
         </button>
       </div>
-      <ValidationObserver v-slot="{ invalid }">
-        <form class="form">
+      <ValidationObserver ref="observer" v-slot="{ invalid, validate }">
+        <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
             <div class="first-row">
               <div>
                 <label for="alias" class="label required">Alias</label>
-                <input type="text" name="alias" id="alias" class="input" value="stage 2" required autocomplete="off">
+                <input type="text" name="alias" id="alias" class="input" value="stage 2" rules="required" required
+                  autocomplete="off">
               </div>
               <div>
                 <label for="order" class="label required">Order</label>
-                <input type="number" name="order" id="order" class="input" value="20" required autocomplete="off">
+                <input type="number" name="order" id="order" class="input" value="20" rules="required" required
+                  autocomplete="off">
               </div>
               <div>
                 <label for="action" class="label">Action</label>
@@ -104,12 +106,12 @@
               <input type="text" name="user" id="user" class="input" :value="userState" autocomplete="off" disabled>
             </div>
           </div>
+          <div class="modal-save">
+            <button type="submit" class="submit-button">
+              Save
+            </button>
+          </div>
         </form>
-        <div class="modal-save">
-          <button @click="submit" type="submit" class="submit-button" :disabled="invalid">
-            Save
-          </button>
-        </div>
       </ValidationObserver>
     </div>
   </div>
@@ -228,10 +230,11 @@ export default {
     },
 
     submit() {
-      this.checkPythonCode();
-      if (!this.output) {
-        this.close();
-      }
+      // this.checkPythonCode();
+      // if (!this.output) {
+      //   this.close();
+      // }
+      console.log('valid')
     }
   }
 }
