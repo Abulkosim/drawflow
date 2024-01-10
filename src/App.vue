@@ -124,8 +124,8 @@ export default {
       const positionY = this.contextMenuPosition.y;
       const newNodeId = this.editor.addNode('New Node', 1, 1, positionX, positionY, 'newNode', data, 'Node', 'vue');
 
-      if (this.selectedNodeId) {
-        const selectedNodeIdNumeric = this.selectedNodeId.replace('node-', '');
+      if (this.selectedNode) {
+        const selectedNodeIdNumeric = this.selectedNode.replace('node-', '');
         this.editor.addConnection(selectedNodeIdNumeric, newNodeId, 'output_1', 'input_1');
       }
     },
