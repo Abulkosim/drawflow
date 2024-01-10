@@ -17,11 +17,11 @@
           <div class="first-row">
             <div>
               <label for="alias" class="label required">Alias</label>
-              <input type="text" name="alias" id="alias" class="input" placeholder="stage 2" required autocomplete="off">
+              <input type="text" name="alias" id="alias" class="input" value="stage 2" required autocomplete="off">
             </div>
             <div>
               <label for="order" class="label required">Order</label>
-              <input type="number" name="order" id="order" class="input" placeholder="20" required autocomplete="off">
+              <input type="number" name="order" id="order" class="input" value="20" required autocomplete="off">
             </div>
             <div>
               <label for="action" class="label">Action</label>
@@ -43,9 +43,10 @@
           </div>
           <div v-if="!stageSelected">
             <label for="url" class="label">Callback URL</label>
-            <select id="url" class="input">
-              <option value="first"></option>
-            </select>
+            <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off">
+            <datalist id="datalist" class="datalist">
+              <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
+            </datalist>
           </div>
           <div class="state" v-if="stageSelected">
             <div class="state-type">
@@ -62,13 +63,13 @@
               <input list="datalist" type="text" name="state-string" id="state-string" class="input" v-model="stateString"
                 :disabled="stateString == 'reply'" autocomplete="off">
               <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
-                <option v-for="item in filteredList" :key="item" :value="item">{{ item }}</option>
+                <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
               </datalist>
             </div>
             <div class="state-string" v-else-if="stateType == 'next.'">
               <label for="state-string" class="label">State string</label>
               <select id="state-string" class="input" v-model="stateString">
-                <option v-for="item in filteredList" :key="item" :value="item">{{ item }}</option>
+                <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
               </select>
             </div>
           </div>
@@ -142,11 +143,6 @@ export default {
     },
     stageSelected: function () {
       return this.selected == 'STAGE'
-    },
-    filteredList: function () {
-      return this.items.filter(item => {
-        return item.toLowerCase().includes(this.stateString.toLowerCase());
-      });
     }
   },
 
