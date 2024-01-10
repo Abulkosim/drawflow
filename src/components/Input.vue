@@ -160,7 +160,7 @@ export default {
     this.editor.session.setMode('ace/mode/python');
     this.editor.setTheme('ace/theme/cobalt');
     this.editor.renderer.setPadding(10);
-    // this.editor.session.setUseWrapMode(true);
+    this.editor.session.setUseWrapMode(true);
   },
 
   watch: {
@@ -209,7 +209,7 @@ export default {
   z-index: 100;
   padding: 1rem;
   width: 100%;
-  max-width: 640px;
+  max-width: 680px;
   max-height: 100%;
   letter-spacing: 1px;
 }
