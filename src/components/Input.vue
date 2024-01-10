@@ -18,12 +18,12 @@
             <div class="first-row">
               <div>
                 <label for="alias" class="label required">Alias</label>
-                <input type="text" name="alias" id="alias" class="input" value="stage 2" rules="required" required
+                <input type="text" name="alias" id="alias" class="input" v-model="alias" rules="required" required
                   autocomplete="off">
               </div>
               <div>
                 <label for="order" class="label required">Order</label>
-                <input type="number" name="order" id="order" class="input" value="20" rules="required" required
+                <input type="number" name="order" id="order" class="input" v-model="order" rules="required" required
                   autocomplete="off">
               </div>
               <div>
@@ -126,6 +126,8 @@ export default {
   data() {
     return {
       heading: 'Add stage',
+      alias: 'stage 2',
+      order: '20',
       selected: 'STAGE',
       stateType: '',
       stateString: '',
