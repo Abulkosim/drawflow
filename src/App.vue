@@ -39,7 +39,8 @@ export default {
     Menu,
     Modal,
     Toast,
-    Input
+    Input,
+    Node
   },
   data() {
     return {
@@ -52,19 +53,25 @@ export default {
       showToast: false,
       isSuccessful: false,
       toastMessage: '',
-      adding: true
+      adding: true,
     }
   },
   mounted() {
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
-    const props = { text: 'adfsf' };
-    this.editor.registerNode('Node', Node, props);
-    const node1Id = this.editor.addNode('Node 1', 0, 1, 50, 200, 'nodeOne', { text: 'Node 1', value: 10 }, 'Node', 'vue');
-    const node2Id = this.editor.addNode('Node 2', 1, 1, 350, 200, 'nodeTwo', { text: 'Node 2', value: 20 }, 'Node', 'vue');
+    const data = {}
 
-    this.editor.addConnection(node1Id, node2Id, 'output_1', 'input_1');
+    let props = { content: '/start' }
+    this.editor.registerNode('Node', Node, props);
+
+    const firstNode = this.editor.addNode('Node 1', 0, 1, 50, 200, 'nodeOne', data, 'Node', 'vue');
+
+    props = { content: 'uz, ru, eng' }
+    this.editor.registerNode('Node', Node, props);
+    const secondNode = this.editor.addNode('Node 2', 1, 1, 350, 200, 'nodeTwo', data, 'Node', 'vue');
+
+    this.editor.addConnection(firstNode, secondNode, 'output_1', 'input_1');
 
     id.addEventListener('contextmenu', this.handleRightClick)
 
@@ -75,8 +82,6 @@ export default {
     window.addEventListener('click', () => {
       this.showContextMenu = false;
     });
-    // let node = this.editor.getNodeFromId(1)
-    // console.log(node.querySelector('.drawflow-node'))
 
   },
   methods: {
@@ -91,7 +96,6 @@ export default {
     editNode() {
       this.showContextMenu = false;
       this.adding = false;
-      // this.showInputModal = true;
     },
 
     closeModal() {
@@ -112,8 +116,9 @@ export default {
       const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
 
       const data = {}
+      let props = { content: 'New Node' }
 
-      this.create('New Node', positionX, positionY, data)
+      this.create('New Node', positionX, positionY, data, props)
         .then(() => {
           this.showSuccessToast()
         })
@@ -125,8 +130,9 @@ export default {
         });
     },
 
-    async create(name, x, y, data) {
+    async create(name, x, y, data, props) {
       try {
+        this.editor.registerNode('Node', Node, props);
         const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, 'Node', 'vue');
         if (this.selectedNode) {
           const id = this.selectedNode.replace('node-', '');

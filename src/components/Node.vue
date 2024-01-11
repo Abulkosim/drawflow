@@ -1,14 +1,16 @@
 <template>
   <div class="card-devices">
-    <div class="body">
-      <span> {{ text }} </span>
-    </div>
+    <span>{{ content }}</span>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['text', 'value'],
+  name: 'Node',
+  props: ['content'],
+  mounted() {
+    console.log('NodeComponent mounted with text:', this.content);
+  },
   data() {
     return {}
   },
