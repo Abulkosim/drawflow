@@ -139,6 +139,7 @@ div::-webkit-scrollbar {
   stroke: #4682b4;
 }
 .drawflow-delete {
+  display: none !important;
   position: absolute;
   display: flex;
   align-items: center;
@@ -154,11 +155,11 @@ div::-webkit-scrollbar {
   font-family: monospace;
   cursor: pointer;
 }
-.drawflow > .drawflow-delete {
+/* .drawflow > .drawflow-delete {
   margin-left: -15px;
   margin-top: 15px;
 }
 .parent-node .drawflow-delete {
   right: -12px;
   top: -12px;
-}
+} */

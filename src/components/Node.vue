@@ -1,14 +1,14 @@
 <template>
   <div class="card-devices">
     <div class="body">
-      <span> {{ name }} </span>
+      <span> {{ text }} </span>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['name'],
+  props: ['text', 'value'],
   data() {
     return {}
   },

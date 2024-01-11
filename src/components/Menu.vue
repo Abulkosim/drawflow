@@ -1,19 +1,26 @@
 <template>
-  <div v-if="showMenu" :style="{ top: position.y + 'px', left: position.x + 'px' }" class="context-menu">
+  <div v-if="!isOne && showMenu" :style="{ top: position.y + 'px', left: position.x + 'px' }" class="context-menu">
     <ul>
-      <li @click="addNewNode">Add Node</li>
-      <li @click="editNode">Edit</li>
-      <li @click="deleteNode">Delete</li>
+      <li @click="addNewNode" :class="{ add: isTwo }" v-if="!isOne">Add Node</li>
+      <li @click="editNode" v-if="!isOne && !isTwo">Edit</li>
+      <li @click="deleteNode" v-if="!isOne && !isTwo">Delete</li>
     </ul>
   </div>
 </template>
 <script>
 export default {
-  props: ['showMenu', 'position'],
+  props: ['showMenu', 'position', 'node'],
   data() {
     return {}
   },
-  mounted() { },
+  computed: {
+    isOne: function () {
+      return this.node == 1
+    },
+    isTwo: function () {
+      return this.node == 2
+    }
+  },
   methods: {
     addNewNode() {
       this.$emit('addNewNode');
@@ -58,5 +65,9 @@ export default {
 
 .context-menu ul li:hover {
   background-color: #f0f0f0;
+}
+
+.context-menu ul li.add {
+  border-radius: 10px;
 }
 </style>

@@ -104,7 +104,6 @@ export default {
 }
 
 .yes {
-  display: inline-flex;
   padding: 0.625rem 1.25rem;
   align-items: center;
   border-radius: 0.5rem;
@@ -113,14 +112,18 @@ export default {
   font-weight: 500;
   text-align: center;
   color: #ffffff;
+  outline: 2px solid #B91C1C;
   background-color: #B91C1C;
-  outline: 2px solid #FCA5A5;
   border: none;
   cursor: pointer;
 }
 
 .yes:hover {
-  background-color: #991B1B;
+  background-color: #B91C1CEE;
+}
+
+.yes:active {
+  background-color: #B91C1CDD;
 }
 
 .no {
@@ -141,6 +144,11 @@ export default {
 .no:hover {
   color: #111827;
   background-color: #F3F4F6;
+}
+
+.no:active {
+  color: #111827;
+  background-color: #F3F4F6EE;
 }
 
 .confirmation {

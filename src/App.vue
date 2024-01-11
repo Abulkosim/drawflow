@@ -8,7 +8,7 @@
     </div>
 
     <Menu :position="contextMenuPosition" :showMenu="showContextMenu" @addNewNode="openInputModal"
-      @deleteNode="openConfirmationModal" @editNode="editNode" />
+      @deleteNode="openConfirmationModal" @editNode="editNode" :node="selectedNode" />
 
     <div v-if="showModal" class="overlay"></div>
 
@@ -59,11 +59,10 @@ export default {
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
-    const props = { name: `Node` };
+    const props = { text: 'adfsf' };
     this.editor.registerNode('Node', Node, props);
-    const data = {};
-    const node1Id = this.editor.addNode('Node 1', 0, 1, 50, 200, 'nodeOne', data, 'Node', 'vue');
-    const node2Id = this.editor.addNode('Node 2', 1, 1, 350, 200, 'nodeTwo', data, 'Node', 'vue');
+    const node1Id = this.editor.addNode('Node 1', 0, 1, 50, 200, 'nodeOne', { text: 'Node 1', value: 10 }, 'Node', 'vue');
+    const node2Id = this.editor.addNode('Node 2', 1, 1, 350, 200, 'nodeTwo', { text: 'Node 2', value: 20 }, 'Node', 'vue');
 
     this.editor.addConnection(node1Id, node2Id, 'output_1', 'input_1');
 
@@ -76,6 +75,8 @@ export default {
     window.addEventListener('click', () => {
       this.showContextMenu = false;
     });
+    // let node = this.editor.getNodeFromId(1)
+    // console.log(node.querySelector('.drawflow-node'))
 
   },
   methods: {
@@ -107,7 +108,7 @@ export default {
     },
 
     addNewNode() {
-      const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 100;
+      const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 120;
       const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
 
       const data = {}
