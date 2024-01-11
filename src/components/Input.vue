@@ -11,6 +11,8 @@
               d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
           </svg>
         </button>
+        <div class="loading" v-if="loading">
+        </div>
       </div>
       <ValidationObserver ref="observer" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
@@ -147,6 +149,7 @@ export default {
       editor: null,
       editorVisible: true,
       output: '',
+      loading: false,
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
     }
   },
@@ -244,7 +247,9 @@ export default {
     },
 
     async submit() {
+      this.loading = true
       await this.checkPythonCode();
+      this.loading = false
 
       if (!this.output) {
         this.save();
@@ -281,6 +286,7 @@ export default {
 }
 
 .modal-header {
+  position: relative;
   display: flex;
   padding: 1rem;
   justify-content: space-between;
@@ -291,6 +297,38 @@ export default {
 
   @media (min-width: 768px) {
     padding: 1.25rem;
+  }
+}
+
+.loading {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: white;
+  overflow: hidden;
+}
+
+.loading::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0%;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f9d423;
+  animation: slide 2s linear infinite;
+}
+
+@keyframes slide {
+  from {
+    left: -100%;
+  }
+
+  to {
+    left: 200%;
   }
 }
 

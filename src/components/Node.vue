@@ -8,9 +8,7 @@
 export default {
   name: 'Node',
   props: ['content'],
-  mounted() {
-    console.log('NodeComponent mounted with text:', this.content);
-  },
+  mounted() { },
   data() {
     return {}
   },
