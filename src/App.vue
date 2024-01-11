@@ -90,7 +90,7 @@ export default {
     editNode() {
       this.showContextMenu = false;
       this.adding = false;
-      this.showInputModal = true;
+      // this.showInputModal = true;
     },
 
     closeModal() {
