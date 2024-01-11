@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <Menu :position="contextMenuPosition" :showMenu="showContextMenu" @addNewNode="addNewNode"
+    <Menu :position="contextMenuPosition" :showMenu="showContextMenu" @addNewNode="openInputModal"
       @deleteNode="openConfirmationModal" @editNode="editNode" />
 
     <div v-if="showModal" class="overlay"></div>
@@ -18,7 +18,8 @@
 
     <div v-if="showInputModal" class="overlay"></div>
 
-    <Input v-if="showInputModal" :showModal="showInputModal" :adding="adding" @close="close" />
+    <Input v-if="showInputModal" :showModal="showInputModal" :adding="adding" @close="closeInputModal"
+      @save="addNewNode" />
   </div>
 </template>
 
@@ -47,7 +48,6 @@ export default {
       showModal: false,
       showInputModal: false,
       contextMenuPosition: { x: 0, y: 0 },
-      selectedNodeId: null,
       selectedNode: null,
       showToast: false,
       isSuccessful: false,
@@ -59,23 +59,15 @@ export default {
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
-    const options = {};
     const props = { name: `Node` };
-    this.editor.registerNode('Node', Node, props, options);
+    this.editor.registerNode('Node', Node, props);
     const data = {};
     const node1Id = this.editor.addNode('Node 1', 0, 1, 50, 200, 'nodeOne', data, 'Node', 'vue');
-    const node2Id = this.editor.addNode('Node 2', 1, 1, 350, 100, 'nodeTwo', data, 'Node', 'vue');
-    const node3Id = this.editor.addNode('Node 3', 1, 1, 350, 300, 'nodeThree', data, 'Node', 'vue');
+    const node2Id = this.editor.addNode('Node 2', 1, 1, 350, 200, 'nodeTwo', data, 'Node', 'vue');
 
     this.editor.addConnection(node1Id, node2Id, 'output_1', 'input_1');
-    this.editor.addConnection(node1Id, node3Id, 'output_1', 'input_1');
 
     id.addEventListener('contextmenu', this.handleRightClick)
-
-    this.editor.on('nodeCreated', (id) => {
-      let nodeElement = document.getElementById('node-' + id);
-      nodeElement.addEventListener('contextmenu', (event) => this.setNodeForContextMenu(event, id));
-    });
 
     this.editor.on('nodeSelected', (node) => {
       this.selectedNode = node;
@@ -109,47 +101,47 @@ export default {
       event.preventDefault();
 
       if (event.target.closest('.drawflow-node')) {
-        this.selectedNodeId = event.target.closest('.drawflow-node').id;
         this.showContextMenu = true;
         this.contextMenuPosition = { x: event.pageX, y: event.pageY };
       }
     },
 
     addNewNode() {
-      this.showContextMenu = false;
-      this.adding = true;
-      this.showInputModal = true;
-      const data = {};
-      const positionX = this.contextMenuPosition.x + 200;
-      const positionY = this.contextMenuPosition.y;
-      const newNodeId = this.editor.addNode('New Node', 1, 1, positionX, positionY, 'newNode', data, 'Node', 'vue');
+      const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 100;
+      const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
 
-      if (this.selectedNode) {
-        const selectedNodeIdNumeric = this.selectedNode.replace('node-', '');
-        this.editor.addConnection(selectedNodeIdNumeric, newNodeId, 'output_1', 'input_1');
+      const data = {}
+
+      this.create('New Node', positionX, positionY, data)
+        .then(() => {
+          this.showSuccessToast()
+        })
+        .catch((error) => {
+          this.showFailedToast(error)
+        })
+        .finally(() => {
+          this.closeInputModal();
+        });
+    },
+
+    async create(name, x, y, data) {
+      try {
+        const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, 'Node', 'vue');
+        if (this.selectedNode) {
+          const id = this.selectedNode.replace('node-', '');
+          this.editor.addConnection(id, newNodeId, 'output_1', 'input_1');
+        }
+      } catch (error) {
+        console.error(`Error creating node: ${error}`);
+        throw error;
+      } finally {
+        this.adding = false;
       }
-    },
-
-    setNodeForContextMenu(event, nodeId) {
-      event.preventDefault();
-      this.selectedNodeId = nodeId;
-      this.showContextMenu = true;
-    },
-
-    openConfirmationModal(nodeId) {
-      this.selectedNodeId = nodeId;
-      this.showModal = true;
-      this.showContextMenu = false
-    },
-
-    closeConfirmationModal() {
-      this.showModal = false;
-      this.selectedNodeId = null
     },
 
     confirmDeletion() {
       if (this.selectedNode) {
-        this.deleteNodeAsync(this.selectedNode)
+        this.deleteNode(this.selectedNode)
           .then(() => {
             this.showSuccessToast()
           })
@@ -162,7 +154,7 @@ export default {
       }
     },
 
-    async deleteNodeAsync(id) {
+    async deleteNode(id) {
       try {
         this.editor.removeNodeId(`node-${id}`)
       } catch (error) {
@@ -171,6 +163,25 @@ export default {
       } finally {
         this.selectedNode = null
       }
+    },
+
+    openInputModal() {
+      this.showContextMenu = false;
+      this.adding = true;
+      this.showInputModal = true;
+    },
+
+    closeInputModal() {
+      this.showInputModal = false;
+    },
+
+    openConfirmationModal() {
+      this.showModal = true;
+      this.showContextMenu = false
+    },
+
+    closeConfirmationModal() {
+      this.showModal = false;
     },
 
     showSuccessToast() {
@@ -191,10 +202,6 @@ export default {
       setTimeout(() => {
         this.showToast = false;
       }, 2000);
-    },
-
-    close() {
-      this.showInputModal = false;
     }
   }
 }
@@ -250,11 +257,11 @@ export default {
   justify-content: center;
   width: 40px;
   height: 40px;
-  color: white;
+  color: #2c3e50;
   font-size: 26px;
   padding: 10px;
-  background: #2c3e50;
-  border: none;
+  background: white;
+  border: 2px solid #2c3e50;
   margin: 2px;
   border-radius: 5px;
   cursor: pointer;

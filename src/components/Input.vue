@@ -214,6 +214,10 @@ export default {
       this.$emit('close')
     },
 
+    save() {
+      this.$emit('save')
+    },
+
     validateSize() {
       const regex = /^\d+(\:\d+)?(\:\d+)?$/;
       this.error = !regex.test(this.btn_size);
@@ -243,6 +247,7 @@ export default {
       await this.checkPythonCode();
 
       if (!this.output) {
+        this.save();
         this.close();
       }
     }
