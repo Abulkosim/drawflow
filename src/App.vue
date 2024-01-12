@@ -18,8 +18,8 @@
 
     <div v-if="showInputModal" class="overlay"></div>
 
-    <Input v-if="showInputModal" :showModal="showInputModal" :adding="adding" @close="closeInputModal"
-      @save="addNewNode" />
+    <Input v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :editNodeData="editNodeData"
+      @close="closeInputModal" @save="addNewNode" />
   </div>
 </template>
 
@@ -53,7 +53,8 @@ export default {
       showToast: false,
       isSuccessful: false,
       toastMessage: '',
-      adding: true,
+      addMode: true,
+      editNodeData: null
     }
   },
   mounted() {
@@ -134,7 +135,7 @@ export default {
         console.error(`Error creating node: ${error}`);
         throw error;
       } finally {
-        this.adding = false;
+        this.addMode = false;
       }
     },
 
@@ -164,13 +165,39 @@ export default {
       }
     },
 
+    getNodeData(id) {
+      try {
+        let node = this.editor.getNodeFromId(id);
+        console.log(node.data)
+        if (!node) {
+          return null;
+        }
+        const nodeData = {
+          id: node.id,
+          name: node.name,
+          type: node.type,
+          positionX: node.pos_x,
+          positionY: node.pos_y,
+          class: node.class,
+          html: node.html
+        };
+        return nodeData;
+      } catch (error) {
+        return null;
+      }
+    },
+
     openInputModal(info) {
       this.showContextMenu = false;
-      if (info == 'adding') {
-        this.adding = true
+      this.addMode = info === 'adding';
+
+      if (this.addMode) {
+        this.editNodeData = null;
       } else {
-        this.adding = false
+        this.editNodeData = this.getNodeData(this.selectedNode);
+        console.log(this.editNodeData)
       }
+
       this.showInputModal = true;
     },
 

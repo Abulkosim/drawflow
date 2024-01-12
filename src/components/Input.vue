@@ -132,7 +132,7 @@ import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-cobalt';
 
 export default {
-  props: ['showInputModal', 'adding'],
+  props: ['showInputModal', 'addMode', 'editNodeData'],
   data() {
     return {
       heading: 'Add stage',
@@ -167,7 +167,7 @@ export default {
   },
 
   mounted() {
-    if (this.adding) {
+    if (this.addMode) {
       this.heading = 'Add stage'
     } else {
       this.heading = 'Edit stage'
@@ -256,7 +256,42 @@ export default {
         this.loading = false
         this.close();
       }
+    },
+
+    editData() {
+      if (this.editNodeData) {
+        const nodeData = {
+          id: node.id,
+          name: node.name,
+          type: node.type,
+          positionX: node.pos_x,
+          positionY: node.pos_y,
+          class: node.class,
+          html: node.html
+        };
+      }
     }
+    /*
+    
+    async submit() {
+      this.loading = true;
+      await this.checkPythonCode();
+      if (!this.output) {
+        const nodeData = {
+          alias: this.alias,
+          order: this.order,
+          // ... other form fields
+        };
+        if (this.addMode) {
+          this.$emit('add-node', nodeData);
+        } else {
+          this.$emit('edit-node', nodeData);
+        }
+        this.loading = false;
+        this.close();
+      }
+    },
+    */
   }
 }
 
