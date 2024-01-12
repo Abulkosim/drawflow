@@ -64,12 +64,11 @@ export default {
 
     let props = { content: '/start' }
     this.editor.registerNode('Node', Node, props);
+    const firstNode = this.editor.addNode('Node 1', 0, 1, 30, 200, 'nodeOne', data, 'Node', 'vue');
 
-    const firstNode = this.editor.addNode('Node 1', 0, 1, 50, 200, 'nodeOne', data, 'Node', 'vue');
-
-    props = { content: 'uz, ru, eng' }
+    props = { content: 'uz, ru, en' }
     this.editor.registerNode('Node', Node, props);
-    const secondNode = this.editor.addNode('Node 2', 1, 1, 350, 200, 'nodeTwo', data, 'Node', 'vue');
+    const secondNode = this.editor.addNode('Node 2', 1, 1, 250, 200, 'nodeTwo', data, 'Node', 'vue');
 
     this.editor.addConnection(firstNode, secondNode, 'output_1', 'input_1');
 
@@ -112,7 +111,7 @@ export default {
     },
 
     addNewNode(props) {
-      const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 120;
+      const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
       const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
       const data = {}
       console.log(props)
