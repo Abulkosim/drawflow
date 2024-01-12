@@ -218,7 +218,8 @@ export default {
     },
 
     save() {
-      this.$emit('save')
+      let props = {content: this.alias}
+      this.$emit('save', props)
     },
 
     validateSize() {

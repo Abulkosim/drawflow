@@ -111,12 +111,11 @@ export default {
       }
     },
 
-    addNewNode() {
+    addNewNode(props) {
       const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 120;
       const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
-
       const data = {}
-      let props = { content: 'New Node' }
+      console.log(props)
 
       this.create('New Node', positionX, positionY, data, props)
         .then(() => {
