@@ -218,7 +218,7 @@ export default {
     },
 
     save() {
-      let props = {content: this.alias}
+      let props = { content: this.alias }
       this.$emit('save', props)
     },
 
@@ -250,10 +250,10 @@ export default {
     async submit() {
       this.loading = true
       await this.checkPythonCode();
-      this.loading = false
 
       if (!this.output) {
         this.save();
+        this.loading = false
         this.close();
       }
     }
@@ -317,19 +317,20 @@ export default {
   position: absolute;
   left: 0%;
   bottom: 0;
-  width: 100%;
+  width: 50%;
   height: 100%;
   background-color: #f9d423;
-  animation: slide 2s linear infinite;
+  animation: slide 1s linear infinite;
+  border-radius: 20px;
 }
 
 @keyframes slide {
   from {
-    left: -100%;
+    left: -50%;
   }
 
   to {
-    left: 200%;
+    left: 150%;
   }
 }
 
