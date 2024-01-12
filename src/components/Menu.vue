@@ -23,10 +23,10 @@ export default {
   },
   methods: {
     addNewNode() {
-      this.$emit('addNewNode');
+      this.$emit('addNewNode', 'adding');
     },
     editNode() {
-      this.$emit('editNode');
+      this.$emit('editNode', 'editing');
     },
     deleteNode() {
       this.$emit('deleteNode');

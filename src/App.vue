@@ -8,7 +8,7 @@
     </div>
 
     <Menu :position="contextMenuPosition" :showMenu="showContextMenu" @addNewNode="openInputModal"
-      @deleteNode="openConfirmationModal" @editNode="editNode" :node="selectedNode" />
+      @deleteNode="openConfirmationModal" @editNode="openInputModal" :node="selectedNode" />
 
     <div v-if="showModal" class="overlay"></div>
 
@@ -92,11 +92,6 @@ export default {
       this.editor.zoom_out()
     },
 
-    editNode() {
-      this.showContextMenu = false;
-      this.adding = false;
-    },
-
     closeModal() {
       this.showModal = false;
     },
@@ -114,7 +109,6 @@ export default {
       const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
       const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
       const data = {}
-      console.log(props)
 
       this.create('New Node', positionX, positionY, data, props)
         .then(() => {
@@ -170,9 +164,13 @@ export default {
       }
     },
 
-    openInputModal() {
+    openInputModal(info) {
       this.showContextMenu = false;
-      this.adding = true;
+      if (info == 'adding') {
+        this.adding = true
+      } else {
+        this.adding = false
+      }
       this.showInputModal = true;
     },
 
