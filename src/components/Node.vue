@@ -1,13 +1,13 @@
 <template>
   <div class="card-devices">
-    <span>{{ content }}</span>
+    <span>{{ alias }}</span>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Node',
-  props: ['content'],
+  props: ['alias'],
   mounted() { },
   data() {
     return {}

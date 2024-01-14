@@ -63,11 +63,11 @@ export default {
     this.editor.start();
     const data = {}
 
-    let props = { content: '/start' }
+    let props = { alias: '/start' }
     this.editor.registerNode('Node', Node, props);
     const firstNode = this.editor.addNode('Node 1', 0, 1, 30, 200, 'nodeOne', data, 'Node', 'vue');
 
-    props = { content: 'uz, ru, en' }
+    props = { alias: 'uz, ru, en' }
     this.editor.registerNode('Node', Node, props);
     const secondNode = this.editor.addNode('Node 2', 1, 1, 250, 200, 'nodeTwo', data, 'Node', 'vue');
 
@@ -106,26 +106,54 @@ export default {
       }
     },
 
-    addNewNode(props) {
-      const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
-      const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
-      const data = {}
+    addNewNode(nodeData) {
+      if (this.addMode) {
+        const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
+        const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
+        const data = {}
 
-      this.create('New Node', positionX, positionY, data, props)
-        .then(() => {
-          this.showSuccessToast()
-        })
-        .catch((error) => {
-          this.showFailedToast(error)
-        })
-        .finally(() => {
-          this.closeInputModal();
-        });
+        this.create(nodeData.alias, positionX, positionY, data, nodeData)
+          .then(() => {
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeInputModal();
+          });
+      } else {
+        console.log(nodeData)
+        this.updateNode(nodeData)
+          .then(() => {
+            console.log(nodeData)
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeInputModal();
+          });
+      }
     },
 
-    async create(name, x, y, data, props) {
+    async updateNode(nodeData) {
       try {
-        this.editor.registerNode('Node', Node, props);
+        let node = this.editor.getNodeFromId(this.selectedNode);
+        if (node) {
+          node.alias = nodeData.alias;
+        }
+        return node;
+      } catch (error) {
+        console.error(`Error updating node: ${error}`);
+        throw error;
+      }
+    },
+
+    async create(name, x, y, data, nodeData) {
+      try {
+        this.editor.registerNode('Node', Node, nodeData);
         const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, 'Node', 'vue');
         if (this.selectedNode) {
           const id = this.selectedNode.replace('node-', '');
@@ -165,37 +193,17 @@ export default {
       }
     },
 
-    getNodeData(id) {
-      try {
-        let node = this.editor.getNodeFromId(id);
-        console.log(node.data)
-        if (!node) {
-          return null;
-        }
-        const nodeData = {
-          id: node.id,
-          name: node.name,
-          type: node.type,
-          positionX: node.pos_x,
-          positionY: node.pos_y,
-          class: node.class,
-          html: node.html
-        };
-        return nodeData;
-      } catch (error) {
-        return null;
-      }
-    },
-
     openInputModal(info) {
       this.showContextMenu = false;
       this.addMode = info === 'adding';
 
-      if (this.addMode) {
-        this.editNodeData = null;
+      if (!this.addMode && this.selectedNode) {
+        let node = this.editor.getNodeFromId(this.selectedNode);
+        if (node) {
+          this.editNodeData = node.alias;
+        }
       } else {
-        this.editNodeData = this.getNodeData(this.selectedNode);
-        console.log(this.editNodeData)
+        this.editNodeData = null;
       }
 
       this.showInputModal = true;

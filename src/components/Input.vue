@@ -171,6 +171,7 @@ export default {
       this.heading = 'Add stage'
     } else {
       this.heading = 'Edit stage'
+      this.editData()
     }
 
     this.initializeAceEditor()
@@ -218,8 +219,10 @@ export default {
     },
 
     save() {
-      let props = { content: this.alias }
-      this.$emit('save', props)
+      const nodeData = {
+        alias: this.alias
+      }
+      this.$emit('save', nodeData)
     },
 
     validateSize() {
@@ -250,49 +253,33 @@ export default {
     async submit() {
       this.loading = true
       await this.checkPythonCode();
+      this.loading = false
 
       if (!this.output) {
         this.save();
-        this.loading = false
         this.close();
       }
     },
 
     editData() {
       if (this.editNodeData) {
-        const nodeData = {
-          id: node.id,
-          name: node.name,
-          type: node.type,
-          positionX: node.pos_x,
-          positionY: node.pos_y,
-          class: node.class,
-          html: node.html
-        };
-      }
-    }
-    /*
-    
-    async submit() {
-      this.loading = true;
-      await this.checkPythonCode();
-      if (!this.output) {
-        const nodeData = {
-          alias: this.alias,
-          order: this.order,
-          // ... other form fields
-        };
-        if (this.addMode) {
-          this.$emit('add-node', nodeData);
-        } else {
-          this.$emit('edit-node', nodeData);
-        }
-        this.loading = false;
-        this.close();
+        this.alias = this.editNodeData.alias;
       }
     },
-    */
-  }
+
+  },
+  watch: {
+    showInputModal(newValue) {
+      if (newValue && !this.addMode) {
+        this.editData();
+      }
+    },
+    editNodeData(newData) {
+      if (newData) {
+        this.editData();
+      }
+    }
+  },
 }
 
 </script>
