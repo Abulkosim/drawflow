@@ -171,9 +171,9 @@ export default {
       this.heading = 'Add stage'
     } else {
       this.heading = 'Edit stage'
-      this.editData()
     }
 
+    this.editData()
     this.initializeAceEditor()
   },
 
@@ -262,8 +262,11 @@ export default {
     },
 
     editData() {
+      console.log('editnodedata', this.editNodeData)
       if (this.editNodeData) {
         this.alias = this.editNodeData.alias;
+        console.log('this.alias', this.alias)
+        console.log('this.editNodeData', this.editNodeData)
       }
     },
 

@@ -64,7 +64,7 @@ export default {
     this.fetchData()
 
 
-    const start = 'start'
+    const start = '/start'
     const dataToImport = {
       "drawflow": {
         "Home": {
@@ -125,7 +125,7 @@ export default {
               "name": "Node 3",
               "data": {},
               "class": "nodeThree",
-              "html": `<div class="card-devices"><span>third stage</span></div>`,
+              "html": `<div class="card-devices"><span class="content">third stage</span></div>`,
               "typenode": false,
               "inputs": {
                 "input_1": {
@@ -141,8 +141,8 @@ export default {
                 "output_1": {
                   "connections": [
                     {
-                      // "node": "2",
-                      "input": "output_1"
+                      // "node": "4",
+                      "output": "input_1"
                     }
                   ]
                 }
@@ -183,7 +183,6 @@ export default {
     async fetchData() {
       try {
         const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=110');
-        console.log(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -235,8 +234,12 @@ export default {
       try {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
-        if (node) {
-          this.editor.updateNodeDataFromId(this.selectedNode, { alias: nodeData.alias })
+        let contentElement = document.querySelector(`#node-${nodeId} .content`);
+
+        if (node && contentElement) {
+          let newHtml = `<span>${nodeData.alias}</span>`;
+          this.editor.drawflow.drawflow.Home.data[nodeId].html = newHtml;
+          contentElement.innerHTML = newHtml;
         }
       } catch (error) {
         console.error(`Error updating node: ${error}`);
@@ -246,8 +249,7 @@ export default {
 
     async create(name, x, y, data, nodeData) {
       try {
-        this.editor.registerNode('Node', Node, nodeData);
-        const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, 'Node', 'vue');
+        const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, `<div class="card-devices"><span class="content">${nodeData.alias}</span></div>`);
         if (this.selectedNode) {
           const id = this.selectedNode.replace('node-', '');
           this.editor.addConnection(id, newNodeId, 'output_1', 'input_1');
@@ -292,8 +294,15 @@ export default {
 
       if (!this.addMode && this.selectedNode) {
         let node = this.editor.getNodeFromId(this.selectedNode);
+        const html = this.editor.drawflow.drawflow.Home.data[this.selectedNode].html
+
+        const text = html.replace(/<[^>]*>?/gm, '');
+
         if (node) {
-          this.editNodeData = node.alias;
+          this.editNodeData = {
+            alias: text,
+            id: this.selectedNode
+          };
         }
       } else {
         this.editNodeData = null;
