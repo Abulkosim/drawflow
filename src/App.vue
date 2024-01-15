@@ -19,7 +19,7 @@
     <div v-if="showInputModal" class="overlay"></div>
 
     <Input v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :editNodeData="editNodeData"
-      @close="closeInputModal" @save="addNewNode" />
+      @close="closeInputModal" @save="save" />
   </div>
 </template>
 
@@ -106,7 +106,7 @@ export default {
       }
     },
 
-    addNewNode(nodeData) {
+    save(nodeData) {
       if (this.addMode) {
         const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
         const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
@@ -123,10 +123,8 @@ export default {
             this.closeInputModal();
           });
       } else {
-        console.log(nodeData)
         this.updateNode(nodeData)
           .then(() => {
-            console.log(nodeData)
             this.showSuccessToast()
           })
           .catch((error) => {
@@ -140,11 +138,11 @@ export default {
 
     async updateNode(nodeData) {
       try {
-        let node = this.editor.getNodeFromId(this.selectedNode);
+        let nodeId = this.selectedNode;
+        let node = this.editor.getNodeFromId(nodeId);
         if (node) {
-          node.alias = nodeData.alias;
+          this.editor.updateNodeDataFromId(this.selectedNode, { alias: nodeData.alias })
         }
-        return node;
       } catch (error) {
         console.error(`Error updating node: ${error}`);
         throw error;
