@@ -183,6 +183,7 @@ export default {
     async fetchData() {
       try {
         const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=110');
+        console.log(response.data)
       } catch (error) {
         console.error('Error fetching data:', error);
       }

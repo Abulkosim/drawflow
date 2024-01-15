@@ -262,11 +262,8 @@ export default {
     },
 
     editData() {
-      console.log('editnodedata', this.editNodeData)
       if (this.editNodeData) {
         this.alias = this.editNodeData.alias;
-        console.log('this.alias', this.alias)
-        console.log('this.editNodeData', this.editNodeData)
       }
     },
 
