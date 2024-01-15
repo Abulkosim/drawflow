@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "ace-builds": "^1.32.3",
+    "axios": "^1.6.5",
     "drawflow": "^0.0.59",
     "pinia": "^2.0.16",
     "vee-validate": "^2.2.15",

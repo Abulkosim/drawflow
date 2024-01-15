@@ -20,9 +20,6 @@ export default {
 .card-devices {
   font-weight: 600;
   font-size: 20px;
-}
-
-div {
   text-align: center;
 }
 </style>

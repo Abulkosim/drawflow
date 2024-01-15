@@ -32,6 +32,7 @@ import Menu from './components/Menu.vue'
 import Modal from './components/Modal.vue'
 import Toast from './components/Toast.vue'
 import Input from './components/Input.vue'
+import axios from "axios";
 
 export default {
   name: 'App',
@@ -60,18 +61,104 @@ export default {
   mounted() {
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
+    this.fetchData()
+
+
+    const start = 'start'
+    const dataToImport = {
+      "drawflow": {
+        "Home": {
+          "data": {
+            "1": {
+              "id": 1,
+              "name": "Node 1",
+              "data": {},
+              "class": "nodeOne",
+              "html": `<div class="card-devices"><span>${start}</span></div>`,
+              "typenode": false,
+              "inputs": {},
+              "outputs": {
+                "output_1": {
+                  "connections": [
+                    {
+                      "node": "2",
+                      "output": "input_1"
+                    }
+                  ]
+                }
+              },
+              "pos_x": 30,
+              "pos_y": 200
+            },
+            "2": {
+              "id": 2,
+              "name": "Node 2",
+              "data": {},
+              "class": "nodeTwo",
+              "html": `<div class="card-devices"><span>uz, ru, en</span></div>`,
+              "typenode": false,
+              "inputs": {
+                "input_1": {
+                  "connections": [
+                    {
+                      "node": "1",
+                      "input": "output_1"
+                    }
+                  ]
+                }
+              },
+              "outputs": {
+                "output_1": {
+                  "connections": [
+                    {
+                      "node": "3",
+                      "output": 'input_1'
+                    }
+                  ]
+                }
+              },
+              "pos_x": 250,
+              "pos_y": 200
+            },
+            "3": {
+              "id": 3,
+              "name": "Node 3",
+              "data": {},
+              "class": "nodeThree",
+              "html": `<div class="card-devices"><span>third stage</span></div>`,
+              "typenode": false,
+              "inputs": {
+                "input_1": {
+                  "connections": [
+                    {
+                      "node": "2",
+                      "input": "output_1"
+                    }
+                  ]
+                }
+              },
+              "outputs": {
+                "output_1": {
+                  "connections": [
+                    {
+                      // "node": "2",
+                      "input": "output_1"
+                    }
+                  ]
+                }
+              },
+              "pos_x": 500,
+              "pos_y": 150
+            }
+          }
+        },
+      }
+    }
+
+
     this.editor.start();
-    const data = {}
+    this.editor.import(dataToImport);
 
-    let props = { alias: '/start' }
-    this.editor.registerNode('Node', Node, props);
-    const firstNode = this.editor.addNode('Node 1', 0, 1, 30, 200, 'nodeOne', data, 'Node', 'vue');
-
-    props = { alias: 'uz, ru, en' }
-    this.editor.registerNode('Node', Node, props);
-    const secondNode = this.editor.addNode('Node 2', 1, 1, 250, 200, 'nodeTwo', data, 'Node', 'vue');
-
-    this.editor.addConnection(firstNode, secondNode, 'output_1', 'input_1');
 
     id.addEventListener('contextmenu', this.handleRightClick)
 
@@ -93,6 +180,15 @@ export default {
       this.editor.zoom_out()
     },
 
+    async fetchData() {
+      try {
+        const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=110');
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
+
     closeModal() {
       this.showModal = false;
     },
@@ -111,7 +207,6 @@ export default {
         const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
         const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
         const data = {}
-
         this.create(nodeData.alias, positionX, positionY, data, nodeData)
           .then(() => {
             this.showSuccessToast()
@@ -301,5 +396,11 @@ export default {
   margin: 2px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.card-devices {
+  font-weight: 600;
+  font-size: 20px;
+  text-align: center;
 }
 </style>
