@@ -62,9 +62,9 @@ export default {
 
   async created() {
     const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=118');
-    // const apiData = response.data.data;
-    // console.log(apiData)
-    // this.data = this.transformApiData(apiData);
+    const apiData = response.data.data;
+    console.log(apiData)
+    this.data = this.transformApiData(apiData);
     // this.data = this.transformApiData([
     //   { id: 62, alias: 'contact', stage_order: 10, created_at: 1705320922370 }
     // ]);
@@ -74,7 +74,12 @@ export default {
     this.editor = new Drawflow(id, Vue, this);
 
     this.editor.start();
+    if (this.data.length) {
     this.editor.import(this.data);
+    } else{
+      this.editor.import(this.transformApiData());
+    }
+
 
 
     id.addEventListener('contextmenu', this.handleRightClick)
