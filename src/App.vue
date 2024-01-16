@@ -63,7 +63,7 @@ export default {
   async created() {
     const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=110');
     const apiData = response.data;
-    console.log(apiData)
+    console.log(apiData);
     this.data = this.transformApiData(apiData);
   },
   mounted() {
@@ -71,7 +71,6 @@ export default {
     this.editor = new Drawflow(id, Vue, this);
     this.editor.reroute = true;
 
-    const start = '/start'
     const dataToImport = {
       "drawflow": {
         "Home": {
@@ -81,7 +80,7 @@ export default {
               "name": "Node 1",
               "data": {},
               "class": "nodeOne",
-              "html": `<div class="card-devices"><span>${start}</span></div>`,
+              "html": `<div class="card-devices"><span>/start</span></div>`,
               "typenode": false,
               "inputs": {},
               "outputs": {
