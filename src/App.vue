@@ -56,113 +56,25 @@ export default {
       toastMessage: '',
       addMode: true,
       editNodeData: null,
-      data: null
+      data: []
     }
   },
 
   async created() {
-    const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=110');
-    const apiData = response.data;
-    console.log(apiData);
-    this.data = this.transformApiData(apiData);
+    const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=118');
+    // const apiData = response.data.data;
+    // console.log(apiData)
+    // this.data = this.transformApiData(apiData);
+    // this.data = this.transformApiData([
+    //   { id: 62, alias: 'contact', stage_order: 10, created_at: 1705320922370 }
+    // ]);
   },
   mounted() {
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
-    this.editor.reroute = true;
-
-    const dataToImport = {
-      "drawflow": {
-        "Home": {
-          "data": {
-            "1": {
-              "id": 1,
-              "name": "Node 1",
-              "data": {},
-              "class": "nodeOne",
-              "html": `<div class="card-devices"><span>/start</span></div>`,
-              "typenode": false,
-              "inputs": {},
-              "outputs": {
-                "output_1": {
-                  "connections": [
-                    {
-                      "node": "2",
-                      "output": "input_1"
-                    }
-                  ]
-                }
-              },
-              "pos_x": 30,
-              "pos_y": 200
-            },
-            "2": {
-              "id": 2,
-              "name": "Node 2",
-              "data": {},
-              "class": "nodeTwo",
-              "html": `<div class="card-devices"><span>uz, ru, en</span></div>`,
-              "typenode": false,
-              "inputs": {
-                "input_1": {
-                  "connections": [
-                    {
-                      "node": "1",
-                      "input": "output_1"
-                    }
-                  ]
-                }
-              },
-              "outputs": {
-                "output_1": {
-                  "connections": [
-                    {
-                      "node": "3",
-                      "output": 'input_1'
-                    }
-                  ]
-                }
-              },
-              "pos_x": 250,
-              "pos_y": 200
-            },
-            "3": {
-              "id": 3,
-              "name": "Node 3",
-              "data": {},
-              "class": "nodeThree",
-              "html": `<div class="card-devices"><span class="content">third stage</span></div>`,
-              "typenode": false,
-              "inputs": {
-                "input_1": {
-                  "connections": [
-                    {
-                      "node": "2",
-                      "input": "output_1"
-                    }
-                  ]
-                }
-              },
-              "outputs": {
-                "output_1": {
-                  "connections": [
-                    {
-                      // "node": "4",
-                      "output": "input_1"
-                    }
-                  ]
-                }
-              },
-              "pos_x": 500,
-              "pos_y": 150
-            }
-          }
-        },
-      }
-    }
 
     this.editor.start();
-    this.editor.import(dataToImport);
+    this.editor.import(this.data);
 
 
     id.addEventListener('contextmenu', this.handleRightClick)
@@ -186,60 +98,100 @@ export default {
     },
 
     transformApiData(apiData) {
+
       const transformedData = {
         drawflow: {
           Home: {
-            data: {}
+            data: {
+              "1": {
+                "id": 1,
+                "name": "Node 1",
+                "data": {},
+                "class": "nodeOne",
+                "html": `<div class="card-devices"><span>/start</span></div>`,
+                "typenode": false,
+                "inputs": {},
+                "outputs": {
+                  "output_1": {
+                    "connections": [
+                      {
+                        "node": "2",
+                        "output": "input_1"
+                      }
+                    ]
+                  }
+                },
+                "pos_x": 30,
+                "pos_y": 200
+              },
+              "2": {
+                "id": 2,
+                "name": "Node 2",
+                "data": {},
+                "class": "nodeTwo",
+                "html": `<div class="card-devices"><span>uz, ru, en</span></div>`,
+                "typenode": false,
+                "inputs": {
+                  "input_1": {
+                    "connections": [
+                      {
+                        "node": "1",
+                        "input": "output_1"
+                      }
+                    ]
+                  }
+                },
+                "outputs": {
+                  "output_1": {
+                    "connections": [
+                      {
+                        "node": "3",
+                        "output": 'input_1'
+                      }
+                    ]
+                  }
+                },
+                "pos_x": 250,
+                "pos_y": 200
+              },
+            }
           }
         }
       };
 
-      apiData.forEach((item, index) => {
-        transformedData.drawflow.Home.data[index + 1] = {
-          id: item.id,
-          name: `Node ${index + 1}`,
-          data: {},
-          class: `node${index + 1}`,
-          html: `<div class="card-devices"><span>${item.name}</span></div>`,
-          typenode: false,
-          inputs: this.generateInputs(item),
-          outputs: this.generateOutputs(item),
-          pos_x: 30 + (index * 220),
-          pos_y: 200 + (index * 50)
-        };
-      });
-
-      return transformedData;
+      if (apiData && apiData.length) {
+        apiData.forEach((item) => {
+          transformedData.drawflow.Home.data[`${item.id}`] = {
+            id: item.id,
+            name: `Node ${item.id}`,
+            data: {},
+            class: `node${item.id}`,
+            html: `<div class="card-devices"><span>Stage ${item.id}</span></div>`,
+            typenode: false,
+            inputs: this.generateInputs(item),
+            outputs: this.generateOutputs(item),
+            pos_x: 300 + Math.floor(Math.random() * 301) + 120,
+            pos_y: 200 + Math.floor(Math.random() * 301) - 120
+          };
+        });
+      }
+      return transformedData
     },
 
     generateInputs(item) {
-      const inputs = {};
-
-      item.inputs.forEach((input, index) => {
-        inputs[`input_${index + 1}`] = {
-          connections: input.connections.map(connection => ({
-            node: connection.node_id,
-            input: `input_${connection.input_id}`,
-          })),
-        };
-      });
-
-      return inputs;
+      return {
+        input_1: {
+          connections: []
+        }
+      };
     },
 
     generateOutputs(item) {
-      const outputs = {};
-
-      item.outputs.forEach((output, index) => {
-        outputs[`output_${index + 1}`] = {
-          connections: output.connections.map(connection => ({
-            node: connection.node_id,
-            output: `output_${connection.output_id}`,
-          })),
-        };
-      });
-
-      return outputs;
+      return {
+        output_1: {
+          connections: []
+        }
+      };
     },
 
 
