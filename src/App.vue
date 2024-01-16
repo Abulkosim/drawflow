@@ -55,14 +55,21 @@ export default {
       isSuccessful: false,
       toastMessage: '',
       addMode: true,
-      editNodeData: null
+      editNodeData: null,
+      data: null
     }
+  },
+
+  async created() {
+    const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=110');
+    const apiData = response.data;
+    console.log(apiData)
+    this.data = this.transformApiData(apiData);
   },
   mounted() {
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
-    this.fetchData()
-
+    this.editor.reroute = true;
 
     const start = '/start'
     const dataToImport = {
@@ -155,7 +162,6 @@ export default {
       }
     }
 
-
     this.editor.start();
     this.editor.import(dataToImport);
 
@@ -180,14 +186,63 @@ export default {
       this.editor.zoom_out()
     },
 
-    async fetchData() {
-      try {
-        const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=110');
-        console.log(response.data)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+    transformApiData(apiData) {
+      const transformedData = {
+        drawflow: {
+          Home: {
+            data: {}
+          }
+        }
+      };
+
+      apiData.forEach((item, index) => {
+        transformedData.drawflow.Home.data[index + 1] = {
+          id: item.id,
+          name: `Node ${index + 1}`,
+          data: {},
+          class: `node${index + 1}`,
+          html: `<div class="card-devices"><span>${item.name}</span></div>`,
+          typenode: false,
+          inputs: this.generateInputs(item),
+          outputs: this.generateOutputs(item),
+          pos_x: 30 + (index * 220),
+          pos_y: 200 + (index * 50)
+        };
+      });
+
+      return transformedData;
     },
+
+    generateInputs(item) {
+      const inputs = {};
+
+      item.inputs.forEach((input, index) => {
+        inputs[`input_${index + 1}`] = {
+          connections: input.connections.map(connection => ({
+            node: connection.node_id,
+            input: `input_${connection.input_id}`,
+          })),
+        };
+      });
+
+      return inputs;
+    },
+
+    generateOutputs(item) {
+      const outputs = {};
+
+      item.outputs.forEach((output, index) => {
+        outputs[`output_${index + 1}`] = {
+          connections: output.connections.map(connection => ({
+            node: connection.node_id,
+            output: `output_${connection.output_id}`,
+          })),
+        };
+      });
+
+      return outputs;
+    },
+
 
     closeModal() {
       this.showModal = false;
