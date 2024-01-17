@@ -18,22 +18,26 @@
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
             <div class="first-row">
-              <ValidationProvider rules="required" v-slot="{ errors }">
-                <div>
-                  <label for="alias" class="label required">Alias</label>
-                  <input type="text" name="alias" id="alias" class="input" v-model="alias" autocomplete="off">
-                  <span v-if="errors[0]" class="output">Required field!</span>
-                </div>
-              </ValidationProvider>
-              <ValidationProvider rules="required" v-slot="{ errors }">
-                <div>
-                  <label for="stage_order" class="label required">Order</label>
-                  <input type="number" name="stage_order" id="stage_order" class="input" v-model="stage_order"
-                    autocomplete="off">
-                  <span v-if="errors[0]" class="output">Required field!</span>
-                </div>
-              </ValidationProvider>
+              <div>
+                <ValidationProvider rules="required" v-slot="{ errors }">
+                  <div>
+                    <label for="alias" class="label required">Alias</label>
+                    <input type="text" name="alias" id="alias" class="input" v-model="alias" autocomplete="off">
+                    <span v-if="errors[0]" class="output">Required field!</span>
+                  </div>
+                </ValidationProvider>
+              </div>
+              <div>
+                <ValidationProvider rules="required" v-slot="{ errors }">
+                  <div>
+                    <label for="stage_order" class="label required">Order</label>
+                    <input type="number" name="stage_order" id="stage_order" class="input" v-model="stage_order"
+                      autocomplete="off">
+                    <span v-if="errors[0]" class="output">Required field!</span>
+                  </div>
+                </ValidationProvider>
 
+              </div>
               <div>
                 <label for="action" class="label">Action</label>
                 <select v-model="selected" @change="toggleEditor" id="action" class="input">
@@ -43,7 +47,7 @@
               </div>
               <div>
                 <label for="type" class="label" :class="{ required: stageSelected }">Button type</label>
-                <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="buttonType"
+                <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="btn_type"
                   @change="isDisabled = false; stateString = ''">
                   <option value="INLINE" selected>INLINE</option>
                   <option value="REPLY">REPLY</option>
@@ -51,6 +55,13 @@
                   <option value="LOCATION">LOCATION</option>
                 </select>
               </div>
+            </div>
+            <div v-if="stageSelected">
+              <label for="text" class="label">Text</label>
+              <select id="text" class="input" v-model="text_alias">
+                <option value="" disabled selected hidden></option>
+                <option value="option">option</option>
+              </select>
             </div>
             <div v-if="!stageSelected">
               <label for="url" class="label">Callback URL</label>
@@ -95,9 +106,9 @@
             <div class="dist" v-if="stageSelected">
               <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(\:\d+)?(\:\d+)?$/ }">
                 <div>
-                  <label for="btn-size" class="label">btn_size</label>
-                  <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_size" @change="validateSize"
-                    autocomplete='off'>
+                  <label for="btn-size" class="label">btn_sizes</label>
+                  <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_sizes"
+                    @change="validateSize" autocomplete='off'>
                   <span v-if="errors[0]" class="output">Invalid format!</span>
                 </div>
               </ValidationProvider>
@@ -133,7 +144,7 @@ import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-cobalt';
 
 export default {
-  props: ['showInputModal', 'addMode', 'editNodeData', 'inputValues'],
+  props: ['showInputModal', 'addMode', 'inputValues'],
   data() {
     return {
       heading: 'Add stage',
@@ -142,15 +153,17 @@ export default {
       selected: 'STAGE',
       stateType: '',
       stateString: '',
-      buttonType: 'INLINE',
+      btn_type: 'INLINE',
       conditionType: '',
       isDisabled: false,
-      btn_size: '3',
+      btn_sizes: '3',
       error: false,
       editor: null,
       editorVisible: true,
       output: '',
       loading: false,
+      localInputValues: {},
+      text_alias: '',
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
     }
   },
@@ -206,7 +219,7 @@ export default {
 
     validateSize() {
       const regex = /^\d+(\:\d+)?(\:\d+)?$/;
-      this.error = !regex.test(this.btn_size);
+      this.error = !regex.test(this.btn_sizes);
     },
 
     toggleEditor() {
@@ -241,25 +254,41 @@ export default {
     },
 
     editData() {
-      if (this.editNodeData) {
-        this.alias = this.editNodeData.alias;
-        
+      this.localInputValues = { ...this.inputValues }
+      if (this.localInputValues) {
+        this.alias = this.localInputValues.alias ?? 'stage 2';
+        this.btn_sizes = this.localInputValues.btn_sizes ?? 3;
+        this.btn_type = this.localInputValues.btn_type ?? 'INLINE';
+        this.condition = this.localInputValues.condition;
+        this.id = this.localInputValues.id;
+        this.media = this.localInputValues.media;
+        this.stage_order = this.localInputValues.stage_order ?? '20';
+        this.text_alias = this.localInputValues.text_alias;
+        this.text_id = this.localInputValues.text_id;
+        this.selected = this.localInputValues.url ?? 'STAGE';
+        // this.user_state = this.localInputValues.user_state;
       }
     },
 
   },
   watch: {
+    inputValues: {
+      handler(newValue) {
+        this.localInputValues = { ...newValue }
+      },
+      immediate: true
+    },
     showInputModal(newValue) {
       if (newValue && !this.addMode) {
         this.editData();
       }
     },
-    editNodeData(newData) {
+    inputValues(newData) {
       if (newData) {
         this.editData();
       }
     },
-    buttonType(current) {
+    btn_type(current) {
       if (current == 'LOCATION' || current == 'CONTACT') {
         this.stateType = 'next.'
         this.isDisabled = true

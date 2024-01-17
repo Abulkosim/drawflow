@@ -18,8 +18,8 @@
 
     <div v-if="showInputModal" class="overlay"></div>
 
-    <Input v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :editNodeData="editNodeData"
-      :inputValues="inputValues" @close="closeInputModal" @save="save" />
+    <Input v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
+      @close="closeInputModal" @save="save" />
   </div>
 </template>
 
@@ -55,7 +55,6 @@ export default {
       isSuccessful: false,
       toastMessage: '',
       addMode: true,
-      editNodeData: null,
       data: [],
       inputValues: {},
       url: 'http://10.20.11.24:8080/api/v1/bot/stage'
@@ -314,7 +313,6 @@ export default {
       try {
         const response = await axios.get(`${this.url}?bot_id=122&id=${id}`);
         const apiData = response.data.data.stage;
-        console.log('apidata', apiData)
         this.inputValues = {
           alias: apiData.alias,
           btn_sizes: apiData.btn_sizes,
@@ -322,11 +320,10 @@ export default {
           condition: apiData.condition,
           id: apiData.id ?? this.selectedNode,
           media: apiData.media,
-          stage_order: apiData.stage_order ?? '20',
+          stage_order: apiData.stage_order,
           text_alias: apiData.text_alias,
           text_id: apiData.text_id,
-          text_url: apiData.text_url,
-          url: apiData.url,
+          url: apiData.url ? 'URL' : 'STAGE',
           user_state: apiData.user_state
         }
       } catch (error) {
@@ -346,10 +343,9 @@ export default {
 
         if (node) {
           await this.getNode(this.selectedNode)
-          this.editNodeData = this.inputValues;
         }
       } else {
-        this.editNodeData = null;
+        this.inputValues = {};
       }
 
       this.showInputModal = true;
