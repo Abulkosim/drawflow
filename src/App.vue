@@ -81,7 +81,6 @@ export default {
 
     this.editor.on('nodeSelected', (node) => {
       this.selectedNode = node;
-      this.getNode(this.selectedNode)
     });
 
     window.addEventListener('click', () => {
@@ -103,27 +102,6 @@ export default {
         const response = await axios.get(`${this.url}/list?bot_id=122`);
         const apiData = response.data.data;
         this.data = await this.transformApiData(apiData);
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-      }
-    },
-
-    async getNode(id) {
-      try {
-        const response = await axios.get(`${this.url}?bot_id=122&id=${id}`);
-        const apiData = response.data.data.stage;
-
-        this.inputValues = {
-          id: apiData.id ?? this.selectedNode,
-          stage_order: apiData.stage_order ?? '20',
-          text_id: apiData.text_id,
-          text_alias: apiData.text_alias,
-          text_url: apiData.text_url,
-          user_state: apiData.user_state
-        }
-
-        console.log(this.inputValues)
-
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
@@ -332,7 +310,31 @@ export default {
       }
     },
 
-    openInputModal(info) {
+    async getNode(id) {
+      try {
+        const response = await axios.get(`${this.url}?bot_id=122&id=${id}`);
+        const apiData = response.data.data.stage;
+        console.log('apidata', apiData)
+        this.inputValues = {
+          alias: apiData.alias,
+          btn_sizes: apiData.btn_sizes,
+          btn_type: apiData.btn_type,
+          condition: apiData.condition,
+          id: apiData.id ?? this.selectedNode,
+          media: apiData.media,
+          stage_order: apiData.stage_order ?? '20',
+          text_alias: apiData.text_alias,
+          text_id: apiData.text_id,
+          text_url: apiData.text_url,
+          url: apiData.url,
+          user_state: apiData.user_state
+        }
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    },
+
+    async openInputModal(info) {
       this.showContextMenu = false;
       this.addMode = info === 'adding';
 
@@ -343,10 +345,9 @@ export default {
         const text = html.replace(/<[^>]*>?/gm, '');
 
         if (node) {
-          this.editNodeData = {
-            alias: text,
-            id: this.selectedNode
-          };
+          await this.getNode(this.selectedNode)
+          this.editNodeData = this.inputValues;
+          console.log('this.inputValues', this.inputValues)
         }
       } else {
         this.editNodeData = null;

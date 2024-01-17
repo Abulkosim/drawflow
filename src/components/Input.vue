@@ -178,28 +178,6 @@ export default {
     this.initializeAceEditor()
   },
 
-  watch: {
-    buttonType(current) {
-      if (current == 'LOCATION' || current == 'CONTACT') {
-        this.stateType = 'next.'
-        this.isDisabled = true
-      } else if (current == 'REPLY') {
-        this.stateType = 'other'
-        this.isDisabled = true
-        this.stateString = 'reply'
-      }
-    },
-    conditionType(current) {
-      if (this.editor) {
-        if (current == 'input') {
-          this.editor.setValue('user["attributes"]["full_name"] = msg_data\nupdate_user(id=user["id"], attributes=user["attributes"])')
-        } else if (current == 'update') {
-          this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
-        }
-      }
-    }
-  },
-
   methods: {
     async checkPythonCode() {
       const pythonCode = this.editor.getValue();
@@ -279,8 +257,27 @@ export default {
       if (newData) {
         this.editData();
       }
+    },
+    buttonType(current) {
+      if (current == 'LOCATION' || current == 'CONTACT') {
+        this.stateType = 'next.'
+        this.isDisabled = true
+      } else if (current == 'REPLY') {
+        this.stateType = 'other'
+        this.isDisabled = true
+        this.stateString = 'reply'
+      }
+    },
+    conditionType(current) {
+      if (this.editor) {
+        if (current == 'input') {
+          this.editor.setValue('user["attributes"]["full_name"] = msg_data\nupdate_user(id=user["id"], attributes=user["attributes"])')
+        } else if (current == 'update') {
+          this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
+        }
+      }
     }
-  },
+  }
 }
 
 </script>
