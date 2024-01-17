@@ -19,7 +19,7 @@
     <div v-if="showInputModal" class="overlay"></div>
 
     <Input v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :editNodeData="editNodeData"
-      @close="closeInputModal" @save="save" />
+      :inputValues="inputValues" @close="closeInputModal" @save="save" />
   </div>
 </template>
 
@@ -57,18 +57,13 @@ export default {
       addMode: true,
       editNodeData: null,
       data: [],
-      url: 'http://10.20.11.24:8080/api/v1/bot/stage/'
+      inputValues: {},
+      url: 'http://10.20.11.24:8080/api/v1/bot/stage'
     }
   },
 
   async created() {
-    try {
-      const response = await axios.get(`${this.url}list?bot_id=122`);
-      const apiData = response.data.data;
-      this.data = apiData;
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-    }
+    await this.getStages()
   },
 
   async mounted() {
@@ -76,23 +71,17 @@ export default {
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
 
-    let dataToImport = this.data;
-    if (!dataToImport.length) {
-      try {
-        const response = await axios.get(`${this.url}list?bot_id=122`);
-        const apiData = response.data.data;
-        dataToImport = await this.transformApiData(apiData);
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-      }
+    if (!this.data.length) {
+      await this.getStages()
     }
 
-    this.editor.import(dataToImport);
+    this.editor.import(this.data);
 
     id.addEventListener('contextmenu', this.handleRightClick)
 
     this.editor.on('nodeSelected', (node) => {
       this.selectedNode = node;
+      this.getNode(this.selectedNode)
     });
 
     window.addEventListener('click', () => {
@@ -107,6 +96,37 @@ export default {
 
     zoomOut() {
       this.editor.zoom_out()
+    },
+
+    async getStages() {
+      try {
+        const response = await axios.get(`${this.url}/list?bot_id=122`);
+        const apiData = response.data.data;
+        this.data = await this.transformApiData(apiData);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    },
+
+    async getNode(id) {
+      try {
+        const response = await axios.get(`${this.url}?bot_id=122&id=${id}`);
+        const apiData = response.data.data.stage;
+
+        this.inputValues = {
+          id: apiData.id ?? this.selectedNode,
+          stage_order: apiData.stage_order ?? '20',
+          text_id: apiData.text_id,
+          text_alias: apiData.text_alias,
+          text_url: apiData.text_url,
+          user_state: apiData.user_state
+        }
+
+        console.log(this.inputValues)
+
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
     },
 
     async transformApiData(apiData) {

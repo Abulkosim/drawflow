@@ -27,8 +27,9 @@
               </ValidationProvider>
               <ValidationProvider rules="required" v-slot="{ errors }">
                 <div>
-                  <label for="order" class="label required">Order</label>
-                  <input type="number" name="order" id="order" class="input" v-model="order" autocomplete="off">
+                  <label for="stage_order" class="label required">Order</label>
+                  <input type="number" name="stage_order" id="stage_order" class="input" v-model="stage_order"
+                    autocomplete="off">
                   <span v-if="errors[0]" class="output">Required field!</span>
                 </div>
               </ValidationProvider>
@@ -132,12 +133,12 @@ import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-cobalt';
 
 export default {
-  props: ['showInputModal', 'addMode', 'editNodeData'],
+  props: ['showInputModal', 'addMode', 'editNodeData', 'inputValues'],
   data() {
     return {
       heading: 'Add stage',
       alias: 'stage 2',
-      order: '20',
+      stage_order: '20',
       selected: 'STAGE',
       stateType: '',
       stateString: '',
