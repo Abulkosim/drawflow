@@ -347,7 +347,6 @@ export default {
         if (node) {
           await this.getNode(this.selectedNode)
           this.editNodeData = this.inputValues;
-          console.log('this.inputValues', this.inputValues)
         }
       } else {
         this.editNodeData = null;

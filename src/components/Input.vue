@@ -243,6 +243,7 @@ export default {
     editData() {
       if (this.editNodeData) {
         this.alias = this.editNodeData.alias;
+        
       }
     },
 
