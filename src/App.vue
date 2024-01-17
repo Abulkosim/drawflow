@@ -61,26 +61,28 @@ export default {
   },
 
   async created() {
-    const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=118');
-    const apiData = response.data.data;
-    console.log(apiData)
-    this.data = this.transformApiData(apiData);
-    // this.data = this.transformApiData([
-    //   { id: 62, alias: 'contact', stage_order: 10, created_at: 1705320922370 }
-    // ]);
+    // const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=118');
+    // const apiData = response.data.data;
+    // this.data = this.transformApiData(apiData);
+    this.data = this.transformApiData([
+      { id: 62, alias: 'contact', stage_order: 10, created_at: 1705320922370 }
+    ]);
   },
-  mounted() {
+
+  async mounted() {
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
-
     this.editor.start();
+
+    let dataToImport;
+
     if (this.data.length) {
-    this.editor.import(this.data);
-    } else{
-      this.editor.import(this.transformApiData());
+      dataToImport = this.data;
+    } else {
+      dataToImport = await this.transformApiData();
     }
 
-
+    this.editor.import(dataToImport);
 
     id.addEventListener('contextmenu', this.handleRightClick)
 
@@ -102,7 +104,7 @@ export default {
       this.editor.zoom_out()
     },
 
-    transformApiData(apiData) {
+    async transformApiData(apiData) {
 
       const transformedData = {
         drawflow: {
@@ -150,7 +152,7 @@ export default {
                   "output_1": {
                     "connections": [
                       {
-                        "node": "3",
+                        // "node": "3",
                         "output": 'input_1'
                       }
                     ]
