@@ -56,17 +56,19 @@ export default {
       toastMessage: '',
       addMode: true,
       editNodeData: null,
-      data: []
+      data: [],
+      url: 'http://10.20.11.24:8080/api/v1/bot/stage/'
     }
   },
 
   async created() {
-    // const response = await axios.get('http://10.20.11.24:8080/api/v1/bot/stage/list?bot_id=118');
-    // const apiData = response.data.data;
-    // this.data = this.transformApiData(apiData);
-    this.data = this.transformApiData([
-      { id: 62, alias: 'contact', stage_order: 10, created_at: 1705320922370 }
-    ]);
+    try {
+      const response = await axios.get(`${this.url}list?bot_id=122`);
+      const apiData = response.data.data;
+      this.data = apiData;
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+    }
   },
 
   async mounted() {
@@ -74,12 +76,15 @@ export default {
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
 
-    let dataToImport;
-
-    if (this.data.length) {
-      dataToImport = this.data;
-    } else {
-      dataToImport = await this.transformApiData();
+    let dataToImport = this.data;
+    if (!dataToImport.length) {
+      try {
+        const response = await axios.get(`${this.url}list?bot_id=122`);
+        const apiData = response.data.data;
+        dataToImport = await this.transformApiData(apiData);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
     }
 
     this.editor.import(dataToImport);
