@@ -268,13 +268,13 @@ export default {
 
     async updateNode(nodeData) {
       try {
-        console.log('nodeData', nodeData)
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
-        let contentElement = document.querySelector(`#node-${nodeId} .content`);
-
+        console.log(`#node-${nodeId} .content`)
+        let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
+        console.log('contentElement', contentElement)
         if (node && contentElement) {
-          let newHtml = `<span>${nodeData.alias}</span>`;
+          let newHtml = `<span class="content">${nodeData.alias}</span>`;
           this.editor.drawflow.drawflow.Home.data[nodeId].html = newHtml;
           contentElement.innerHTML = newHtml;
         }

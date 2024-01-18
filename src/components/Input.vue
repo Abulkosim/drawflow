@@ -165,6 +165,7 @@ export default {
       loading: false,
       localValues: {},
       text_alias: '',
+      condition: null,
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
       aliases: [],
       url: 'http://10.20.11.24:8080/api/v1/bot/'
@@ -286,7 +287,6 @@ export default {
         this.alias = this.localValues.alias ?? 'stage 2';
         this.btn_sizes = this.localValues.btn_sizes ?? 3;
         this.btn_type = this.localValues.btn_type ?? 'INLINE';
-        this.condition = this.localValues.condition;
         this.id = this.localValues.id;
         this.media = this.localValues.media;
         this.stage_order = this.localValues.stage_order ?? '20';
@@ -294,6 +294,11 @@ export default {
         this.text_id = this.localValues.text_id;
         this.selected = this.localValues.url ?? 'STAGE';
         this.user_state = this.localValues.user_state;
+        this.condition = this.localValues.condition;
+      }
+
+      if (this.localValues.condition) {
+        this.editor.setValue(this.localValues.condition);
       }
     },
 
