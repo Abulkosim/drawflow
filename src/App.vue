@@ -57,7 +57,7 @@ export default {
       addMode: true,
       data: [],
       inputValues: {},
-      url: 'http://10.20.11.24:8080/api/v1/bot/stage'
+      url: 'http://10.20.11.24:8080/api/'
     }
   },
 
@@ -98,7 +98,7 @@ export default {
 
     async getStages() {
       try {
-        const response = await axios.get(`${this.url}/list?bot_id=122`);
+        const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
         const apiData = response.data.data;
         this.data = await this.transformApiData(apiData);
       } catch (error) {
@@ -254,12 +254,17 @@ export default {
     async create(name, x, y, data, nodeData) {
       try {
         const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, `<div class="card-devices"><span class="content">${nodeData.alias}</span></div>`);
+        // delete nodeData.id;
+        // await axios.post(`${this.url}tg/bot/stage/create`, nodeData);
+
+        console.log(nodeData)
         if (this.selectedNode) {
           const id = this.selectedNode.replace('node-', '');
           this.editor.addConnection(id, newNodeId, 'output_1', 'input_1');
         }
       } catch (error) {
         console.error(`Error creating node: ${error}`);
+        console.log(error.response)
         throw error;
       } finally {
         this.addMode = false;
@@ -270,16 +275,19 @@ export default {
       try {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
-        console.log(`#node-${nodeId} .content`)
+
+        await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
+
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
-        console.log('contentElement', contentElement)
         if (node && contentElement) {
           let newHtml = `<span class="content">${nodeData.alias}</span>`;
           this.editor.drawflow.drawflow.Home.data[nodeId].html = newHtml;
           contentElement.innerHTML = newHtml;
         }
+
       } catch (error) {
         console.error(`Error updating node: ${error}`);
+        console.log(error.response)
         throw error;
       }
     },
@@ -312,7 +320,7 @@ export default {
 
     async getNode(id) {
       try {
-        const response = await axios.get(`${this.url}?bot_id=122&id=${id}`);
+        const response = await axios.get(`${this.url}v1/bot/stage?bot_id=122&id=${id}`);
         const apiData = response.data.data.stage;
         this.inputValues = {
           alias: apiData.alias,

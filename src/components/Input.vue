@@ -163,8 +163,9 @@ export default {
       editorVisible: true,
       output: '',
       loading: false,
-      localValues: {},
       text_alias: '',
+      text_id: '',
+      id: '',
       condition: null,
       items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
       aliases: [],
@@ -239,10 +240,19 @@ export default {
     },
 
     save() {
-      const nodeData = {
-        alias: this.alias
-      }
-      this.$emit('save', nodeData)
+      this.$emit('save', {
+        id: this.id,
+        alias: this.alias,
+        stage_order: this.stage_order,
+        text_id: this.text_id,
+        url_id: 2,
+        user_state: this.user_state,
+        condition: this.editor.getValue(),
+        updated_by: 1,
+        btn_type: this.btn_type,
+        btn_sizes: this.btn_sizes,
+        state: 1
+      })
     },
 
     validateSize() {
@@ -282,31 +292,29 @@ export default {
     },
 
     editData() {
-      this.localValues = { ...this.inputValues }
-      if (this.localValues) {
-        this.alias = this.localValues.alias ?? 'stage 2';
-        this.btn_sizes = this.localValues.btn_sizes ?? 3;
-        this.btn_type = this.localValues.btn_type ?? 'INLINE';
-        this.id = this.localValues.id;
-        this.media = this.localValues.media;
-        this.stage_order = this.localValues.stage_order ?? '20';
-        this.text_alias = this.localValues.text_alias;
-        this.text_id = this.localValues.text_id;
-        this.selected = this.localValues.url ?? 'STAGE';
-        this.user_state = this.localValues.user_state;
-        this.condition = this.localValues.condition;
+      if (this.inputValues) {
+        this.alias = this.inputValues.alias ?? 'stage 2';
+        this.btn_sizes = this.inputValues.btn_sizes ?? 3;
+        this.btn_type = this.inputValues.btn_type ?? 'INLINE';
+        this.id = this.inputValues.id;
+        this.stage_order = this.inputValues.stage_order ?? '20';
+        this.text_alias = this.inputValues.text_alias;
+        this.text_id = this.inputValues.text_id;
+        this.selected = this.inputValues.url ?? 'STAGE';
+        this.user_state = this.inputValues.user_state;
+        this.condition = this.inputValues.condition;
       }
 
-      if (this.localValues.condition) {
-        this.editor.setValue(this.localValues.condition);
-      }
+      // if (this.inputValues.condition) {
+      //   this.editor.setValue(this.inputValues.condition);
+      // }
     },
 
   },
   watch: {
     inputValues: {
       handler(newValue) {
-        this.localValues = { ...newValue }
+        this.inputValues = { ...newValue }
       },
       immediate: true
     },
