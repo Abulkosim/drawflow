@@ -179,8 +179,8 @@ export default {
             typenode: false,
             inputs: this.generateInputs(item),
             outputs: this.generateOutputs(item),
-            pos_x: 300 + Math.floor(Math.random() * 301) + 120,
-            pos_y: 200 + Math.floor(Math.random() * 301) - 120
+            pos_x: 300 + Math.floor(Math.random() * 201) + 150,
+            pos_y: 200 + Math.floor(Math.random() * 201) - 100
           };
         });
       }
@@ -251,23 +251,6 @@ export default {
       }
     },
 
-    async updateNode(nodeData) {
-      try {
-        let nodeId = this.selectedNode;
-        let node = this.editor.getNodeFromId(nodeId);
-        let contentElement = document.querySelector(`#node-${nodeId} .content`);
-
-        if (node && contentElement) {
-          let newHtml = `<span>${nodeData.alias}</span>`;
-          this.editor.drawflow.drawflow.Home.data[nodeId].html = newHtml;
-          contentElement.innerHTML = newHtml;
-        }
-      } catch (error) {
-        console.error(`Error updating node: ${error}`);
-        throw error;
-      }
-    },
-
     async create(name, x, y, data, nodeData) {
       try {
         const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, `<div class="card-devices"><span class="content">${nodeData.alias}</span></div>`);
@@ -280,6 +263,24 @@ export default {
         throw error;
       } finally {
         this.addMode = false;
+      }
+    },
+
+    async updateNode(nodeData) {
+      try {
+        console.log('nodeData', nodeData)
+        let nodeId = this.selectedNode;
+        let node = this.editor.getNodeFromId(nodeId);
+        let contentElement = document.querySelector(`#node-${nodeId} .content`);
+
+        if (node && contentElement) {
+          let newHtml = `<span>${nodeData.alias}</span>`;
+          this.editor.drawflow.drawflow.Home.data[nodeId].html = newHtml;
+          contentElement.innerHTML = newHtml;
+        }
+      } catch (error) {
+        console.error(`Error updating node: ${error}`);
+        throw error;
       }
     },
 

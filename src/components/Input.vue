@@ -60,7 +60,7 @@
               <label for="text" class="label">Text</label>
               <select id="text" class="input" v-model="text_alias">
                 <option value="" disabled selected hidden></option>
-                <option value="option">option</option>
+                <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
               </select>
             </div>
             <div v-if="!stageSelected">
@@ -106,9 +106,9 @@
             <div class="dist" v-if="stageSelected">
               <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(\:\d+)?(\:\d+)?$/ }">
                 <div>
-                  <label for="btn-size" class="label">btn_sizes</label>
-                  <input type="text" name="btn-size" id="btn-size" class="input" v-model="btn_sizes"
-                    @change="validateSize" autocomplete='off'>
+                  <label for="btn-sizes" class="label">btn_sizes</label>
+                  <input type="text" name="btn-sizes" id="btn-sizes" class="input" v-model="btn_sizes"
+                    @change="validateSize" autocomplete='off' :class="{ error: error }">
                   <span v-if="errors[0]" class="output">Invalid format!</span>
                 </div>
               </ValidationProvider>
@@ -125,7 +125,7 @@
 
             <div v-if="stageSelected">
               <label for="user" class="label">User State</label>
-              <input type="text" name="user" id="user" class="input" :value="userState" autocomplete="off" disabled>
+              <input type="text" name="user" id="user" class="input" :value="user_state" autocomplete="off" disabled>
             </div>
           </div>
           <div class="modal-save">
@@ -142,6 +142,7 @@
 import ace from 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-cobalt';
+import axios from "axios";
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues'],
@@ -162,17 +163,36 @@ export default {
       editorVisible: true,
       output: '',
       loading: false,
-      localInputValues: {},
+      localValues: {},
       text_alias: '',
-      items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']
+      items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
+      aliases: [],
+      url: 'http://10.20.11.24:8080/api/v1/bot/'
     }
   },
   computed: {
-    userState: function () {
-      if (this.stateType != 'other') {
-        return this.stateType + this.stateString
-      } else {
-        return this.stateString
+    user_state: {
+      get() {
+        if (this.stateType != 'other') {
+          return this.stateType + this.stateString
+        } else {
+          return this.stateString
+        }
+      },
+
+      set(newValue) {
+        if (newValue) {
+          if (newValue.startsWith('next.')) {
+            this.stateType = 'next.'
+            this.stateString = newValue.slice(5)
+          } else if (newValue.startsWith('url.')) {
+            this.stateType = 'url.'
+            this.stateString = newValue.slice(4)
+          } else {
+            this.stateType = 'other'
+            this.stateString = newValue
+          }
+        }
       }
     },
     stageSelected: function () {
@@ -181,17 +201,24 @@ export default {
   },
 
   mounted() {
+    this.getAliases()
+
     if (this.addMode) {
       this.heading = 'Add stage'
     } else {
       this.heading = 'Edit stage'
+      this.editData()
     }
 
-    this.editData()
     this.initializeAceEditor()
   },
 
   methods: {
+    async getAliases() {
+      const response = await axios.get(`${this.url}user/texts?user_id=1`)
+      this.aliases = response.data.data
+    },
+
     async checkPythonCode() {
       const pythonCode = this.editor.getValue();
 
@@ -254,19 +281,19 @@ export default {
     },
 
     editData() {
-      this.localInputValues = { ...this.inputValues }
-      if (this.localInputValues) {
-        this.alias = this.localInputValues.alias ?? 'stage 2';
-        this.btn_sizes = this.localInputValues.btn_sizes ?? 3;
-        this.btn_type = this.localInputValues.btn_type ?? 'INLINE';
-        this.condition = this.localInputValues.condition;
-        this.id = this.localInputValues.id;
-        this.media = this.localInputValues.media;
-        this.stage_order = this.localInputValues.stage_order ?? '20';
-        this.text_alias = this.localInputValues.text_alias;
-        this.text_id = this.localInputValues.text_id;
-        this.selected = this.localInputValues.url ?? 'STAGE';
-        // this.user_state = this.localInputValues.user_state;
+      this.localValues = { ...this.inputValues }
+      if (this.localValues) {
+        this.alias = this.localValues.alias ?? 'stage 2';
+        this.btn_sizes = this.localValues.btn_sizes ?? 3;
+        this.btn_type = this.localValues.btn_type ?? 'INLINE';
+        this.condition = this.localValues.condition;
+        this.id = this.localValues.id;
+        this.media = this.localValues.media;
+        this.stage_order = this.localValues.stage_order ?? '20';
+        this.text_alias = this.localValues.text_alias;
+        this.text_id = this.localValues.text_id;
+        this.selected = this.localValues.url ?? 'STAGE';
+        this.user_state = this.localValues.user_state;
       }
     },
 
@@ -274,7 +301,7 @@ export default {
   watch: {
     inputValues: {
       handler(newValue) {
-        this.localInputValues = { ...newValue }
+        this.localValues = { ...newValue }
       },
       immediate: true
     },
