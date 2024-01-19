@@ -168,7 +168,7 @@ export default {
                   "output_1": {
                     "connections": [
                       {
-                        // "node": "3",
+                        "node": "3",
                         "output": 'input_1'
                       }
                     ]
@@ -238,10 +238,23 @@ export default {
 
     save(nodeData) {
       if (this.addMode) {
+        const createData = {
+          alias: nodeData.alias,
+          stage_order: nodeData.stage_order,
+          bot_id: nodeData.bot_id,
+          text_id: nodeData.text_id,
+          user_state: nodeData.user_state,
+          condition: nodeData.condition,
+          created_by: nodeData.created_by,
+          btn_type: nodeData.btn_type,
+          btn_sizes: nodeData.btn_sizes,
+        }
+
+        console.log('create', createData)
         const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
         const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
         const data = {}
-        this.create(nodeData.alias, positionX, positionY, data, nodeData)
+        this.create(nodeData.alias, positionX, positionY, data, createData)
           .then(() => {
             this.showSuccessToast()
           })
@@ -252,7 +265,21 @@ export default {
             this.closeInputModal();
           });
       } else {
-        this.updateNode(nodeData)
+        const editData = {
+          id: nodeData.id,
+          alias: nodeData.alias,
+          stage_order: nodeData.stage_order,
+          text_id: nodeData.text_id,
+          url_id: nodeData.url_id,
+          user_state: nodeData.user_state,
+          condition: nodeData.condition,
+          updated_by: nodeData.updated_by,
+          btn_type: nodeData.btn_type,
+          btn_sizes: nodeData.btn_sizes,
+          state: nodeData.state,
+        }
+
+        this.updateNode(editData)
           .then(() => {
             this.showSuccessToast()
           })
@@ -265,17 +292,16 @@ export default {
       }
     },
 
-    async create(name, x, y, data, nodeData) {
+    async create(name, x, y, data, createData) {
       try {
-        const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, `<div class="card-devices"><span class="content">${nodeData.alias}</span></div>`);
-        // delete nodeData.id;
-        // await axios.post(`${this.url}tg/bot/stage/create`, nodeData);
-
-        console.log(nodeData)
+        await axios.post(`${this.url}tg/bot/stage/create`, createData);
+        const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, `<div class="card-devices"><span class="content">${createData.alias}</span></div>`);
+        console.log(newNodeId)
         if (this.selectedNode) {
           const id = this.selectedNode.replace('node-', '');
           this.editor.addConnection(id, newNodeId, 'output_1', 'input_1');
         }
+        console.log(createData)
       } catch (error) {
         console.error(`Error creating node: ${error}`);
         console.log(error.response)
@@ -323,6 +349,8 @@ export default {
 
     async deleteNode(id) {
       try {
+        console.log(id)
+        await axios.delete(`${this.url}tg/bot/stage/delete?id=${id}`);
         this.editor.removeNodeId(`node-${id}`)
       } catch (error) {
         console.error(`Error deleting node: ${error}`);
@@ -337,17 +365,15 @@ export default {
         const response = await axios.get(`${this.url}v1/bot/stage?bot_id=122&id=${id}`);
         const apiData = response.data.data.stage;
         this.inputValues = {
-          alias: apiData.alias,
-          btn_sizes: apiData.btn_sizes,
-          btn_type: apiData.btn_type,
-          condition: apiData.condition,
           id: apiData.id ?? this.selectedNode,
-          media: apiData.media,
+          alias: apiData.alias,
           stage_order: apiData.stage_order,
-          text_alias: apiData.text_alias,
           text_id: apiData.text_id,
           url: apiData.url ? 'URL' : 'STAGE',
-          user_state: apiData.user_state
+          btn_type: apiData.btn_type,
+          user_state: apiData.user_state,
+          condition: apiData.condition,
+          btn_sizes: apiData.btn_sizes,
         }
       } catch (error) {
         console.error('Failed to fetch data:', error);

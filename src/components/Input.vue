@@ -64,10 +64,11 @@
               </select>
             </div>
             <div v-if="!stageSelected">
-              <label for="url" class="label">Callback URL</label>
-              <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off">
+              <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
+              <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"
+                :required="!stageSelected">
               <datalist id="datalist" class="datalist">
-                <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
+                <option v-for="item in urls" :key="item" :value="item">{{ item }}</option>
               </datalist>
             </div>
             <div class="state" v-if="stageSelected">
@@ -167,9 +168,10 @@ export default {
       text_id: '',
       id: '',
       condition: null,
-      items: ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
       aliases: [],
-      url: 'http://10.20.11.24:8080/api/v1/bot/'
+      urls: [],
+      items: ['reply', 'next', 'url'],
+      url: 'http://10.20.11.24:8080/api/'
     }
   },
   computed: {
@@ -204,6 +206,7 @@ export default {
 
   mounted() {
     this.getAliases()
+    this.getUrls()
 
     if (this.addMode) {
       this.heading = 'Add stage'
@@ -217,8 +220,13 @@ export default {
 
   methods: {
     async getAliases() {
-      const response = await axios.get(`${this.url}user/texts?user_id=1`)
+      const response = await axios.get(`${this.url}v1/bot/user/texts?user_id=1`)
       this.aliases = response.data.data
+    },
+
+    async getUrls() {
+      const response = await axios.get(`${this.url}tg/bot/user/callback_urls`)
+      this.urls = response.data.data
     },
 
     async checkPythonCode() {
@@ -244,11 +252,13 @@ export default {
         id: this.id,
         alias: this.alias,
         stage_order: this.stage_order,
-        text_id: this.text_id,
+        text_id: 1,
         url_id: 2,
         user_state: this.user_state,
-        condition: this.editor.getValue(),
+        condition: this.condition,
         updated_by: 1,
+        created_by: 1,
+        bot_id: 122,
         btn_type: this.btn_type,
         btn_sizes: this.btn_sizes,
         state: 1
@@ -293,21 +303,16 @@ export default {
 
     editData() {
       if (this.inputValues) {
-        this.alias = this.inputValues.alias ?? 'stage 2';
-        this.btn_sizes = this.inputValues.btn_sizes ?? 3;
-        this.btn_type = this.inputValues.btn_type ?? 'INLINE';
         this.id = this.inputValues.id;
+        this.alias = this.inputValues.alias ?? 'stage 2';
         this.stage_order = this.inputValues.stage_order ?? '20';
-        this.text_alias = this.inputValues.text_alias;
         this.text_id = this.inputValues.text_id;
         this.selected = this.inputValues.url ?? 'STAGE';
+        this.btn_type = this.inputValues.btn_type ?? 'INLINE';
         this.user_state = this.inputValues.user_state;
         this.condition = this.inputValues.condition;
+        this.btn_sizes = this.inputValues.btn_sizes ?? 3;
       }
-
-      // if (this.inputValues.condition) {
-      //   this.editor.setValue(this.inputValues.condition);
-      // }
     },
 
   },
