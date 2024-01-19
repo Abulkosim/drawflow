@@ -2,8 +2,21 @@
   <div>
     <div id="drawflow">
       <div id="buttons">
-        <button @click="zoomIn">+</button>
-        <button @click="zoomOut">-</button>
+        <button @click="showButtons = !showButtons">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            <line x1="11" y1="8" x2="11" y2="14" />
+            <line x1="8" y1="11" x2="14" y2="11" />
+          </svg>
+        </button>
+        <Transition>
+          <div v-if="showButtons">
+            <button @click="zoomIn">+</button>
+            <button @click="zoomOut">-</button>
+          </div>
+        </Transition>
       </div>
     </div>
 
@@ -45,6 +58,7 @@ export default {
   },
   data() {
     return {
+      showButtons: false,
       editor: null,
       showContextMenu: false,
       showModal: false,
@@ -434,9 +448,10 @@ export default {
 }
 
 #buttons {
+  display: none;
   position: absolute;
-  right: 0;
-  bottom: 0;
+  right: 3px;
+  top: 3px;
   font-weight: bold;
   z-index: 1;
 }
@@ -447,14 +462,29 @@ export default {
   justify-content: center;
   width: 40px;
   height: 40px;
-  color: #2c3e50;
+  background-color: white;
   font-size: 26px;
   padding: 10px;
-  background: white;
+  color: 2c3e50;
   border: 2px solid #2c3e50;
   margin: 2px;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-enter-to,
+.v-leave-from {
+  opacity: 1;
 }
 
 .card-devices {
