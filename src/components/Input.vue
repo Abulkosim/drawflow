@@ -222,6 +222,11 @@ export default {
     async getAliases() {
       const response = await axios.get(`${this.url}v1/bot/user/texts?user_id=1`)
       this.aliases = response.data.data
+
+      if (this.inputValues) {
+        this.text_alias = this.aliases.find(item => item.id == this.inputValues.text_id)
+      }
+
     },
 
     async getUrls() {
@@ -248,11 +253,16 @@ export default {
     },
 
     save() {
+      if (this.text_alias) {
+        this.text_alias = this.text_alias.name
+      } else {
+        this.text_alias = null
+      }
       this.$emit('save', {
         id: this.id,
         alias: this.alias,
         stage_order: this.stage_order,
-        text_id: 1,
+        text_id: this.text_alias ? this.aliases[this.aliases.indexOf(this.text_alias)].id : null,
         url_id: 2,
         user_state: this.user_state,
         condition: this.condition,

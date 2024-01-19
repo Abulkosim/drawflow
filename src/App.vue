@@ -110,6 +110,15 @@ export default {
       this.editor.zoom_out()
     },
 
+    async rerender() {
+
+      if (!this.data.length) {
+        await this.getStages()
+      }
+
+      this.editor.import(this.data);
+    },
+
     async getStages() {
       try {
         const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
@@ -184,7 +193,6 @@ export default {
 
       if (apiData && apiData.length) {
         apiData.forEach((item) => {
-          console.log(item)
           transformedData.drawflow.Home.data[`${item.id}`] = {
             id: item.id,
             name: `Node ${item.id}`,
@@ -251,7 +259,6 @@ export default {
           btn_sizes: nodeData.btn_sizes,
         }
 
-        console.log('create', createData)
         const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
         const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
         const data = {}
@@ -297,12 +304,13 @@ export default {
       try {
         await axios.post(`${this.url}tg/bot/stage/create`, createData);
         const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, `<div class="card-devices"><span class="content">${createData.alias}</span></div>`);
-        console.log(newNodeId)
         if (this.selectedNode) {
           const id = this.selectedNode.replace('node-', '');
           this.editor.addConnection(id, newNodeId, 'output_1', 'input_1');
         }
-        console.log(createData)
+
+        await this.rerender()
+
       } catch (error) {
         console.error(`Error creating node: ${error}`);
         console.log(error.response)
@@ -325,6 +333,8 @@ export default {
           this.editor.drawflow.drawflow.Home.data[nodeId].html = newHtml;
           contentElement.innerHTML = newHtml;
         }
+
+        await this.rerender()
 
       } catch (error) {
         console.error(`Error updating node: ${error}`);
@@ -350,9 +360,9 @@ export default {
 
     async deleteNode(id) {
       try {
-        console.log(id)
         await axios.delete(`${this.url}tg/bot/stage/delete?id=${id}`);
         this.editor.removeNodeId(`node-${id}`)
+        await this.rerender()
       } catch (error) {
         console.error(`Error deleting node: ${error}`);
         throw error;
