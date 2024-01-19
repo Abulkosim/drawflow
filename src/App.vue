@@ -428,7 +428,8 @@ export default {
   height: calc(100vh);
   background-size: 20px 20px;
   border-radius: 5px;
-  background-image: radial-gradient(#0c416085 1px, transparent 1px);
+  /* background-image: radial-gradient(#0c41605e 1px, transparent 1px); */
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 19px, #0c41601f 20px), repeating-linear-gradient(90deg, transparent, transparent 19px, #0c41601f 20px);
   cursor: grab;
 }
 
