@@ -168,7 +168,7 @@ export default {
                   "output_1": {
                     "connections": [
                       {
-                        "node": "3",
+                        // "node": "3",
                         "output": 'input_1'
                       }
                     ]
@@ -184,6 +184,7 @@ export default {
 
       if (apiData && apiData.length) {
         apiData.forEach((item) => {
+          console.log(item)
           transformedData.drawflow.Home.data[`${item.id}`] = {
             id: item.id,
             name: `Node ${item.id}`,
