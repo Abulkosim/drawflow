@@ -57,15 +57,21 @@
               </div>
             </div>
             <div v-if="stageSelected">
-              <label for="text" class="label">Text</label>
-              <select id="text" class="input" v-model="text_alias">
-                <option value="" disabled selected hidden></option>
-                <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
-              </select>
+              <label for="connection" class="label">Back hand</label>
+              <div class="input-container">
+                <select id="connection" class="input">
+                  <option value="" disabled selected hidden></option>
+                </select>
+                <select class="input">
+                  <option value="" disabled selected hidden></option>
+                </select>
+              </div>
+
+
             </div>
             <div v-if="stageSelected">
-              <label for="connection" class="label">Connection</label>
-              <select id="connection" class="input" v-model="text_alias">
+              <label for="text" class="label">Text</label>
+              <select id="text" class="input" v-model="text_alias">
                 <option value="" disabled selected hidden></option>
                 <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
               </select>
@@ -502,6 +508,16 @@ export default {
   @media (max-width: 640px) {
     width: calc(50% - 0.8rem);
   }
+}
+
+.input-container {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: space-between;
+}
+
+.input-container div {
+  width: 100%
 }
 
 .state {
