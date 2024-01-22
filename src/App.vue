@@ -94,6 +94,17 @@ export default {
       this.selectedNode = node;
     });
 
+    this.editor.on('nodeMoved', (node) => {
+      const nodeData = this.editor.getNodeFromId(node);
+      const editData = {
+        id: nodeData.id,
+        x_: nodeData.pos_x,
+        y_: nodeData.pos_y,
+      }
+
+      this.updatePosition(editData)
+    });
+
     window.addEventListener('click', () => {
       this.showContextMenu = false;
     });
@@ -342,6 +353,16 @@ export default {
       }
     },
 
+    async updatePosition(nodeData) {
+      try {
+        await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
+        await this.rerender()
+      } catch (error) {
+        console.error(`Error updating node: ${error}`);
+        throw error;
+      }
+    },
+
     confirmDeletion() {
       if (this.selectedNode) {
         this.deleteNode(this.selectedNode)
@@ -484,7 +505,7 @@ export default {
 }
 
 #buttons {
-  display: none;
+  /* display: none; */
   position: absolute;
   right: 3px;
   top: 3px;
