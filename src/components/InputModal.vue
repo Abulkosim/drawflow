@@ -63,6 +63,13 @@
                 <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
               </select>
             </div>
+            <div v-if="stageSelected">
+              <label for="connection" class="label">Connection</label>
+              <select id="connection" class="input" v-model="text_alias">
+                <option value="" disabled selected hidden></option>
+                <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
+              </select>
+            </div>
             <div v-if="!stageSelected">
               <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
               <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"

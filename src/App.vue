@@ -20,18 +20,18 @@
       </div>
     </div>
 
-    <Menu :position="contextMenuPosition" :showMenu="showContextMenu" @addNewNode="openInputModal"
+    <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @addNewNode="openInputModal"
       @deleteNode="openConfirmationModal" @editNode="openInputModal" :node="selectedNode" />
 
     <div v-if="showModal" class="overlay"></div>
 
-    <Modal :showModal="showModal" @close="closeConfirmationModal" @confirm="confirmDeletion" />
+    <ConfirmationModal :showModal="showModal" @close="closeConfirmationModal" @confirm="confirmDeletion" />
 
     <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
 
     <div v-if="showInputModal" class="overlay"></div>
 
-    <Input v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
+    <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
       @close="closeInputModal" @save="save" />
   </div>
 </template>
@@ -40,21 +40,19 @@
 import Vue from 'vue'
 import Drawflow from 'drawflow'
 import './assets/main.css'
-import Node from './components/Node.vue'
-import Menu from './components/Menu.vue'
-import Modal from './components/Modal.vue'
+import ContextMenu from './components/ContextMenu.vue'
+import ConfirmationModal from './components/ConfirmationModal.vue'
 import Toast from './components/Toast.vue'
-import Input from './components/Input.vue'
+import InputModal from './components/InputModal.vue'
 import axios from "axios";
 
 export default {
   name: 'App',
   components: {
-    Menu,
-    Modal,
+    ContextMenu,
+    ConfirmationModal,
     Toast,
-    Input,
-    Node
+    InputModal
   },
   data() {
     return {
