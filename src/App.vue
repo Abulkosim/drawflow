@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @addNewNode="openInputModal"
+    <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu"
       @deleteNode="openConfirmationModal" @editNode="openInputModal" :node="selectedNode" />
 
     <div v-if="showModal" class="overlay"></div>
@@ -74,6 +74,7 @@ export default {
       inputValues: {},
       x_: null,
       y_: null,
+      dragOffset: { x: 0, y: 0 },
       url: 'http://10.20.11.24:8080/api/'
     }
   },
@@ -126,12 +127,17 @@ export default {
 
     drag(ev) {
       ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
+
+      const rect = ev.target.getBoundingClientRect();
+      this.dragOffset.x = ev.clientX - rect.left;
+      this.dragOffset.y = ev.clientY - rect.top;
+
     },
 
     drop(ev) {
       ev.preventDefault();
-      this.x_ = ev.clientX;
-      this.y_ = ev.clientY;
+      this.x_ = ev.clientX - this.dragOffset.x;
+      this.y_ = ev.clientY - this.dragOffset.y;
       this.openInputModal('adding')
     },
 
@@ -141,9 +147,6 @@ export default {
 
     save(nodeData) {
       if (this.addMode) {
-        const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
-        const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
-
         const createData = {
           alias: nodeData.alias,
           stage_order: nodeData.stage_order,
@@ -159,7 +162,7 @@ export default {
         }
 
         const data = {}
-        this.create(nodeData.alias, positionX, positionY, data, createData)
+        this.create(createData)
           .then(() => {
             this.showSuccessToast()
           })
@@ -332,17 +335,10 @@ export default {
       }
     },
 
-    async create(name, x, y, data, createData) {
+    async create(createData) {
       try {
         await axios.post(`${this.url}tg/bot/stage/create`, createData);
-        const newNodeId = this.editor.addNode(name, 1, 1, x, y, 'newNode', data, `<div class="card-devices"><span class="content">${createData.alias}</span></div>`);
-        if (this.selectedNode) {
-          const id = this.selectedNode.replace('node-', '');
-          this.editor.addConnection(id, newNodeId, 'output_1', 'input_1');
-        }
-
         await this.rerender()
-
       } catch (error) {
         console.error(`Error creating node: ${error}`);
         throw error;
