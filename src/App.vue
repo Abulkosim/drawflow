@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="drawflow">
+    <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
       <div id="buttons">
         <button @click="showButtons = !showButtons">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -17,6 +17,9 @@
             <button @click="zoomOut">-</button>
           </div>
         </Transition>
+      </div>
+      <div class="node-drag card-devices" draggable="true" @dragstart="drag($event)">
+        <span>Add node</span>
       </div>
     </div>
 
@@ -69,6 +72,8 @@ export default {
       addMode: true,
       data: [],
       inputValues: {},
+      x_: null,
+      y_: null,
       url: 'http://10.20.11.24:8080/api/'
     }
   },
@@ -117,6 +122,79 @@ export default {
 
     zoomOut() {
       this.editor.zoom_out()
+    },
+
+    drag(ev) {
+      ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
+    },
+
+    drop(ev) {
+      ev.preventDefault();
+      this.x_ = ev.clientX;
+      this.y_ = ev.clientY;
+      this.openInputModal('adding')
+    },
+
+    allowDrop(ev) {
+      ev.preventDefault();
+    },
+
+    save(nodeData) {
+      if (this.addMode) {
+        const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
+        const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
+
+        const createData = {
+          alias: nodeData.alias,
+          stage_order: nodeData.stage_order,
+          bot_id: nodeData.bot_id,
+          text_id: nodeData.text_id,
+          user_state: nodeData.user_state,
+          condition: nodeData.condition,
+          created_by: nodeData.created_by,
+          btn_type: nodeData.btn_type,
+          btn_sizes: nodeData.btn_sizes,
+          x_: this.x_,
+          y_: this.y_,
+        }
+
+        const data = {}
+        this.create(nodeData.alias, positionX, positionY, data, createData)
+          .then(() => {
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeInputModal();
+          });
+      } else {
+        const editData = {
+          id: nodeData.id,
+          alias: nodeData.alias,
+          stage_order: nodeData.stage_order,
+          text_id: nodeData.text_id,
+          url_id: nodeData.url_id,
+          user_state: nodeData.user_state,
+          condition: nodeData.condition,
+          updated_by: nodeData.updated_by,
+          btn_type: nodeData.btn_type,
+          btn_sizes: nodeData.btn_sizes,
+          state: nodeData.state,
+        }
+
+        this.updateNode(editData)
+          .then(() => {
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeInputModal();
+          });
+      }
     },
 
     async rerender() {
@@ -251,64 +329,6 @@ export default {
       if (event.target.closest('.drawflow-node')) {
         this.showContextMenu = true;
         this.contextMenuPosition = { x: event.pageX, y: event.pageY };
-      }
-    },
-
-    save(nodeData) {
-      if (this.addMode) {
-        const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
-        const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
-
-        const createData = {
-          alias: nodeData.alias,
-          stage_order: nodeData.stage_order,
-          bot_id: nodeData.bot_id,
-          text_id: nodeData.text_id,
-          user_state: nodeData.user_state,
-          condition: nodeData.condition,
-          created_by: nodeData.created_by,
-          btn_type: nodeData.btn_type,
-          btn_sizes: nodeData.btn_sizes,
-          x_: positionX,
-          y_: positionY,
-        }
-
-        const data = {}
-        this.create(nodeData.alias, positionX, positionY, data, createData)
-          .then(() => {
-            this.showSuccessToast()
-          })
-          .catch((error) => {
-            this.showFailedToast(error)
-          })
-          .finally(() => {
-            this.closeInputModal();
-          });
-      } else {
-        const editData = {
-          id: nodeData.id,
-          alias: nodeData.alias,
-          stage_order: nodeData.stage_order,
-          text_id: nodeData.text_id,
-          url_id: nodeData.url_id,
-          user_state: nodeData.user_state,
-          condition: nodeData.condition,
-          updated_by: nodeData.updated_by,
-          btn_type: nodeData.btn_type,
-          btn_sizes: nodeData.btn_sizes,
-          state: nodeData.state,
-        }
-
-        this.updateNode(editData)
-          .then(() => {
-            this.showSuccessToast()
-          })
-          .catch((error) => {
-            this.showFailedToast(error)
-          })
-          .finally(() => {
-            this.closeInputModal();
-          });
       }
     },
 
@@ -502,6 +522,46 @@ export default {
   /* background-image: radial-gradient(#0c41605e 1px, transparent 1px); */
   background-image: repeating-linear-gradient(0deg, transparent, transparent 19px, #0c41601f 20px), repeating-linear-gradient(90deg, transparent, transparent 19px, #0c41601f 20px);
   cursor: grab;
+}
+
+.node-drag {
+  position: absolute;
+  bottom: 5px;
+  left: calc(50% - 70px);
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  width: 160px;
+  min-height: 40px;
+  border-radius: 10px;
+  border: 2px solid #36454f;
+  color: #36454f;
+  user-select: none;
+  z-index: 1;
+  padding: 15px;
+  cursor: grab;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.node-drag span {
+  display: inline;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 #buttons {

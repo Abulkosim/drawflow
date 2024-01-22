@@ -63,7 +63,7 @@ div::-webkit-scrollbar {
   padding: 15px;
 }
 .drawflow .drawflow-node span {
-  display: block;
+  display: inline;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
