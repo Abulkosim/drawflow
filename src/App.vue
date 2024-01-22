@@ -505,7 +505,7 @@ export default {
 }
 
 #buttons {
-  /* display: none; */
+  display: none;
   position: absolute;
   right: 3px;
   top: 3px;
