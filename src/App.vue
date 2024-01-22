@@ -200,8 +200,8 @@ export default {
             typenode: false,
             inputs: this.generateInputs(item),
             outputs: this.generateOutputs(item),
-            pos_x: 300 + Math.floor(Math.random() * 201) + 150,
-            pos_y: 200 + Math.floor(Math.random() * 201) - 100
+            pos_x: item.x_,
+            pos_y: item.y_
           };
         });
       }
@@ -245,6 +245,9 @@ export default {
 
     save(nodeData) {
       if (this.addMode) {
+        const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
+        const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
+
         const createData = {
           alias: nodeData.alias,
           stage_order: nodeData.stage_order,
@@ -255,10 +258,10 @@ export default {
           created_by: nodeData.created_by,
           btn_type: nodeData.btn_type,
           btn_sizes: nodeData.btn_sizes,
+          x_: positionX,
+          y_: positionY,
         }
 
-        const positionX = this.contextMenuPosition.x + Math.floor(Math.random() * 101) + 130;
-        const positionY = this.contextMenuPosition.y + Math.floor(Math.random() * 201) - 100;
         const data = {}
         this.create(nodeData.alias, positionX, positionY, data, createData)
           .then(() => {
@@ -311,7 +314,6 @@ export default {
 
       } catch (error) {
         console.error(`Error creating node: ${error}`);
-        console.log(error.response)
         throw error;
       } finally {
         this.addMode = false;
@@ -336,7 +338,6 @@ export default {
 
       } catch (error) {
         console.error(`Error updating node: ${error}`);
-        console.log(error.response)
         throw error;
       }
     },
