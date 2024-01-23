@@ -67,8 +67,6 @@
                   <option value="" disabled selected hidden></option>
                 </select>
               </div>
-
-
             </div>
             <div v-if="stageSelected">
               <label for="text" class="label">Text</label>
@@ -80,7 +78,7 @@
             <div v-if="!stageSelected">
               <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
               <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"
-                :required="!stageSelected">
+                :required="!stageSelected" v-model="url_id">
               <datalist id="datalist" class="datalist">
                 <option v-for="item in urls" :key="item" :value="item">{{ item }}</option>
               </datalist>
@@ -167,6 +165,7 @@ export default {
       alias: 'stage 2',
       stage_order: '20',
       selected: 'STAGE',
+      url_id: null,
       stateType: '',
       stateString: '',
       btn_type: 'INLINE',
@@ -214,10 +213,12 @@ export default {
         }
       }
     },
+
     stageSelected: function () {
       return this.selected == 'STAGE'
     }
   },
+
 
   mounted() {
     this.getAliases()
@@ -269,33 +270,6 @@ export default {
       }
     },
 
-    close() {
-      this.$emit('close')
-    },
-
-    save() {
-      if (this.text_alias) {
-        this.text_alias = this.text_alias.name
-      } else {
-        this.text_alias = null
-      }
-      this.$emit('save', {
-        id: this.id,
-        alias: this.alias,
-        stage_order: this.stage_order,
-        text_id: this.text_alias ? this.aliases[this.aliases.indexOf(this.text_alias)].id : null,
-        url_id: 2,
-        user_state: this.user_state,
-        condition: this.condition,
-        updated_by: 1,
-        created_by: 1,
-        bot_id: 122,
-        btn_type: this.btn_type,
-        btn_sizes: this.btn_sizes,
-        state: 1
-      })
-    },
-
     validateSize() {
       const regex = /^\d+(\:\d+)?(\:\d+)?$/;
       this.error = !regex.test(this.btn_sizes);
@@ -321,6 +295,39 @@ export default {
       });
     },
 
+    save() {
+      this.$emit('save', {
+        id: this.id,
+        alias: this.alias,
+        stage_order: this.stage_order,
+        text_id: this.text_alias ? this.aliases[this.aliases.indexOf(this.text_alias)].id : null,
+        url_id: this.url_id,
+        user_state: this.user_state,
+        condition: this.condition,
+        updated_by: 1,
+        created_by: 1,
+        bot_id: 122,
+        btn_type: this.btn_type,
+        btn_sizes: this.btn_sizes,
+        state: 1
+      })
+    },
+
+    editData() {
+      if (this.inputValues) {
+        this.alias = this.inputValues.alias ?? 'stage 2';
+        this.btn_sizes = this.inputValues.btn_sizes ?? 3;
+        this.btn_type = this.inputValues.btn_type ?? 'INLINE';
+        this.condition = this.inputValues.condition;
+        this.id = this.inputValues.id;
+        this.stage_order = this.inputValues.stage_order ?? '20';
+        this.text_id = this.inputValues.text_id;
+        this.url_id = this.inputValues.url_id;
+        this.selected = this.inputValues.url_id ? 'URL' : 'STAGE';
+        this.user_state = this.inputValues.user_state;
+      }
+    },
+
     async submit() {
       this.loading = true
       await this.checkPythonCode();
@@ -332,20 +339,9 @@ export default {
       }
     },
 
-    editData() {
-      if (this.inputValues) {
-        this.id = this.inputValues.id;
-        this.alias = this.inputValues.alias ?? 'stage 2';
-        this.stage_order = this.inputValues.stage_order ?? '20';
-        this.text_id = this.inputValues.text_id;
-        this.selected = this.inputValues.url ?? 'STAGE';
-        this.btn_type = this.inputValues.btn_type ?? 'INLINE';
-        this.user_state = this.inputValues.user_state;
-        this.condition = this.inputValues.condition;
-        this.btn_sizes = this.inputValues.btn_sizes ?? 3;
-      }
+    close() {
+      this.$emit('close')
     },
-
   },
   watch: {
     inputValues: {
@@ -382,7 +378,7 @@ export default {
           this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
         }
       }
-    }
+    },
   }
 }
 

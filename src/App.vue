@@ -23,8 +23,8 @@
       </div>
     </div>
 
-    <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu"
-      @deleteNode="openConfirmationModal" @editNode="openInputModal" :node="selectedNode" />
+    <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
+      @editNode="openInputModal" :node="selectedNode" />
 
     <div v-if="showModal" class="overlay"></div>
 
@@ -114,8 +114,8 @@ export default {
     window.addEventListener('click', () => {
       this.showContextMenu = false;
     });
-
   },
+
   methods: {
     zoomIn() {
       this.editor.zoom_in()
@@ -125,13 +125,34 @@ export default {
       this.editor.zoom_out()
     },
 
+    closeModal() {
+      this.showModal = false;
+    },
+
+    handleRightClick(event) {
+      event.preventDefault();
+
+      if (event.target.closest('.drawflow-node')) {
+        this.showContextMenu = true;
+        this.contextMenuPosition = { x: event.pageX, y: event.pageY };
+      }
+    },
+
+    async rerender() {
+
+      if (!this.data.length) {
+        await this.getStages()
+      }
+
+      this.editor.import(this.data);
+    },
+
     drag(ev) {
       ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
 
       const rect = ev.target.getBoundingClientRect();
       this.dragOffset.x = ev.clientX - rect.left;
       this.dragOffset.y = ev.clientY - rect.top;
-
     },
 
     drop(ev) {
@@ -145,68 +166,14 @@ export default {
       ev.preventDefault();
     },
 
-    save(nodeData) {
-      if (this.addMode) {
-        const createData = {
-          alias: nodeData.alias,
-          stage_order: nodeData.stage_order,
-          bot_id: nodeData.bot_id,
-          text_id: nodeData.text_id,
-          user_state: nodeData.user_state,
-          condition: nodeData.condition,
-          created_by: nodeData.created_by,
-          btn_type: nodeData.btn_type,
-          btn_sizes: nodeData.btn_sizes,
-          x_: this.x_,
-          y_: this.y_,
-        }
-
-        const data = {}
-        this.create(createData)
-          .then(() => {
-            this.showSuccessToast()
-          })
-          .catch((error) => {
-            this.showFailedToast(error)
-          })
-          .finally(() => {
-            this.closeInputModal();
-          });
-      } else {
-        const editData = {
-          id: nodeData.id,
-          alias: nodeData.alias,
-          stage_order: nodeData.stage_order,
-          text_id: nodeData.text_id,
-          url_id: nodeData.url_id,
-          user_state: nodeData.user_state,
-          condition: nodeData.condition,
-          updated_by: nodeData.updated_by,
-          btn_type: nodeData.btn_type,
-          btn_sizes: nodeData.btn_sizes,
-          state: nodeData.state,
-        }
-
-        this.updateNode(editData)
-          .then(() => {
-            this.showSuccessToast()
-          })
-          .catch((error) => {
-            this.showFailedToast(error)
-          })
-          .finally(() => {
-            this.closeInputModal();
-          });
+    async updatePosition(nodeData) {
+      try {
+        await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
+        await this.rerender()
+      } catch (error) {
+        console.error(`Error updating node: ${error}`);
+        throw error;
       }
-    },
-
-    async rerender() {
-
-      if (!this.data.length) {
-        await this.getStages()
-      }
-
-      this.editor.import(this.data);
     },
 
     async getStages() {
@@ -321,17 +288,77 @@ export default {
       };
     },
 
-
-    closeModal() {
-      this.showModal = false;
+    async getNode(id) {
+      try {
+        const response = await axios.get(`${this.url}v1/bot/stage?bot_id=122&id=${id}`);
+        const apiData = response.data.data.stage;
+        this.inputValues = {
+          alias: apiData.alias,
+          btn_sizes: apiData.btn_sizes,
+          btn_type: apiData.btn_type,
+          condition: apiData.condition,
+          id: apiData.id,
+          stage_order: apiData.stage_order,
+          text_id: apiData.text_id,
+          url_id: apiData.url_id,
+          user_state: apiData.user_state,
+        }
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
     },
 
-    handleRightClick(event) {
-      event.preventDefault();
+    save(nodeData) {
+      if (this.addMode) {
+        const createData = {
+          alias: nodeData.alias,
+          stage_order: nodeData.stage_order,
+          bot_id: nodeData.bot_id,
+          text_id: nodeData.text_id,
+          user_state: nodeData.user_state,
+          condition: nodeData.condition,
+          created_by: nodeData.created_by,
+          btn_type: nodeData.btn_type,
+          btn_sizes: nodeData.btn_sizes,
+          x_: this.x_,
+          y_: this.y_,
+        }
+        const data = {}
+        this.create(createData)
+          .then(() => {
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeInputModal();
+          });
+      } else {
+        const editData = {
+          id: nodeData.id,
+          alias: nodeData.alias,
+          stage_order: nodeData.stage_order,
+          text_id: nodeData.text_id,
+          url_id: nodeData.url_id,
+          user_state: nodeData.user_state,
+          condition: nodeData.condition,
+          updated_by: nodeData.updated_by,
+          btn_type: nodeData.btn_type,
+          btn_sizes: nodeData.btn_sizes,
+          state: nodeData.state
+        }
 
-      if (event.target.closest('.drawflow-node')) {
-        this.showContextMenu = true;
-        this.contextMenuPosition = { x: event.pageX, y: event.pageY };
+        this.updateNode(editData)
+          .then(() => {
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeInputModal();
+          });
       }
     },
 
@@ -351,7 +378,7 @@ export default {
       try {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
-
+        console.log(nodeData)
         await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
 
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
@@ -365,16 +392,7 @@ export default {
 
       } catch (error) {
         console.error(`Error updating node: ${error}`);
-        throw error;
-      }
-    },
-
-    async updatePosition(nodeData) {
-      try {
-        await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
-        await this.rerender()
-      } catch (error) {
-        console.error(`Error updating node: ${error}`);
+        console.log(error.response.data.message)
         throw error;
       }
     },
@@ -404,26 +422,6 @@ export default {
         throw error;
       } finally {
         this.selectedNode = null
-      }
-    },
-
-    async getNode(id) {
-      try {
-        const response = await axios.get(`${this.url}v1/bot/stage?bot_id=122&id=${id}`);
-        const apiData = response.data.data.stage;
-        this.inputValues = {
-          id: apiData.id ?? this.selectedNode,
-          alias: apiData.alias,
-          stage_order: apiData.stage_order,
-          text_id: apiData.text_id,
-          url: apiData.url ? 'URL' : 'STAGE',
-          btn_type: apiData.btn_type,
-          user_state: apiData.user_state,
-          condition: apiData.condition,
-          btn_sizes: apiData.btn_sizes,
-        }
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
       }
     },
 
