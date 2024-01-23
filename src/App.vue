@@ -18,7 +18,7 @@
           </div>
         </Transition>
       </div>
-      <div class="node-drag card-devices" draggable="true" @dragstart="drag($event)">
+      <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
         <span>Add node</span>
       </div>
     </div>
@@ -42,12 +42,12 @@
 <script>
 import Vue from 'vue'
 import Drawflow from 'drawflow'
-import './assets/main.css'
 import ContextMenu from './components/ContextMenu.vue'
 import ConfirmationModal from './components/ConfirmationModal.vue'
 import Toast from './components/Toast.vue'
 import InputModal from './components/InputModal.vue'
 import axios from "axios";
+import './assets/main.css'
 
 export default {
   name: 'App',
@@ -551,13 +551,6 @@ export default {
   }
 }
 
-.node-drag span {
-  display: inline;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
 #buttons {
   display: none;
   position: absolute;
@@ -602,5 +595,7 @@ export default {
   font-weight: 600;
   font-size: 20px;
   text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>
