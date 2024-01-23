@@ -61,6 +61,7 @@
               <div class="input-container">
                 <select id="connection" class="input">
                   <option value="" disabled selected hidden></option>
+                  <option v-for="item in stages" :key="item.id" :value="item">{{ item.alias }}</option>
                 </select>
                 <select class="input">
                   <option value="" disabled selected hidden></option>
@@ -183,6 +184,7 @@ export default {
       condition: null,
       aliases: [],
       urls: [],
+      stages: [],
       items: ['reply', 'next', 'url'],
       url: 'http://10.20.11.24:8080/api/'
     }
@@ -220,6 +222,7 @@ export default {
   mounted() {
     this.getAliases()
     this.getUrls()
+    this.getStages()
 
     if (this.addMode) {
       this.heading = 'Add stage'
@@ -240,6 +243,11 @@ export default {
         this.text_alias = this.aliases.find(item => item.id == this.inputValues.text_id)
       }
 
+    },
+
+    async getStages() {
+      const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
+      this.stages = response.data.data;
     },
 
     async getUrls() {
