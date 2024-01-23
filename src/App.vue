@@ -36,6 +36,8 @@
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
       @close="closeInputModal" @save="save" />
+
+    <!-- <AnotherModal /> -->
   </div>
 </template>
 
@@ -46,6 +48,7 @@ import ContextMenu from './components/ContextMenu.vue'
 import ConfirmationModal from './components/ConfirmationModal.vue'
 import Toast from './components/Toast.vue'
 import InputModal from './components/InputModal.vue'
+import AnotherModal from './components/AnotherModal.vue'
 import axios from "axios";
 import './assets/main.css'
 
@@ -55,7 +58,8 @@ export default {
     ContextMenu,
     ConfirmationModal,
     Toast,
-    InputModal
+    InputModal,
+    AnotherModal
   },
   data() {
     return {
@@ -84,6 +88,7 @@ export default {
   },
 
   async mounted() {
+
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
@@ -286,6 +291,16 @@ export default {
           connections: []
         }
       };
+    },
+
+    async getConnections() {
+      try {
+        const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
+        const apiData = response.data.data;
+        console.log(apiData)
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
     },
 
     async getNode(id) {
@@ -534,20 +549,20 @@ export default {
   z-index: 1;
   padding: 15px;
   cursor: grab;
-  animation: bounce 1s infinite;
+  animation: float 3s ease-in-out infinite;
 }
 
-@keyframes bounce {
-
-  0%,
-  100% {
-    transform: translateY(-5%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+@keyframes float {
+  0% {
+    transform: translatey(0px);
   }
 
   50% {
-    transform: translateY(0);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    transform: translatey(-3px);
+  }
+
+  100% {
+    transform: translatey(0px);
   }
 }
 
