@@ -37,7 +37,14 @@
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
       @close="closeInputModal" @save="save" />
 
-    <!-- <AnotherModal /> -->
+    <div v-if="showAddButtonModal" class="overlay"></div>
+
+    <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal" />
+
+    <div v-if="showStageButtonModal" class="overlay"></div>
+
+    <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal"
+      @close="closeStageButtonModal" />
   </div>
 </template>
 
@@ -48,9 +55,10 @@ import ContextMenu from './components/ContextMenu.vue'
 import ConfirmationModal from './components/ConfirmationModal.vue'
 import Toast from './components/Toast.vue'
 import InputModal from './components/InputModal.vue'
-import AnotherModal from './components/AnotherModal.vue'
 import axios from "axios";
 import './assets/main.css'
+import AddButtonModal from './components/AddButtonModal.vue'
+import StageButtonModal from './components/StageButtonModal.vue'
 
 export default {
   name: 'App',
@@ -59,7 +67,8 @@ export default {
     ConfirmationModal,
     Toast,
     InputModal,
-    AnotherModal
+    AddButtonModal,
+    StageButtonModal
   },
   data() {
     return {
@@ -68,6 +77,8 @@ export default {
       showContextMenu: false,
       showModal: false,
       showInputModal: false,
+      showAddButtonModal: false,
+      showStageButtonModal: false,
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
       showToast: false,
@@ -462,6 +473,14 @@ export default {
 
     closeInputModal() {
       this.showInputModal = false;
+    },
+
+    closeAddButtonModal() {
+      this.showAddButtonModal = false;
+    },
+
+    closeStageButtonModal() {
+      this.showStageButtonModal = false;
     },
 
     openConfirmationModal() {
