@@ -162,8 +162,8 @@ export default {
   data() {
     return {
       heading: 'Add stage',
-      alias: 'stage 2',
-      stage_order: '20',
+      alias: '',
+      stage_order: '',
       selected: 'STAGE',
       url_id: null,
       stateType: '',
@@ -184,6 +184,7 @@ export default {
       aliases: [],
       urls: [],
       stages: [],
+      num: '',
       items: ['reply', 'next', 'url'],
       url: 'http://10.20.11.24:8080/api/'
     }
@@ -224,6 +225,7 @@ export default {
     this.getAliases()
     this.getUrls()
     this.getStages()
+    this.getNum()
 
     if (this.addMode) {
       this.heading = 'Add stage'
@@ -236,6 +238,18 @@ export default {
   },
 
   methods: {
+    async getNum() {
+      const response = await axios.get(`${this.url}tg/bot/stage/new?bot_id=122`)
+      this.num = response.data.data
+      if (!this.alias) {
+        this.alias = `stage ${this.num}`
+      }
+
+      if (!this.stage_order) {
+        this.stage_order = this.num * 10
+      }
+    },
+
     async getAliases() {
       const response = await axios.get(`${this.url}v1/bot/user/texts?user_id=1`)
       this.aliases = response.data.data
@@ -243,7 +257,6 @@ export default {
       if (this.inputValues) {
         this.text_alias = this.aliases.find(item => item.id == this.inputValues.text_id)
       }
-
     },
 
     async getStages() {
@@ -315,12 +328,12 @@ export default {
 
     editData() {
       if (this.inputValues) {
-        this.alias = this.inputValues.alias ?? 'stage 2';
+        this.alias = this.inputValues.alias;
         this.btn_sizes = this.inputValues.btn_sizes ?? 3;
         this.btn_type = this.inputValues.btn_type ?? 'INLINE';
         this.condition = this.inputValues.condition;
         this.id = this.inputValues.id;
-        this.stage_order = this.inputValues.stage_order ?? '20';
+        this.stage_order = this.inputValues.stage_order;
         this.text_id = this.inputValues.text_id;
         this.url_id = this.inputValues.url_id;
         this.selected = this.inputValues.url_id ? 'URL' : 'STAGE';
