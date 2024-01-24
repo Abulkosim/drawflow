@@ -17,7 +17,7 @@
             node? </h3>
           <div class="yes-no">
             <button data-modal-hide="popup-modal" type="button" @click="confirm" class="yes">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="red" viewBox="0 0 256 256">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 256 256">
                 <path
                   d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z">
                 </path>
@@ -25,11 +25,6 @@
               <span>Delete</span>
             </button>
             <button data-modal-hide="popup-modal" type="button" @click="close" class="no">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#6B7280" viewBox="0 0 256 256">
-                <path
-                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z">
-                </path>
-              </svg>
               <span>Cancel</span>
             </button>
           </div>
@@ -117,7 +112,10 @@ export default {
 
 .yes {
   display: flex;
+  height: 44px;
+  width: 120px;
   align-items: center;
+  justify-content: center;
   gap: 0.25rem;
   padding: 0.625rem 1.25rem;
   align-items: center;
@@ -126,23 +124,24 @@ export default {
   line-height: 1.25rem;
   font-weight: 500;
   text-align: center;
-  color: red;
-  outline: 2px solid red;
-  background-color: white;
+  color: white;
+  outline: 2px solid #E02424;
+  background-color: #E02424;
   border: none;
   cursor: pointer;
 }
 
 .yes:hover {
-  background-color: #f3f3f3
-}
-
-.yes:active {
-  background-color: #e3e3e3;
+  background-color: #d62828;
+  outline-color: #d62828;
 }
 
 .no {
   display: flex;
+  height: 44px;
+  width: 120px;
+  text-align: center;
+  justify-content: center;
   align-items: center;
   gap: 0.25rem;
   padding: 0.625rem 1.25rem;
@@ -159,14 +158,9 @@ export default {
 }
 
 .no:hover {
-  color: #111827;
-  background-color: #F3F4F6;
+  background-color: rgb(248, 248, 248);
 }
 
-.no:active {
-  color: #111827;
-  background-color: #F3F4F6EE;
-}
 
 .confirmation {
   margin-bottom: 1.75rem;
