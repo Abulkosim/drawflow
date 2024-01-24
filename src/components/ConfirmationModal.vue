@@ -17,9 +17,21 @@
             node? </h3>
           <div class="yes-no">
             <button data-modal-hide="popup-modal" type="button" @click="confirm" class="yes">
-              Yes, I'm sure
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="red" viewBox="0 0 256 256">
+                <path
+                  d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z">
+                </path>
+              </svg>
+              <span>Delete</span>
             </button>
-            <button data-modal-hide="popup-modal" type="button" @click="close" class="no">No, cancel</button>
+            <button data-modal-hide="popup-modal" type="button" @click="close" class="no">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#6B7280" viewBox="0 0 256 256">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z">
+                </path>
+              </svg>
+              <span>Cancel</span>
+            </button>
           </div>
         </div>
       </div>
@@ -104,40 +116,45 @@ export default {
 }
 
 .yes {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
   padding: 0.625rem 1.25rem;
   align-items: center;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 18px;
   line-height: 1.25rem;
   font-weight: 500;
   text-align: center;
-  color: #ffffff;
-  outline: 2px solid #B91C1C;
-  background-color: #B91C1C;
+  color: red;
+  outline: 2px solid red;
+  background-color: white;
   border: none;
   cursor: pointer;
 }
 
 .yes:hover {
-  background-color: #B91C1CEE;
+  background-color: #f3f3f3
 }
 
 .yes:active {
-  background-color: #B91C1CDD;
+  background-color: #e3e3e3;
 }
 
 .no {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
   padding: 0.625rem 1.25rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  font-weight: 500;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 18px;
   line-height: 1.25rem;
   color: #6B7280;
   background-color: #ffffff;
   border: none;
-  outline: 2px solid #d1d1d1;
+  outline: 2px solid #6B7280;
   cursor: pointer;
 }
 

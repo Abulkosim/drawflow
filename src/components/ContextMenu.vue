@@ -1,5 +1,6 @@
 <template>
-  <div v-if="!isOne && !isTwo && showMenu" :style="{ top: position.y + 'px', left: position.x + 'px' }" class="context-menu">
+  <div v-if="!isOne && !isTwo && showMenu" :style="{ top: position.y + 'px', left: position.x + 'px' }"
+    class="context-menu">
     <ul>
       <li @click="editNode" v-if="!isOne && !isTwo">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#2c3e50" viewBox="0 0 256 256">
@@ -53,7 +54,7 @@ export default {
   background-color: #fff;
   z-index: 10;
   width: 150px;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
 .context-menu ul {
