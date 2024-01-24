@@ -280,6 +280,7 @@ export default {
           };
         });
       }
+      console.log(transformedData.drawflow.Home.data)
       return transformedData
     },
 
@@ -302,16 +303,6 @@ export default {
           connections: []
         }
       };
-    },
-
-    async getConnections() {
-      try {
-        const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
-        const apiData = response.data.data;
-        console.log(apiData)
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-      }
     },
 
     async getNode(id) {
@@ -404,7 +395,6 @@ export default {
       try {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
-        console.log(nodeData)
         await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
 
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);

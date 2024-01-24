@@ -60,7 +60,6 @@
               <label for="connection" class="label">Back hand</label>
               <div class="input-container">
                 <select id="connection" class="input">
-                  <option value="" disabled selected hidden></option>
                   <option v-for="item in stages" :key="item.id" :value="item">{{ item.alias }}</option>
                 </select>
                 <select class="input">
@@ -80,7 +79,7 @@
               <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"
                 :required="!stageSelected" v-model="url_id">
               <datalist id="datalist" class="datalist">
-                <option v-for="item in urls" :key="item" :value="item">{{ item }}</option>
+                <option v-for="item in urls" :key="item" :value="item.url"><span>{{ item.description }}</span></option>
               </datalist>
             </div>
             <div class="state" v-if="stageSelected">
@@ -99,13 +98,13 @@
                 <input list="datalist" type="text" name="state-string" id="state-string" class="input"
                   v-model="stateString" :disabled="stateString == 'reply'" autocomplete="off">
                 <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
-                  <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
+                  <option v-for="item in urls" :key="item" :value="item">{{ item.alias }}</option>
                 </datalist>
               </div>
               <div class="state-string" v-else-if="stateType == 'next.'">
                 <label for="state-string" class="label">State string</label>
                 <select id="state-string" class="input" v-model="stateString">
-                  <option v-for="item in items" :key="item" :value="item">{{ item }}</option>
+                  <option v-for="item in stages" :key="item" :value="item.alias">{{ item.alias }}</option>
                 </select>
               </div>
             </div>
@@ -185,7 +184,7 @@ export default {
       urls: [],
       stages: [],
       num: '',
-      items: ['reply', 'next', 'url'],
+      connections: [],
       url: 'http://10.20.11.24:8080/api/'
     }
   },
@@ -195,7 +194,11 @@ export default {
         if (this.stateType != 'other') {
           return this.stateType + this.stateString
         } else {
-          return this.stateString
+          if (this.stateString) {
+            return this.stateString
+          } else {
+            return null
+          }
         }
       },
 
@@ -226,6 +229,7 @@ export default {
     this.getUrls()
     this.getStages()
     this.getNum()
+    this.getConnections()
 
     if (this.addMode) {
       this.heading = 'Add stage'
@@ -250,6 +254,11 @@ export default {
       }
     },
 
+    async getConnections() {
+      const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`)
+      this.connections = response.data.data
+    },
+
     async getAliases() {
       const response = await axios.get(`${this.url}v1/bot/user/texts?user_id=1`)
       this.aliases = response.data.data
@@ -265,7 +274,7 @@ export default {
     },
 
     async getUrls() {
-      const response = await axios.get(`${this.url}tg/bot/user/callback_urls`)
+      const response = await axios.get(`${this.url}tg/bot/user/callback_urls?user_id=1`)
       this.urls = response.data.data
     },
 
