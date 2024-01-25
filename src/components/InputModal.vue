@@ -59,10 +59,12 @@
             <div v-if="stageSelected">
               <label for="connection" class="label">Back hand</label>
               <div class="input-container">
-                <select id="connection" class="input">
+                <select id="connection" class="input" v-model="stage">
+                  <option value="" disabled selected hidden></option>
                   <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
                 </select>
-                <select class="input">
+                <select class="input" v-model="backhand">
+                  <option value="" disabled selected hidden></option>
                   <option v-for="item in backhands" :key="item.id" :value="item.alias">{{ item.alias }}</option>
                 </select>
               </div>
@@ -188,9 +190,10 @@ export default {
       urls: [],
       stages: [],
       num: '',
-      connections: [],
       backhands: [],
-      url: 'http://10.20.11.24:8080/api/'
+      url: 'http://10.20.11.24:8080/api/',
+      stage: '',
+      backhand: ''
     }
   },
   computed: {
@@ -229,7 +232,6 @@ export default {
     this.getUrls()
     this.getStages()
     this.getNum()
-    this.getConnections()
     this.getBackhands()
 
     if (this.addMode) {
@@ -255,13 +257,8 @@ export default {
       }
     },
 
-    async getConnections() {
-      const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`)
-      this.connections = response.data.data
-    },
-
     async getBackhands() {
-      const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=183`)
+      const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=223`)
       this.backhands = response.data.data.buttons
     },
 
@@ -337,7 +334,9 @@ export default {
         bot_id: 122,
         btn_type: this.btn_type,
         btn_sizes: this.btn_sizes,
-        state: 1
+        backhand_id: this.backhands.find(item => item.alias == this.backhand)?.id,
+        stage: this.stage,
+        state: 1,
       })
     },
 
@@ -353,7 +352,9 @@ export default {
         this.url_id = this.inputValues.url_id;
         this.selected = this.inputValues.url_id ? 'URL' : 'STAGE';
         this.user_state = this.inputValues.user_state;
+        this.backhand = this.backhands.find(item => item.id == this.inputValues.back_stage_btn_id).alias ?? '';
       }
+      console.log(this.backhand)
     },
 
     async submit() {
