@@ -280,7 +280,6 @@ export default {
           };
         });
       }
-      console.log(transformedData.drawflow.Home.data)
       return transformedData
     },
 
@@ -382,6 +381,7 @@ export default {
     async create(createData) {
       try {
         await axios.post(`${this.url}tg/bot/stage/create`, createData);
+        // await axios.post(`${this.url}tg/bot/stage/back/hand/create`)
         await this.rerender()
       } catch (error) {
         console.error(`Error creating node: ${error}`);
@@ -395,6 +395,7 @@ export default {
       try {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
+
         await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
 
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
@@ -408,7 +409,6 @@ export default {
 
       } catch (error) {
         console.error(`Error updating node: ${error}`);
-        console.log(error.response.data.message)
         throw error;
       }
     },

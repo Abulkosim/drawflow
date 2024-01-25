@@ -60,10 +60,10 @@
               <label for="connection" class="label">Back hand</label>
               <div class="input-container">
                 <select id="connection" class="input">
-                  <option v-for="item in stages" :key="item.id" :value="item">{{ item.alias }}</option>
+                  <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
                 </select>
                 <select class="input">
-                  <option value="" disabled selected hidden></option>
+                  <option v-for="item in backhands" :key="item.id" :value="item.alias">{{ item.alias }}</option>
                 </select>
               </div>
             </div>
@@ -79,7 +79,11 @@
               <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"
                 :required="!stageSelected" v-model="url_id">
               <datalist id="datalist" class="datalist">
-                <option v-for="item in urls" :key="item" :value="item.url"><span>{{ item.description }}</span></option>
+                <option v-for="item in urls" :key="item.description">
+                  <span v-if="item.url">{{ item.url }}</span>
+                  <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
+                  <span v-if="item.description">{{ item.description }}</span>
+                </option>
               </datalist>
             </div>
             <div class="state" v-if="stageSelected">
@@ -98,13 +102,13 @@
                 <input list="datalist" type="text" name="state-string" id="state-string" class="input"
                   v-model="stateString" :disabled="stateString == 'reply'" autocomplete="off">
                 <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
-                  <option v-for="item in urls" :key="item" :value="item">{{ item.alias }}</option>
+                  <option v-for="item in urls" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
                 </datalist>
               </div>
               <div class="state-string" v-else-if="stateType == 'next.'">
                 <label for="state-string" class="label">State string</label>
                 <select id="state-string" class="input" v-model="stateString">
-                  <option v-for="item in stages" :key="item" :value="item.alias">{{ item.alias }}</option>
+                  <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
                 </select>
               </div>
             </div>
@@ -185,6 +189,7 @@ export default {
       stages: [],
       num: '',
       connections: [],
+      backhands: [],
       url: 'http://10.20.11.24:8080/api/'
     }
   },
@@ -194,11 +199,7 @@ export default {
         if (this.stateType != 'other') {
           return this.stateType + this.stateString
         } else {
-          if (this.stateString) {
-            return this.stateString
-          } else {
-            return null
-          }
+          return this.stateString
         }
       },
 
@@ -223,13 +224,13 @@ export default {
     }
   },
 
-
   mounted() {
     this.getAliases()
     this.getUrls()
     this.getStages()
     this.getNum()
     this.getConnections()
+    this.getBackhands()
 
     if (this.addMode) {
       this.heading = 'Add stage'
@@ -257,6 +258,11 @@ export default {
     async getConnections() {
       const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`)
       this.connections = response.data.data
+    },
+
+    async getBackhands() {
+      const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=183`)
+      this.backhands = response.data.data.buttons
     },
 
     async getAliases() {
@@ -324,7 +330,7 @@ export default {
         stage_order: this.stage_order,
         text_id: this.text_alias ? this.aliases[this.aliases.indexOf(this.text_alias)].id : null,
         url_id: this.url_id,
-        user_state: this.user_state,
+        user_state: this.user_state == '' ? null : this.user_state,
         condition: this.condition,
         updated_by: 1,
         created_by: 1,
