@@ -109,7 +109,6 @@ export default {
     }
 
     this.editor.import(this.data);
-    this.getConnections()
     id.addEventListener('contextmenu', this.handleRightClick)
 
     this.editor.on('nodeSelected', (node) => {
@@ -202,14 +201,6 @@ export default {
       }
     },
 
-    async getConnections() {
-      try {
-        const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-      }
-    },
-
     async transformApiData(apiData) {
 
       const transformedData = {
@@ -281,36 +272,48 @@ export default {
             class: `node${item.id}`,
             html: `<div class="card-devices"><span>${item.alias}</span></div>`,
             typenode: false,
-            inputs: this.generateInputs(item),
-            outputs: this.generateOutputs(item),
+            inputs: {},
+            outputs: {},
             pos_x: item.x_,
             pos_y: item.y_
           };
         });
       }
-      console.log(transformedData)
+
+      const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
+
+      const connections = response.data.data;
+      console.log('connections', connections)
+      if (connections) {
+        connections.forEach((connection, index) => {
+          if (transformedData.drawflow.Home.data[connection.output_]) {
+            transformedData.drawflow.Home.data[connection.output_].outputs = {
+              output_1: {
+                connections: [
+                  {
+                    node: connection.input_,
+                    output: 'input_1'
+                  }
+                ]
+              }
+            };
+          }
+          if (transformedData.drawflow.Home.data[connection.input_]) {
+            transformedData.drawflow.Home.data[connection.input_].inputs = {
+              input_1: {
+                connections: [
+                  {
+                    node: connection.output_,
+                    input: 'output_1'
+                  }
+                ]
+              }
+            };
+          }
+        });
+      }
+
       return transformedData
-    },
-
-    generateInputs(item) {
-      return {
-        input_1: {
-          connections: [
-            {
-              node: 2,
-              input: 'output_1'
-            }
-          ]
-        }
-      };
-    },
-
-    generateOutputs(item) {
-      return {
-        output_1: {
-          connections: []
-        }
-      };
     },
 
     async getNode(id) {
