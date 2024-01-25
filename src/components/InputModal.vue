@@ -59,7 +59,7 @@
             <div v-if="stageSelected">
               <label for="connection" class="label">Back hand</label>
               <div class="input-container">
-                <select id="connection" class="input" v-model="stage">
+                <select id="connection" class="input" v-model="stage" @input="getBackhands">
                   <option value="" disabled selected hidden></option>
                   <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
                 </select>
@@ -200,7 +200,11 @@ export default {
     user_state: {
       get() {
         if (this.stateType != 'other') {
-          return this.stateType + this.stateString
+          if (this.stateType == 'next.' && this.stateString != '') {
+            return this.stateType + this.stages.find(item => item.alias == this.stateString)?.id
+          } else {
+            return this.stateType + this.stateString
+          }
         } else {
           return this.stateString
         }
@@ -210,7 +214,7 @@ export default {
         if (newValue) {
           if (newValue.startsWith('next.')) {
             this.stateType = 'next.'
-            this.stateString = newValue.slice(5)
+            this.stateString = this.stages.find(item => item.id == newValue.slice(5))?.alias ?? ''
           } else if (newValue.startsWith('url.')) {
             this.stateType = 'url.'
             this.stateString = newValue.slice(4)
@@ -227,12 +231,12 @@ export default {
     }
   },
 
-  mounted() {
-    this.getAliases()
-    this.getUrls()
-    this.getStages()
-    this.getNum()
-    this.getBackhands()
+  async mounted() {
+    await this.getAliases()
+    await this.getUrls()
+    await this.getStages()
+    await this.getNum()
+    await this.getBackhands()
 
     if (this.addMode) {
       this.heading = 'Add stage'
@@ -258,8 +262,12 @@ export default {
     },
 
     async getBackhands() {
-      const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=223`)
-      this.backhands = response.data.data.buttons
+      if (this.stage) {
+        const id = this.stages.find(item => item.alias == this.stage)?.id
+        const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=${id}`)
+        this.backhands = response.data.data.buttons
+      }
+
     },
 
     async getAliases() {
@@ -352,9 +360,8 @@ export default {
         this.url_id = this.inputValues.url_id;
         this.selected = this.inputValues.url_id ? 'URL' : 'STAGE';
         this.user_state = this.inputValues.user_state;
-        this.backhand = this.backhands.find(item => item.id == this.inputValues.back_stage_btn_id).alias ?? '';
+        this.backhand = this.inputValues.backhand_id ? this.backhands.find(item => item.id == this.inputValues.backhand_id)?.alias : '';
       }
-      console.log(this.backhand)
     },
 
     async submit() {
@@ -408,6 +415,9 @@ export default {
         }
       }
     },
+    stage(current) {
+      this.getBackhands()
+    }
   }
 }
 

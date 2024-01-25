@@ -109,7 +109,7 @@ export default {
     }
 
     this.editor.import(this.data);
-
+    this.getConnections()
     id.addEventListener('contextmenu', this.handleRightClick)
 
     this.editor.on('nodeSelected', (node) => {
@@ -202,6 +202,14 @@ export default {
       }
     },
 
+    async getConnections() {
+      try {
+        const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    },
+
     async transformApiData(apiData) {
 
       const transformedData = {
@@ -280,6 +288,7 @@ export default {
           };
         });
       }
+      console.log(transformedData)
       return transformedData
     },
 
@@ -308,8 +317,6 @@ export default {
       try {
         const response = await axios.get(`${this.url}v1/bot/stage?id=${id}`);
         const apiData = response.data.data.stage;
-        console.log(apiData)
-        console.log(apiData)
         this.inputValues = {
           alias: apiData.alias,
           btn_sizes: apiData.btn_sizes,
@@ -412,7 +419,6 @@ export default {
       try {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
-
         await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
         await axios.post(`${this.url}tg/bot/stage/back/hand/create`, backhandData)
 
