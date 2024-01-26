@@ -21,8 +21,14 @@
               <label for="button" class="label required">Button</label>
               <select id="button" class="input" required>
                 <option value="view" selected>view</option>
-                <option value="edit">edit</option>
-                <option value="delete">delete</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="button" class="label">is_web_app</label>
+              <select id="button" class="input">
+                <option value="yes">yes</option>
+                <option value="no" selected>no</option>
               </select>
             </div>
 
@@ -34,12 +40,30 @@
                   <span v-if="errors[0]" class="output">Required field!</span>
                 </div>
               </ValidationProvider>
+            </div>
 
+            <div class="state">
+              <div class="state-type">
+                <label for="back-type" class="label">Back type</label>
+                <select id="back-type" class="input">
+                  <option value="" disabled selected hidden></option>
+                  <option value="next.">next.</option>
+                  <option value="url.">url.</option>
+                  <option value="other">other</option>
+                </select>
+              </div>
+              <div class="state-string">
+                <label for="back-string" class="label">Back string</label>
+                <input list="datalist" type="text" name="back-string" id="back-string" class="input" autocomplete="off">
+                <datalist id="datalist" class="datalist">
+                  <option></option>
+                </datalist>
+              </div>
             </div>
 
           </div>
           <div class="modal-save">
-            <button type="submit" class="submit-button">
+            <button class="submit-button">
               Save
             </button>
           </div>
@@ -73,4 +97,39 @@ export default {
 </script>
 <style scoped>
 @import '../assets/modal.css';
+
+
+.modal {
+  max-width: 540px;
+  max-height: calc(100% - 50px)
+}
+
+.modal-content {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.modal-header {
+  @media (min-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+.form {
+
+  @media (min-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+.form-content {
+  gap: 0.5rem;
+}
+
+.modal-save {
+  padding: 1rem;
+
+  @media (min-width: 768px) {
+    padding: 1rem;
+  }
+}
 </style>

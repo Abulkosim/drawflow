@@ -146,6 +146,9 @@
               <input type="text" name="user" id="user" class="input" :value="user_state" autocomplete="off" disabled>
             </div>
           </div>
+
+          <ButtonsTable v-if="!addMode" :inputValues="inputValues" />
+
           <div class="modal-save">
             <button type="submit" class="submit-button">
               Save
@@ -160,10 +163,15 @@
 import ace from 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-cobalt';
+
 import axios from "axios";
+import ButtonsTable from './ButtonsTable.vue';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues'],
+  components: {
+    ButtonsTable
+  },
   data() {
     return {
       heading: 'Add stage',

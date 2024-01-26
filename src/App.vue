@@ -78,7 +78,7 @@ export default {
       showModal: false,
       showInputModal: false,
       showAddButtonModal: false,
-      showStageButtonModal: false,
+      showStageButtonModal: true,
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
       showToast: false,
@@ -550,7 +550,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 2;
+  z-index: 100;
   background-color: #6B7280;
   opacity: 0.5;
   transition-property: opacity;
@@ -620,7 +620,7 @@ export default {
   background-color: white;
   font-size: 26px;
   padding: 10px;
-  color: 2c3e50;
+  color: #2c3e50;
   border: 2px solid #2c3e50;
   margin: 2px;
   border-radius: 50%;
