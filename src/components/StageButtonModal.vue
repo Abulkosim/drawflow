@@ -20,7 +20,7 @@
             <div>
               <label for="button" class="label required">Button</label>
               <div class="buttons">
-                <select id="button" class="input" required>
+                <select id="button" class="input" required v-model="button_id">
                   <option v-for="button in buttons" :key="button.id" :value="button.id">{{ button.name }}</option>
                 </select>
                 <button class="create-button" @click.stop.prevent="create" title="Create button">
@@ -29,41 +29,67 @@
               </div>
             </div>
 
-            <div>
-              <label for="button" class="label">is_web_app</label>
-              <select id="button" class="input">
-                <option value="yes">yes</option>
-                <option value="no" selected>no</option>
-              </select>
-            </div>
 
-            <div>
+            <!-- <div>
               <ValidationProvider rules="required" v-slot="{ errors }">
                 <div>
                   <label for="order" class="label required">Order</label>
-                  <input type="number" name="order" id="order" class="input" autocomplete="off">
+                  <div class="cont">
+                    <input type="number" name="order" id="order" class="input" autocomplete="off" v-model="btn_order">
+                    <div class="check">
+                      <input type="checkbox" name="is_web_app" id="is_web_app" class="checkbox" v-model="is_web_app">
+                      <label for="is_web_app" class="label">is_web_app</label>
+                    </div>
+                  </div>
                   <span v-if="errors[0]" class="output">Required field!</span>
                 </div>
               </ValidationProvider>
+            </div> -->
+
+            <div>
+              <label for="order" class="label required">Order</label>
+              <div class="cont">
+                <input type="number" name="order" id="order" class="input" autocomplete="off" v-model="btn_order">
+                <div class="check">
+                  <input type="checkbox" name="is_web_app" id="is_web_app" class="checkbox" v-model="is_web_app">
+                  <label for="is_web_app" class="label">is_web_app</label>
+                </div>
+              </div>
+              <span v-if="errors[0]" class="output">Required field!</span>
             </div>
+
 
             <div class="state">
               <div class="state-type">
                 <label for="back-type" class="label">Back type</label>
-                <select id="back-type" class="input">
+                <select id="back-type" class="input" v-model="backType" @change="backString = ''">
                   <option value="" disabled selected hidden></option>
                   <option value="next.">next.</option>
                   <option value="url.">url.</option>
                   <option value="other">other</option>
                 </select>
               </div>
-              <div class="state-string">
+              <div class="state-string" v-if="backType != 'next.'">
                 <label for="back-string" class="label">Back string</label>
-                <input list="datalist" type="text" name="back-string" id="back-string" class="input" autocomplete="off">
-                <datalist id="datalist" class="datalist">
-                  <option></option>
+                <input list="datalist" type="text" name="back-string" id="back-string" class="input" autocomplete="off"
+                  v-model="backString" :disabled="backString == 'reply'">
+                <datalist id="datalist" class="datalist" v-if="backType == 'url.'">
+                  <option v-for="item in urls" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
                 </datalist>
               </div>
+
+              <div class="state-string" v-if="backType == 'next.'">
+                <label for="back-string" class="label">Back string</label>
+                <select id="back-string" class="input" v-model="backString">
+                  <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
+                </select>
+              </div>
+            </div>
+
+
+            <div>
+              <label for="back" class="label">Back</label>
+              <input type="text" name="back" id="back" class="input" autocomplete="off" disabled :value="back">
             </div>
 
           </div>
@@ -87,14 +113,20 @@ export default {
       heading: 'Add button to the stage',
       url: 'http://10.20.11.24:8080/api/',
       stage_id: this.inputValues.id ?? null,
-      buttons: []
+      buttons: [],
+      is_web_app: false,
+      button_id: '',
+      btn_order: '',
+      backType: '',
+      backString: '',
+      urls: [],
+      stages: [],
     }
   },
   async mounted() {
-    await this.getButtons(); 
-    setInterval(() => {
-      this.getButtons();
-    }, 3000);
+    await this.getUrls()
+    await this.getStages()
+    await this.getButtons();
   },
   methods: {
     close() {
@@ -106,12 +138,55 @@ export default {
     create() {
       this.$emit('create')
     },
+    async getStages() {
+      const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
+      this.stages = response.data.data;
+    },
+
+    async getUrls() {
+      const response = await axios.get(`${this.url}tg/bot/user/callback_urls?user_id=1`)
+      this.urls = response.data.data
+    },
+
     async getButtons() {
       if (this.stage_id) {
         const response = await axios.get(`${this.url}tg/bot/user/buttons?user_id=1`);
         this.buttons = response.data.data;
       }
     },
+
+    async submit() {
+      const stageButtonData = {
+        stage_id: this.stage_id,
+        button_id: this.button_id,
+        btn_order: this.btn_order,
+        is_web_app: this.is_web_app,
+        back: this.back
+      }
+      console.log(stageButtonData);
+      await axios.post(`${this.url}tg/bot/stage/button/create`, stageButtonData)
+        .then((response) => {
+          console.log(response.data);
+
+          this.close()
+        }, (error) => {
+          console.log(error);
+        });
+      this.close()
+    }
+  },
+  computed: {
+    back() {
+      if (this.backType != 'other') {
+        if (this.backType == 'next.' && this.backString != '') {
+          return this.backType + this.stages.find(item => item.alias == this.backString)?.id
+        } else {
+          return this.backType + this.backString
+        }
+      } else {
+        return this.backString
+      }
+    }
   }
 }
 </script>
@@ -169,5 +244,22 @@ export default {
   height: 39px;
   border-radius: 0.25rem;
   cursor: pointer;
+}
+
+.label {
+  display: inline;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cont {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
 }
 </style>

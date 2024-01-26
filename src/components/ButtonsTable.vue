@@ -23,7 +23,7 @@ export default {
   props: ['inputValues'],
   data() {
     return {
-      columns: ['id', 'btn_order', 'button_id', 'is_web_app', 'back', 'created_at'],
+      columns: ['id', 'btn_order', 'button', 'is_web_app', 'back', 'created_at'],
       items: [],
       stage_id: this.inputValues.id ?? null,
     };
@@ -38,23 +38,8 @@ export default {
         this.items = response.data.data;
       }
     },
-    async addButton() {
-      try {
-        this.$emit('openStageButtonModal')
-        const buttonData = {
-          stage_id: this.stage_id,
-          button_id: 200,
-          is_web_app: false,
-          back: "next.200",
-          user_id: 1,
-          btn_order: 200,
-        };
-        // stage_id, button_id, is_web_app, back, user_id, btn_order
-        // await axios.post('http://10.20.11.24:8080/api/tg/bot/stage/button/create', buttonData);
-        await this.getTableData();
-      } catch (error) {
-        console.error(error);
-      }
+    addButton() {
+      this.$emit('openStageButtonModal');
     },
   },
 };
