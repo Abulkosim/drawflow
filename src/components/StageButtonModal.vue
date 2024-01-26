@@ -19,9 +19,14 @@
 
             <div>
               <label for="button" class="label required">Button</label>
-              <select id="button" class="input" required>
-                <option value="view" selected>view</option>
-              </select>
+              <div class="buttons">
+                <select id="button" class="input" required>
+                  <option v-for="button in buttons" :key="button.id" :value="button.id">{{ button.name }}</option>
+                </select>
+                <button class="create-button" @click.stop.prevent="create" title="Create button">
+                  Create
+                </button>
+              </div>
             </div>
 
             <div>
@@ -76,14 +81,17 @@
 import axios from "axios";
 
 export default {
-  props: ['showStageButtonModal'],
+  props: ['showStageButtonModal', 'inputValues'],
   data() {
     return {
       heading: 'Add button to the stage',
-      loading: false,
-
-      url: 'http://10.20.11.24:8080/api/'
+      url: 'http://10.20.11.24:8080/api/',
+      stage_id: this.inputValues.id ?? null,
+      buttons: []
     }
+  },
+  async mounted() {
+    await this.getButtons();
   },
   methods: {
     close() {
@@ -91,7 +99,17 @@ export default {
     },
     submit() {
       this.close()
-    }
+    },
+    create() {
+      this.$emit('create')
+    },
+    async getButtons() {
+      console.log(`${this.url}/tg/bot/button/list?stage_id=${this.stage_id}`)
+      if (this.stage_id) {
+        const response = await axios.get(`${this.url}tg/bot/user/buttons?user_id=1`);
+        this.items = response.data.data;
+      }
+    },
   }
 }
 </script>
@@ -131,5 +149,23 @@ export default {
   @media (min-width: 768px) {
     padding: 1rem;
   }
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.create-button {
+  background-color: white;
+  border: 2px solid lightgray;
+  color: #2c3e50;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  height: 39px;
+  border-radius: 0.25rem;
+  cursor: pointer;
 }
 </style>

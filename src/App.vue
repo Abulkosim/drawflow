@@ -35,16 +35,16 @@
     <div v-if="showInputModal" class="overlay"></div>
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
-      @close="closeInputModal" @save="save" />
-
-    <div v-if="showAddButtonModal" class="overlay"></div>
-
-    <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal" />
+      @close="closeInputModal" @save="save" @openStageButtonModal="showStageButtonModal = true" />
 
     <div v-if="showStageButtonModal" class="overlay"></div>
 
-    <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal"
-      @close="closeStageButtonModal" />
+    <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal" :inputValues="inputValues"
+      @close="closeStageButtonModal" @create="showAddButtonModal = true" />
+
+    <div v-if="showAddButtonModal" class="overlay high-index"></div>
+
+    <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal" />
   </div>
 </template>
 
@@ -78,7 +78,7 @@ export default {
       showModal: false,
       showInputModal: false,
       showAddButtonModal: false,
-      showStageButtonModal: true,
+      showStageButtonModal: false,
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
       showToast: false,
@@ -550,12 +550,16 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 100;
+  z-index: 10;
   background-color: #6B7280;
   opacity: 0.5;
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
+}
+
+.high-index {
+  z-index: 101;
 }
 
 #drawflow {

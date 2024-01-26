@@ -147,7 +147,7 @@
             </div>
           </div>
 
-          <ButtonsTable v-if="!addMode" :inputValues="inputValues" />
+          <ButtonsTable v-if="!addMode" :inputValues="inputValues" @openStageButtonModal="openStageButtonModal" />
 
           <div class="modal-save">
             <button type="submit" class="submit-button">
@@ -257,6 +257,10 @@ export default {
   },
 
   methods: {
+    openStageButtonModal() {
+      this.$emit('openStageButtonModal')
+    },
+
     async getNum() {
       const response = await axios.get(`${this.url}tg/bot/stage/new?bot_id=122`)
       this.num = response.data.data

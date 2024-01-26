@@ -33,11 +33,14 @@ export default {
   },
   methods: {
     async getTableData() {
-      const response = await axios.get(`http://10.20.11.24:8080/api/tg/bot/stage/button/list?stage_id=${this.stage_id}`);
-      this.items = response.data.data;
+      if (this.stage_id) {
+        const response = await axios.get(`http://10.20.11.24:8080/api/tg/bot/stage/button/list?stage_id=${this.stage_id}`);
+        this.items = response.data.data;
+      }
     },
     async addButton() {
       try {
+        this.$emit('openStageButtonModal')
         const buttonData = {
           stage_id: this.stage_id,
           button_id: 200,
@@ -47,7 +50,7 @@ export default {
           btn_order: 200,
         };
         // stage_id, button_id, is_web_app, back, user_id, btn_order
-        await axios.post('http://10.20.11.24:8080/api/tg/bot/stage/button/create', buttonData);
+        // await axios.post('http://10.20.11.24:8080/api/tg/bot/stage/button/create', buttonData);
         await this.getTableData();
       } catch (error) {
         console.error(error);

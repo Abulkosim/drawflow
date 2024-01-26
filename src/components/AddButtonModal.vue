@@ -82,8 +82,9 @@ export default {
 @import '../assets/modal.css';
 
 .modal {
-  max-width: 540px;
-  max-height: calc(100% - 50px)
+  max-width: 480px;
+  max-height: calc(100% - 80px);
+  z-index: 101;
 }
 
 .modal-content {
@@ -97,9 +98,8 @@ export default {
 }
 
 .form {
-
   @media (min-width: 768px) {
-    padding: 1rem;
+    padding: 0.6rem 1rem;
   }
 }
 
@@ -109,9 +109,5 @@ export default {
 
 .modal-save {
   padding: 1rem;
-
-  @media (min-width: 768px) {
-    padding: 1rem;
-  }
 }
 </style>
