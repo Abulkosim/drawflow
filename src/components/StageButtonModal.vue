@@ -91,7 +91,10 @@ export default {
     }
   },
   async mounted() {
-    await this.getButtons();
+    await this.getButtons(); 
+    setInterval(() => {
+      this.getButtons();
+    }, 3000);
   },
   methods: {
     close() {
@@ -104,10 +107,9 @@ export default {
       this.$emit('create')
     },
     async getButtons() {
-      console.log(`${this.url}/tg/bot/button/list?stage_id=${this.stage_id}`)
       if (this.stage_id) {
         const response = await axios.get(`${this.url}tg/bot/user/buttons?user_id=1`);
-        this.items = response.data.data;
+        this.buttons = response.data.data;
       }
     },
   }

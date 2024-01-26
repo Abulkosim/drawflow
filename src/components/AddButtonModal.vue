@@ -29,20 +29,20 @@
 
             <div>
               <label for="english" class="label">English</label>
-              <input type="text" name="english" id="english" class="input" autocomplete="off" v-model="english">
+              <input type="text" name="english" id="english" class="input" autocomplete="off" v-model="en">
             </div>
             <div>
               <label for="uzbek" class="label">O'zbekcha</label>
-              <input type="text" name="uzbek" id="uzbek" class="input" autocomplete="off" v-model="uzbek">
+              <input type="text" name="uzbek" id="uzbek" class="input" autocomplete="off" v-model="uz">
             </div>
             <div>
               <label for="russian" class="label">Русский</label>
-              <input type="text" name="russian" id="russian" class="input" autocomplete="off" v-model="russian">
+              <input type="text" name="russian" id="russian" class="input" autocomplete="off" v-model="ru">
             </div>
 
           </div>
           <div class="modal-save">
-            <button type="submit" class="submit-button">
+            <button @click="submit" class="submit-button">
               Save
             </button>
           </div>
@@ -60,10 +60,9 @@ export default {
     return {
       heading: 'Create button',
       alias: '',
-      english: '',
-      uzbek: '',
-      russian: '',
-      loading: false,
+      en: '',
+      uz: '',
+      ru: '',
 
       url: 'http://10.20.11.24:8080/api/'
     }
@@ -72,7 +71,22 @@ export default {
     close() {
       this.$emit('close')
     },
-    submit() {
+    async submit() {
+      await axios.post(`${this.url}tg/bot/button/create`, {
+        alias: this.alias,
+        names: {
+          en: this.en,
+          uz: this.uz,
+          ru: this.ru
+        },
+        user_id: 1
+      })
+        .then((response) => {
+          console.log(response);
+          this.close()
+        }, (error) => {
+          console.log(error);
+        });
       this.close()
     }
   }
