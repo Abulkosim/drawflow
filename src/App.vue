@@ -245,7 +245,16 @@ export default {
                     ]
                   }
                 },
-                "outputs": {},
+                "outputs": {
+                  "output_1": {
+                    "connections": [
+                      {
+                        // "node": "3",
+                        "output": 'input_1'
+                      }
+                    ]
+                  }
+                },
                 "pos_x": 250,
                 "pos_y": 200
               },
@@ -277,20 +286,19 @@ export default {
       console.log('connections', connections)
       if (connections) {
         connections.forEach((connection, index) => {
-          console.log(connection, index)
           if (transformedData.drawflow.Home.data[connection.output_]) {
             transformedData.drawflow.Home.data[connection.output_].outputs = {
               output_1: {
                 connections: [
                   {
-                    node: connection.output_,
+                    node: connection.input_,
                     output: 'input_1'
                   }
                 ]
               }
             };
           }
-          if (transformedData.drawflow.Home.data[connection.output_]) {
+          if (transformedData.drawflow.Home.data[connection.input_]) {
             transformedData.drawflow.Home.data[connection.input_].inputs = {
               input_1: {
                 connections: [
@@ -302,37 +310,7 @@ export default {
               }
             };
           }
-
-          if (index === 0) {
-            console.log(connection.input_)
-            if (transformedData.drawflow.Home.data[2]) {
-              transformedData.drawflow.Home.data[2].outputs = {
-                output_1: {
-                  connections: [
-                    {
-                      node: connection.input_ - 1,
-                      output: 'input_1'
-                    }
-                  ]
-                }
-              };
-            }
-            if (transformedData.drawflow.Home.data[connection.input_ - 1]) {
-              transformedData.drawflow.Home.data[connection.input_ - 1].inputs = {
-                input_1: {
-                  connections: [
-                    {
-                      node: 2,
-                      input: 'output_1'
-                    }
-                  ]
-                }
-              };
-            }
-          }
         });
-
-
       }
 
       return transformedData
