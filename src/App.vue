@@ -271,7 +271,7 @@ export default {
       };
 
       if (apiData && apiData.length) {
-        apiData.forEach((item) => {
+        apiData.forEach((item, index) => {
           transformedData.drawflow.Home.data[`${item.id}`] = {
             id: item.id,
             name: `Node ${item.id}`,
@@ -285,6 +285,35 @@ export default {
             pos_y: item.y_
           };
         });
+
+        const lowestOrderNode = apiData.reduce((prev, current) => {
+          return (prev.stage_order < current.stage_order) ? prev : current
+        });
+        const firstDynamicNode = transformedData.drawflow.Home.data[lowestOrderNode.id];
+
+        const secondStaticNode = transformedData.drawflow.Home.data['2'];
+        if (firstDynamicNode && secondStaticNode) {
+          secondStaticNode.outputs = {
+            output_1: {
+              connections: [
+                {
+                  node: firstDynamicNode.id,
+                  output: 'input_1'
+                }
+              ]
+            }
+          };
+          firstDynamicNode.inputs = {
+            input_1: {
+              connections: [
+                {
+                  node: '2',
+                  input: 'output_1'
+                }
+              ]
+            }
+          };
+        }
       }
 
       const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
