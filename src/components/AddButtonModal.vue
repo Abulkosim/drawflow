@@ -55,7 +55,9 @@ export default {
       names: {
         en: '',
         uz: '',
-        ru: ''
+        ru: '',
+        ўз: '',
+        qq: ''
       },
       locales: [],
       url: 'http://10.20.11.24:8080/api/'
