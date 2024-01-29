@@ -258,8 +258,8 @@ export default {
   },
 
   methods: {
-    openStageButtonModal() {
-      this.$emit('openStageButtonModal')
+    openStageButtonModal(id) {
+      this.$emit('openStageButtonModal', id)
     },
 
     async getNum() {
@@ -437,5 +437,4 @@ export default {
 </script>
 <style>
 @import '../assets/modal.css';
-
 </style>

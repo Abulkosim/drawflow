@@ -36,12 +36,12 @@
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
       :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
-      @openStageButtonModal="showStageButtonModal = true" />
+      @openStageButtonModal="openStageButtonModal" />
 
     <div v-if="showStageButtonModal" class="overlay"></div>
 
     <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal" :inputValues="inputValues"
-      @close="closeStageButtonModal" @create="showAddButtonModal = true" />
+      :stageButtonId="stageButtonId" @close="closeStageButtonModal" @create="showAddButtonModal = true" />
 
     <div v-if="showAddButtonModal" class="overlay high-index"></div>
 
@@ -91,7 +91,8 @@ export default {
       x_: null,
       y_: null,
       dragOffset: { x: 0, y: 0 },
-      url: 'http://10.20.11.24:8080/api/'
+      url: 'http://10.20.11.24:8080/api/',
+      stageButtonId: null,
     }
   },
 
@@ -180,6 +181,11 @@ export default {
 
     allowDrop(ev) {
       ev.preventDefault();
+    },
+
+    async openStageButtonModal(id) {
+      this.stageButtonId = id;
+      this.showStageButtonModal = true;
     },
 
     async updatePosition(nodeData) {
@@ -284,7 +290,6 @@ export default {
       const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
 
       const connections = response.data.data;
-      console.log('connections', connections)
       if (connections) {
         connections.forEach((connection, index) => {
           if (transformedData.drawflow.Home.data[connection.output_]) {

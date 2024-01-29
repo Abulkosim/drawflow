@@ -33,23 +33,6 @@
               </div>
             </div>
 
-
-            <!-- <div>
-              <ValidationProvider rules="required" v-slot="{ errors }">
-                <div>
-                  <label for="order" class="label required">Order</label>
-                  <div class="cont">
-                    <input type="number" name="order" id="order" class="input" autocomplete="off" v-model="btn_order">
-                    <div class="check">
-                      <input type="checkbox" name="is_web_app" id="is_web_app" class="checkbox" v-model="is_web_app">
-                      <label for="is_web_app" class="label">is_web_app</label>
-                    </div>
-                  </div>
-                  <span v-if="errors[0]" class="output">Required field!</span>
-                </div>
-              </ValidationProvider>
-            </div> -->
-
             <div>
               <label for="order" class="label required">Order</label>
               <div class="cont">
@@ -61,7 +44,6 @@
               </div>
               <span v-if="errors[0]" class="output">Required field!</span>
             </div>
-
 
             <div class="state">
               <div class="state-type">
@@ -90,7 +72,6 @@
               </div>
             </div>
 
-
             <div>
               <label for="back" class="label">Back</label>
               <input type="text" name="back" id="back" class="input" autocomplete="off" disabled :value="back">
@@ -108,10 +89,11 @@
   </div>
 </template>
 <script>
+import { get } from "ace-builds/src-noconflict/ace";
 import axios from "axios";
 
 export default {
-  props: ['showStageButtonModal', 'inputValues'],
+  props: ['showStageButtonModal', 'inputValues', 'stageButtonId'],
   data() {
     return {
       heading: 'Add button to the stage',
@@ -125,12 +107,24 @@ export default {
       backString: '',
       urls: [],
       stages: [],
+      info: {},
     }
   },
   async mounted() {
-    await this.getUrls()
     await this.getStages()
+    await this.getUrls()
     await this.getButtons();
+    if (this.stageButtonId) {
+      await this.getInfo()
+      this.heading = 'Edit button of the stage'
+      this.stage_id = this.info.stage_id;
+      this.button_id = this.info.button_id;
+      this.btn_order = this.info.btn_order;
+      this.is_web_app = this.info.is_web_app;
+      this.back = this.info.back;
+    } else {
+      this.heading = 'Add button to the stage'
+    }
   },
   methods: {
     close() {
@@ -159,6 +153,11 @@ export default {
       }
     },
 
+    async getInfo() {
+      const response = await axios.get(`${this.url}tg/bot/stage/button?id=${this.stageButtonId}`);
+      this.info = response.data.data;
+    },
+
     async submit() {
       const stageButtonData = {
         stage_id: this.stage_id,
@@ -167,28 +166,52 @@ export default {
         is_web_app: this.is_web_app,
         back: this.back
       }
-      console.log(stageButtonData);
-      await axios.post(`${this.url}tg/bot/stage/button/create`, stageButtonData)
-        .then((response) => {
-          console.log(response.data);
-
-          this.close()
-        }, (error) => {
-          console.log(error);
-        });
-      this.close()
+      if (this.stageButtonId) {
+        await axios.post(`${this.url}tg/bot/stage/button/update?id=${this.stageButtonId}`, stageButtonData)
+          .then((response) => {
+            this.close()
+          }, (error) => {
+            console.log(error);
+          });
+        this.close()
+      } else {
+        await axios.post(`${this.url}tg/bot/stage/button/create`, stageButtonData)
+          .then((response) => {
+            this.close()
+          }, (error) => {
+            console.log(error);
+          });
+        this.close()
+      }
     }
   },
   computed: {
-    back() {
-      if (this.backType != 'other') {
-        if (this.backType == 'next.' && this.backString != '') {
-          return this.backType + this.stages.find(item => item.alias == this.backString)?.id
+    back: {
+      get() {
+        if (this.backType != 'other') {
+          if (this.backType == 'next.' && this.backString != '') {
+            return this.backType + this.stages.find(item => item.alias == this.backString)?.id
+          } else {
+            return this.backType + this.backString
+          }
         } else {
-          return this.backType + this.backString
+          return this.backString
         }
-      } else {
-        return this.backString
+      },
+
+      set(newValue) {
+        if (newValue) {
+          if (newValue.startsWith('next.')) {
+            this.backType = 'next.'
+            this.backString = this.stages.find(item => item.id == newValue.slice(5))?.alias ?? ''
+          } else if (newValue.startsWith('url.')) {
+            this.backType = 'url.'
+            this.backString = newValue.slice(4)
+          } else {
+            this.backType = 'other'
+            this.backString = newValue
+          }
+        }
       }
     }
   }
