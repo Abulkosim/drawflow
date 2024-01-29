@@ -20,7 +20,7 @@
 import axios from 'axios';
 
 export default {
-  props: ['inputValues'],
+  props: ['inputValues', 'showStageButtonModal'],
   data() {
     return {
       columns: ['id', 'btn_order', 'button', 'is_web_app', 'back', 'created_at'],
@@ -30,6 +30,11 @@ export default {
   },
   async mounted() {
     await this.getTableData();
+    setInterval(() => {
+      if (this.showStageButtonModal == false) {
+        this.getTableData();
+      }
+    }, 100);
   },
   methods: {
     async getTableData() {

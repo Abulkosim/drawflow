@@ -147,7 +147,8 @@
             </div>
           </div>
 
-          <ButtonsTable v-if="!addMode" :inputValues="inputValues" @openStageButtonModal="openStageButtonModal" />
+          <ButtonsTable v-if="!addMode" :inputValues="inputValues" @openStageButtonModal="openStageButtonModal"
+            :showStageButtonModal="showStageButtonModal" />
 
           <div class="modal-save">
             <button type="submit" class="submit-button">
@@ -168,7 +169,7 @@ import axios from "axios";
 import ButtonsTable from './ButtonsTable.vue';
 
 export default {
-  props: ['showInputModal', 'addMode', 'inputValues'],
+  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal'],
   components: {
     ButtonsTable
   },

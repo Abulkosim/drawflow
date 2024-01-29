@@ -35,7 +35,8 @@
     <div v-if="showInputModal" class="overlay"></div>
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
-      @close="closeInputModal" @save="save" @openStageButtonModal="showStageButtonModal = true" />
+      :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
+      @openStageButtonModal="showStageButtonModal = true" />
 
     <div v-if="showStageButtonModal" class="overlay"></div>
 

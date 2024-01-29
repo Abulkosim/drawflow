@@ -24,7 +24,11 @@
                   <option v-for="button in buttons" :key="button.id" :value="button.id">{{ button.name }}</option>
                 </select>
                 <button class="create-button" @click.stop.prevent="create" title="Create button">
-                  Create
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#2c3e50" viewBox="0 0 256 256">
+                    <path
+                      d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z">
+                    </path>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -236,14 +240,14 @@ export default {
 }
 
 .create-button {
-  background-color: white;
-  border: 2px solid lightgray;
-  color: #2c3e50;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  height: 39px;
-  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  width: 39px;
+  height: 39px;
+  border: 2px solid lightgray;
+  border-radius: 5px;
 }
 
 .label {

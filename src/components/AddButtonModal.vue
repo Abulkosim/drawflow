@@ -26,18 +26,10 @@
               </ValidationProvider>
             </div>
 
-
-            <div>
-              <label for="english" class="label">English</label>
-              <input type="text" name="english" id="english" class="input" autocomplete="off" v-model="en">
-            </div>
-            <div>
-              <label for="uzbek" class="label">O'zbekcha</label>
-              <input type="text" name="uzbek" id="uzbek" class="input" autocomplete="off" v-model="uz">
-            </div>
-            <div>
-              <label for="russian" class="label">Русский</label>
-              <input type="text" name="russian" id="russian" class="input" autocomplete="off" v-model="ru">
+            <div v-for="locale in locales">
+              <label :for="locale.id" class="label">{{ locale.name }}</label>
+              <input type="text" :name="locale.locale" :id="locale.id" class="input" autocomplete="off"
+                v-model="names[locale.locale]">
             </div>
 
           </div>
@@ -60,34 +52,38 @@ export default {
     return {
       heading: 'Create button',
       alias: '',
-      en: '',
-      uz: '',
-      ru: '',
-
+      names: {
+        en: '',
+        uz: '',
+        ru: ''
+      },
+      locales: [],
       url: 'http://10.20.11.24:8080/api/'
     }
+  },
+  created() {
+    this.getLocales()
   },
   methods: {
     close() {
       this.$emit('close')
     },
-    async submit() {
-      await axios.post(`${this.url}tg/bot/button/create`, {
-        alias: this.alias,
-        names: {
-          en: this.en,
-          uz: this.uz,
-          ru: this.ru
-        },
-        user_id: 1
-      })
+    async getLocales() {
+      await axios.get(`${this.url}tg/bot/flow/locales?bot_id=122`)
         .then((response) => {
-          console.log(response);
-          this.close()
+          this.locales = response.data.data
         }, (error) => {
           console.log(error);
         });
-      this.close()
+    },
+    async submit() {
+      const data = {
+        alias: this.alias,
+        names: this.names,
+        user_id: 1
+      }
+      await axios.post(`${this.url}tg/bot/button/create`, data);
+      this.close();
     }
   }
 }
