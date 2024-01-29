@@ -437,4 +437,5 @@ export default {
 </script>
 <style>
 @import '../assets/modal.css';
+
 </style>
