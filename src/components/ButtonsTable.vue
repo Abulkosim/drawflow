@@ -167,8 +167,8 @@ button {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   outline: none;
   font-size: 24px;
@@ -176,8 +176,9 @@ button {
   color: white;
   border: none;
   position: absolute;
-  right: -13px;
-  bottom: -13px;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .svg svg {

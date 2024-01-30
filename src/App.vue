@@ -131,6 +131,26 @@ export default {
     window.addEventListener('click', () => {
       this.showContextMenu = false;
     });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if (this.showContextMenu) {
+          this.showContextMenu = false;
+        } else if (this.showAddButtonModal) {
+          this.showAddButtonModal = false;
+        } else if (this.showStageButtonModal) {
+          this.showStageButtonModal = false;
+        } else if (this.showInputModal) {
+          this.showInputModal = false;
+        } else if (this.showModal) {
+          this.showModal = false;
+        }
+      }
+    });
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.onKeyDown);
   },
 
   methods: {
@@ -318,7 +338,7 @@ export default {
 
       const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
 
-      const connections = response.data.data;
+      const connections = [...response.data.data.btns, ...response.data.data.states];
       if (connections) {
         connections.forEach((connection, index) => {
           if (transformedData.drawflow.Home.data[connection.output_]) {
