@@ -279,7 +279,10 @@ export default {
         const id = this.stages.find(item => item.alias == this.stage)?.id
         const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=${id}`)
         this.backhands = response.data.data.buttons
-        // this.backhands.push({ id: null, alias: '' })
+
+        if (response.data.data.user_state) {
+          this.backhands.push({ id: response.data.data.user_state, alias: response.data.data.user_state ? 'user_state' : '' })
+        }
       }
 
     },
