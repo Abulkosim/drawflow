@@ -359,9 +359,10 @@ export default {
         bot_id: 122,
         btn_type: this.btn_type,
         btn_sizes: this.btn_sizes,
-        backhand_id: this.backhands.find(item => item.alias == this.backhand)?.id,
-        stage: this.stage,
+        stage_id: this.stages.find(item => item.alias == this.stage)?.id,
         state: 1,
+        backhand: this.backhand,
+        backhand_id: this.backhand == 'user_state' ? 'user_state' : this.backhands.find(item => item.alias == this.backhand)?.id
       })
     },
 
@@ -377,7 +378,6 @@ export default {
         this.url_id = this.inputValues.url_id;
         this.selected = this.inputValues.url_id ? 'URL' : 'STAGE';
         this.user_state = this.inputValues.user_state;
-        this.backhand = this.inputValues.backhand_id ? this.backhands.find(item => item.id == this.inputValues.backhand_id)?.alias : '';
       }
     },
 

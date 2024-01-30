@@ -386,13 +386,13 @@ export default {
           btn_sizes: nodeData.btn_sizes,
           x_: this.x_,
           y_: this.y_,
+          backhand: nodeData.backhand,
+          backhand_id: nodeData.backhand_id,
+          stage_id: nodeData.stage_id,
         }
 
-        const backhandData = {
-          id: nodeData.backhand_id
-        }
         const data = {}
-        this.create(createData, backhandData)
+        this.create(createData)
           .then(() => {
             this.showSuccessToast()
           })
@@ -415,15 +415,9 @@ export default {
           btn_type: nodeData.btn_type,
           btn_sizes: nodeData.btn_sizes,
           state: nodeData.state,
-          backhand_id: nodeData.backhand_id,
         }
 
-        const backhandData = {
-          id: nodeData.backhand_id,
-          back: 'next.' + nodeData.id,
-        }
-
-        this.updateNode(editData, backhandData)
+        this.updateNode(editData)
           .then(() => {
             this.showSuccessToast()
           })
@@ -436,13 +430,27 @@ export default {
       }
     },
 
-    async create(createData, backhandData) {
+    async create(createData) {
       try {
         const response = await axios.post(`${this.url}tg/bot/stage/create`, createData);
 
-        backhandData.back = 'next.' + response.data.data.insert.id
-
-        await axios.post(`${this.url}tg/bot/stage/back/hand/create`, backhandData)
+        if (createData.backhand) {
+          if (createData.backhand == 'user_state') {
+            const sendData = {
+              id: createData.stage_id,
+              stage_id: response.data.data.insert.id,
+              type: 's'
+            };
+            await axios.post(`${this.url}tg/bot/stage/back/hand/create`, sendData);
+          } else {
+            const sendData = {
+              id: createData.backhand_id,
+              stage_id: response.data.data.insert.id,
+              type: 'b'
+            };
+            await axios.post(`${this.url}tg/bot/stage/back/hand/create`, sendData);
+          }
+        }
 
         await this.rerender()
       } catch (error) {
@@ -453,12 +461,11 @@ export default {
       }
     },
 
-    async updateNode(nodeData, backhandData) {
+    async updateNode(nodeData) {
       try {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
         await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
-        await axios.post(`${this.url}tg/bot/stage/back/hand/create`, backhandData)
 
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
         if (node && contentElement) {

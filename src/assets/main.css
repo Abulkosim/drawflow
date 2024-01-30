@@ -56,7 +56,7 @@ div::-webkit-scrollbar {
   background: #fff;
   width: 160px;
   min-height: 40px;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 2px solid #36454f;
   color: #36454f;
   z-index: 1;
@@ -86,8 +86,8 @@ div::-webkit-scrollbar {
 .drawflow .drawflow-node .input,
 .drawflow .drawflow-node .output {
   position: relative;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   background: #fff;
   border-radius: 50%;
   border: 2px solid #36454f;

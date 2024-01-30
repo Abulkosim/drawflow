@@ -74,11 +74,11 @@ export default {
       }
     });
 
-    setInterval(() => {
-      if (this.showStageButtonModal == false) {
+    if (this.showStageButtonModal == false) {
+      setInterval(() => {
         this.getTableData();
-      }
-    }, 100);
+      }, 500);
+    }
 
   },
 
@@ -233,9 +233,12 @@ button {
   background-color: #d4d4d4;
 }
 
-.fade-enter-active,
+.fade-enter-active {
+  transition: opacity 0.2s;
+}
+
 .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity 0.2s;
 }
 
 .fade-enter,
