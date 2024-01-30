@@ -387,6 +387,7 @@ export default {
           user_state: apiData.user_state,
           back_stage_btn_id: apiData.back_stage_btn_id,
         }
+        console.log(this.inputValues)
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
