@@ -409,7 +409,11 @@ export default {
           backhand: nodeData.backhand,
           backhand_id: nodeData.backhand_id,
           stage_id: nodeData.stage_id,
+          url_id: nodeData.url_id,
         }
+
+        console.log('url id in save', createData.url_id)
+
 
         const data = {}
         this.create(createData)

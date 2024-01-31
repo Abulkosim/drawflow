@@ -40,7 +40,7 @@
               </div>
               <div>
                 <label for="action" class="label">Action</label>
-                <select v-model="selected" @change="toggleEditor" id="action" class="input">
+                <select v-model="selected" @input="toggleEditor" id="action" class="input">
                   <option value="STAGE" selected>STAGE</option>
                   <option value="URL">URL</option>
                 </select>
@@ -67,12 +67,12 @@
             <div v-if="!stageSelected">
               <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
               <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"
-                :required="!stageSelected" v-model="url_id">
+                :required="!stageSelected" v-model="callback_url">
               <datalist id="datalist" class="datalist">
                 <option v-for="item in urls" :key="item.description">
                   <span v-if="item.url">{{ item.url }}</span>
-                  <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
-                  <span v-if="item.description">{{ item.description }}</span>
+                  <!-- <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
+                  <span v-if="item.description">{{ item.description }}</span> -->
                 </option>
               </datalist>
             </div>
@@ -149,8 +149,8 @@
             </div>
           </div>
 
-          <ButtonsTable v-if="!addMode" :inputValues="inputValues" @openStageButtonModal="openStageButtonModal"
-            :showStageButtonModal="showStageButtonModal" />
+          <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues"
+            @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
 
           <div class="modal-save">
             <button type="submit" class="submit-button">
@@ -182,6 +182,7 @@ export default {
       stage_order: '',
       selected: 'STAGE',
       url_id: null,
+      callback_url: null,
       stateType: '',
       stateString: '',
       btn_type: 'INLINE',
@@ -282,20 +283,6 @@ export default {
         const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=${id}`)
         this.backhands = response.data.data.buttons
 
-        // if (!this.addMode && this.inputValues.back_stage_btn_id) {
-        //   if (this.inputValues.back_stage_btn_id.startsWith('s')) {
-        //     if (!this.backhands.some(item => item.alias === 'user_state')) {
-        //       this.backhands.push({ id: this.inputValues.back_stage_btn_id.slice(2), alias: 'user_state' })
-        //     }
-
-        //   } else if (this.inputValues.back_stage_btn_id.startsWith('b')) {
-        //     this.backhands.push({ id: this.inputValues.back_stage_btn_id.slice(2), alias: this.stages.find(item => item.id == this.inputValues.back_stage_btn_id.slice(2))?.alias })
-        //     if (!this.backhands.some(item => item.alias === 'user_state')) {
-        //       this.backhands.push({ id: this.inputValues.back_stage_btn_id.slice(2), alias: 'user_state' })
-        //     }
-        //   }
-        // }
-
         if (response.data.data.user_state) {
           this.backhands.push({ id: response.data.data.user_state, alias: response.data.data.user_state ? 'user_state' : '' })
         }
@@ -362,12 +349,13 @@ export default {
     },
 
     save() {
+      console.log(this.callback_url ? this.urls.find(item => item.url == this.callback_url).id : null)
       this.$emit('save', {
         id: this.id,
         alias: this.alias,
         stage_order: this.stage_order,
         text_id: this.text_alias ? this.aliases[this.aliases.indexOf(this.text_alias)].id : null,
-        url_id: this.url_id,
+        url_id: this.callback_url ? this.urls.find(item => item.url == this.callback_url).id : null,
         user_state: this.user_state == '' ? null : this.user_state,
         condition: this.condition,
         updated_by: 1,
@@ -392,9 +380,12 @@ export default {
         this.stage_order = this.inputValues.stage_order;
         this.text_id = this.inputValues.text_id;
         this.url_id = this.inputValues.url_id;
+        this.callback_url = this.inputValues.url_id ? this.urls.find(item => item.id == this.inputValues.url_id)?.url : null;
         this.selected = this.inputValues.url_id ? 'URL' : 'STAGE';
+        console.log(this.selected)
         this.user_state = this.inputValues.user_state;
       }
+      console.log(this.url_id)
     },
 
     async submit() {
