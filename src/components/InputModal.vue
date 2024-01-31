@@ -134,7 +134,7 @@
               <input type="text" name="user" id="user" class="input" :value="user_state" autocomplete="off" disabled>
             </div>
 
-            <div v-if="stageSelected">
+            <div v-if="stageSelected && addMode">
               <label for="connection" class="label">Back hand</label>
               <div class="input-container">
                 <select id="connection" class="input" v-model="stage" @input="getBackhands">

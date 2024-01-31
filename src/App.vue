@@ -222,6 +222,7 @@ export default {
       try {
         const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
         const apiData = response.data.data;
+        console.log(apiData)
         this.data = await this.transformApiData(apiData);
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -339,6 +340,7 @@ export default {
       const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
 
       const connections = [...response.data.data.btns, ...response.data.data.states];
+      console.log(connections)
       if (connections) {
         connections.forEach((connection, index) => {
           if (transformedData.drawflow.Home.data[connection.output_]) {
@@ -387,7 +389,6 @@ export default {
           user_state: apiData.user_state,
           back_stage_btn_id: apiData.back_stage_btn_id,
         }
-        console.log(this.inputValues)
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
