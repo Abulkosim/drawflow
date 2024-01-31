@@ -222,7 +222,6 @@ export default {
       try {
         const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
         const apiData = response.data.data;
-        console.log(apiData)
         this.data = await this.transformApiData(apiData);
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -340,32 +339,31 @@ export default {
       const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
 
       const connections = [...response.data.data.btns, ...response.data.data.states];
-      console.log(connections)
       if (connections) {
-        connections.forEach((connection, index) => {
+        connections.forEach((connection) => {
           if (transformedData.drawflow.Home.data[connection.output_]) {
-            transformedData.drawflow.Home.data[connection.output_].outputs = {
-              output_1: {
-                connections: [
-                  {
-                    node: connection.input_,
-                    output: 'input_1'
-                  }
-                ]
-              }
-            };
+            if (!transformedData.drawflow.Home.data[connection.output_].outputs) {
+              transformedData.drawflow.Home.data[connection.output_].outputs = {};
+            }
+            if (!transformedData.drawflow.Home.data[connection.output_].outputs.output_1) {
+              transformedData.drawflow.Home.data[connection.output_].outputs.output_1 = { connections: [] };
+            }
+            transformedData.drawflow.Home.data[connection.output_].outputs.output_1.connections.push({
+              node: connection.input_,
+              output: 'input_1'
+            });
           }
           if (transformedData.drawflow.Home.data[connection.input_]) {
-            transformedData.drawflow.Home.data[connection.input_].inputs = {
-              input_1: {
-                connections: [
-                  {
-                    node: connection.output_,
-                    input: 'output_1'
-                  }
-                ]
-              }
-            };
+            if (!transformedData.drawflow.Home.data[connection.input_].inputs) {
+              transformedData.drawflow.Home.data[connection.input_].inputs = {};
+            }
+            if (!transformedData.drawflow.Home.data[connection.input_].inputs.input_1) {
+              transformedData.drawflow.Home.data[connection.input_].inputs.input_1 = { connections: [] };
+            }
+            transformedData.drawflow.Home.data[connection.input_].inputs.input_1.connections.push({
+              node: connection.output_,
+              input: 'output_1'
+            });
           }
         });
       }
