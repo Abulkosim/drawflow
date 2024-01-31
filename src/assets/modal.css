@@ -98,8 +98,7 @@
 .form {
   padding: 1rem;
   max-height: calc(100vh - 200px);
-  overflow-x: hidden; 
-  overflow-y: scroll; 
+  overflow-x: hidden;
 
   @media (min-width: 768px) {
     padding: 1.25rem;

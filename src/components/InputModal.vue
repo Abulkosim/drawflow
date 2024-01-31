@@ -56,19 +56,7 @@
                 </select>
               </div>
             </div>
-            <div v-if="stageSelected">
-              <label for="connection" class="label">Back hand</label>
-              <div class="input-container">
-                <select id="connection" class="input" v-model="stage" @input="getBackhands">
-                  <option value="" disabled selected hidden></option>
-                  <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
-                </select>
-                <select class="input" v-model="backhand">
-                  <option value="" disabled selected hidden></option>
-                  <option v-for="item in backhands" :key="item.id" :value="item.alias">{{ item.alias }}</option>
-                </select>
-              </div>
-            </div>
+
             <div v-if="stageSelected">
               <label for="text" class="label">Text</label>
               <select id="text" class="input" v-model="text_alias">
@@ -144,6 +132,20 @@
             <div v-if="stageSelected">
               <label for="user" class="label">User State</label>
               <input type="text" name="user" id="user" class="input" :value="user_state" autocomplete="off" disabled>
+            </div>
+
+            <div v-if="stageSelected">
+              <label for="connection" class="label">Back hand</label>
+              <div class="input-container">
+                <select id="connection" class="input" v-model="stage" @input="getBackhands">
+                  <option value="" disabled selected hidden></option>
+                  <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
+                </select>
+                <select class="input" v-model="backhand">
+                  <option value="" disabled selected hidden></option>
+                  <option v-for="item in backhands" :key="item.id" :value="item.alias">{{ item.alias }}</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -386,7 +388,8 @@ export default {
             this.stage = this.stages.find(item => item.id == this.inputValues.back_stage_btn_id.slice(2))?.alias
             this.backhand = 'user_state'
           } else if (this.inputValues.back_stage_btn_id.startsWith('b')) {
-            this.backhand = this.backhands.find(item => item.id == this.inputValues.backhand_id)?.alias
+
+            // this.backhand = this.backhands.find(item => item.id == this.inputValues.backhand_id)?.alias
             console.log(this.backhand)
           }
         }

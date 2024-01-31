@@ -1,5 +1,4 @@
 @import './base.css';
-
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--secondary) var(--primary);
@@ -14,8 +13,8 @@ div::-webkit-scrollbar {
 }
 
 :root {
-  --primary: lightgray;
-  --secondary: white;
+  --primary: white;
+  --secondary: lightgray;
 }
 
 *::-webkit-scrollbar-track {
