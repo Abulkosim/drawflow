@@ -282,6 +282,20 @@ export default {
         const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=${id}`)
         this.backhands = response.data.data.buttons
 
+        // if (!this.addMode && this.inputValues.back_stage_btn_id) {
+        //   if (this.inputValues.back_stage_btn_id.startsWith('s')) {
+        //     if (!this.backhands.some(item => item.alias === 'user_state')) {
+        //       this.backhands.push({ id: this.inputValues.back_stage_btn_id.slice(2), alias: 'user_state' })
+        //     }
+
+        //   } else if (this.inputValues.back_stage_btn_id.startsWith('b')) {
+        //     this.backhands.push({ id: this.inputValues.back_stage_btn_id.slice(2), alias: this.stages.find(item => item.id == this.inputValues.back_stage_btn_id.slice(2))?.alias })
+        //     if (!this.backhands.some(item => item.alias === 'user_state')) {
+        //       this.backhands.push({ id: this.inputValues.back_stage_btn_id.slice(2), alias: 'user_state' })
+        //     }
+        //   }
+        // }
+
         if (response.data.data.user_state) {
           this.backhands.push({ id: response.data.data.user_state, alias: response.data.data.user_state ? 'user_state' : '' })
         }
@@ -380,20 +394,6 @@ export default {
         this.url_id = this.inputValues.url_id;
         this.selected = this.inputValues.url_id ? 'URL' : 'STAGE';
         this.user_state = this.inputValues.user_state;
-
-
-        // Fix this.
-        if (this.inputValues.back_stage_btn_id) {
-          if (this.inputValues.back_stage_btn_id.startsWith('s')) {
-            this.stage = this.stages.find(item => item.id == this.inputValues.back_stage_btn_id.slice(2))?.alias
-            this.backhand = 'user_state'
-          } else if (this.inputValues.back_stage_btn_id.startsWith('b')) {
-
-            // this.backhand = this.backhands.find(item => item.id == this.inputValues.backhand_id)?.alias
-            console.log(this.backhand)
-          }
-        }
-
       }
     },
 
