@@ -40,7 +40,7 @@
               </div>
               <div>
                 <label for="action" class="label">Action</label>
-                <select v-model="selected" @input="toggleEditor" id="action" class="input">
+                <select v-model="selected" @change="toggleEditor" id="action" class="input">
                   <option value="STAGE" selected>STAGE</option>
                   <option value="URL">URL</option>
                 </select>
@@ -250,6 +250,7 @@ export default {
     await this.getNum()
     await this.getBackhands()
 
+
     if (this.addMode) {
       this.heading = 'Add stage'
     } else {
@@ -349,13 +350,12 @@ export default {
     },
 
     save() {
-      console.log(this.callback_url ? this.urls.find(item => item.url == this.callback_url).id : null)
       this.$emit('save', {
         id: this.id,
         alias: this.alias,
         stage_order: this.stage_order,
         text_id: this.text_alias ? this.aliases[this.aliases.indexOf(this.text_alias)].id : null,
-        url_id: this.callback_url ? this.urls.find(item => item.url == this.callback_url).id : null,
+        url_id: this.selected == 'URL' ? (this.callback_url ? this.urls.find(item => item.url == this.callback_url).id : null) : null,
         user_state: this.user_state == '' ? null : this.user_state,
         condition: this.condition,
         updated_by: 1,
@@ -368,6 +368,7 @@ export default {
         backhand: this.backhand,
         backhand_id: this.backhand == 'user_state' ? 'user_state' : this.backhands.find(item => item.alias == this.backhand)?.id
       })
+
     },
 
     editData() {
@@ -382,10 +383,8 @@ export default {
         this.url_id = this.inputValues.url_id;
         this.callback_url = this.inputValues.url_id ? this.urls.find(item => item.id == this.inputValues.url_id)?.url : null;
         this.selected = this.inputValues.url_id ? 'URL' : 'STAGE';
-        console.log(this.selected)
         this.user_state = this.inputValues.user_state;
       }
-      console.log(this.url_id)
     },
 
     async submit() {

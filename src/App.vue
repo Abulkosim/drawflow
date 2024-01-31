@@ -375,6 +375,7 @@ export default {
       try {
         const response = await axios.get(`${this.url}v1/bot/stage?id=${id}`);
         const apiData = response.data.data.stage;
+        console.log('url id ', apiData.url_id)
         this.inputValues = {
           alias: apiData.alias,
           btn_sizes: apiData.btn_sizes,
@@ -393,6 +394,7 @@ export default {
     },
 
     save(nodeData) {
+      console.log('nodeData', nodeData.url_id)
       if (this.addMode) {
         const createData = {
           alias: nodeData.alias,
@@ -412,8 +414,6 @@ export default {
           url_id: nodeData.url_id,
         }
 
-        console.log('url id in save', createData.url_id)
-
 
         const data = {}
         this.create(createData)
@@ -432,7 +432,7 @@ export default {
           alias: nodeData.alias,
           stage_order: nodeData.stage_order,
           text_id: nodeData.text_id,
-          url_id: nodeData.url_id,
+          url_id: null,
           user_state: nodeData.user_state,
           condition: nodeData.condition,
           updated_by: nodeData.updated_by,
