@@ -375,7 +375,6 @@ export default {
       try {
         const response = await axios.get(`${this.url}v1/bot/stage?id=${id}`);
         const apiData = response.data.data.stage;
-        console.log('url id ', apiData.url_id)
         this.inputValues = {
           alias: apiData.alias,
           btn_sizes: apiData.btn_sizes,
@@ -394,7 +393,6 @@ export default {
     },
 
     save(nodeData) {
-      console.log('nodeData', nodeData.url_id)
       if (this.addMode) {
         const createData = {
           alias: nodeData.alias,
@@ -432,13 +430,13 @@ export default {
           alias: nodeData.alias,
           stage_order: nodeData.stage_order,
           text_id: nodeData.text_id,
-          url_id: null,
           user_state: nodeData.user_state,
           condition: nodeData.condition,
           updated_by: nodeData.updated_by,
           btn_type: nodeData.btn_type,
           btn_sizes: nodeData.btn_sizes,
           state: nodeData.state,
+          url_id: nodeData.url_id,
         }
 
         this.updateNode(editData)
@@ -490,6 +488,7 @@ export default {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
         await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
+        await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: nodeData.id, url_id: nodeData.url_id })
 
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
         if (node && contentElement) {
