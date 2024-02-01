@@ -321,20 +321,6 @@ export default {
       this.urls = response.data.data
     },
 
-    async checkPythonCode() {
-      const pythonCode = this.editor.getValue();
-
-      try {
-        if (!window.pyodide) {
-          window.pyodide = await loadPyodide();
-        }
-        window.pyodide.runPython(pythonCode);
-        this.output = '';
-      } catch (error) {
-        this.output = '(syntax error!)'
-      }
-    },
-
     validateSize() {
       const regex = /^\d+(\:\d+)?(\:\d+)?$/;
       this.error = !regex.test(this.btn_sizes);
@@ -379,7 +365,7 @@ export default {
         url_id: this.selected == 'URL' ? (this.callback_url ? this.urls.find(item => item.url == this.callback_url).id : null) : null,
         callback_url: this.callback_url,
         user_state: this.user_state == '' ? null : this.user_state,
-        condition: this.condition,
+        condition: this.editor.getValue(),
         updated_by: 1,
         created_by: 1,
         bot_id: 122,
@@ -399,6 +385,12 @@ export default {
         this.btn_sizes = this.inputValues.btn_sizes ?? 3;
         this.btn_type = this.inputValues.btn_type ?? 'INLINE';
         this.condition = this.inputValues.condition;
+
+        setTimeout(() => {
+          console.log(this.condition)
+          this.editor.setValue(this.condition)
+        }, 0);
+
         this.id = this.inputValues.id;
         this.stage_order = this.inputValues.stage_order;
         this.text_id = this.inputValues.text_id;
@@ -411,13 +403,24 @@ export default {
 
     async submit() {
       this.loading = true
-      await this.checkPythonCode();
-      this.loading = false
 
-      if (!this.output) {
-        this.save();
-        this.close();
+      const data = {
+        code: this.editor.getValue()
       }
+
+      const response = await axios.post('http://10.20.11.24:8000/main/code/check', data)
+      console.log(response.data)
+      if (response.data.success) {
+        this.output = ''
+        this.loading = false
+      } else {
+        this.output = response.data.message
+        this.loading = false
+        return
+      }
+
+      this.save();
+      this.close();
     },
 
     close() {
@@ -458,6 +461,11 @@ export default {
         } else if (current == 'update') {
           this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
         }
+      }
+    },
+    condition(current) {
+      if (this.editor) {
+        this.editor.setValue(current)
       }
     },
     stage(current) {

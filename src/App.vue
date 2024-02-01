@@ -416,9 +416,6 @@ export default {
           stage_id: nodeData.stage_id,
           url_id: nodeData.url_id
         }
-        console.log(createData.url_id)
-
-
 
         const data = {}
         this.create(createData)
