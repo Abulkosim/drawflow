@@ -160,6 +160,9 @@
             </div>
           </div>
 
+          <!-- <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" /> -->
+
+
           <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues"
             @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
 
@@ -180,11 +183,13 @@ import 'ace-builds/src-noconflict/theme-cobalt';
 
 import axios from "axios";
 import ButtonsTable from './ButtonsTable.vue';
+import Toast from './Toast.vue';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal'],
   components: {
-    ButtonsTable
+    ButtonsTable, 
+    Toast
   },
   data() {
     return {
