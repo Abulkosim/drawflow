@@ -393,6 +393,11 @@ export default {
     },
 
     save(nodeData) {
+      const otherData = {
+        urls: nodeData.urls,
+        callback_url: nodeData.callback_url
+      }
+
       if (this.addMode) {
         const createData = {
           alias: nodeData.alias,
@@ -409,8 +414,10 @@ export default {
           backhand: nodeData.backhand,
           backhand_id: nodeData.backhand_id,
           stage_id: nodeData.stage_id,
-          url_id: nodeData.url_id,
+          url_id: nodeData.url_id
         }
+        console.log(createData.url_id)
+
 
 
         const data = {}
@@ -436,7 +443,7 @@ export default {
           btn_type: nodeData.btn_type,
           btn_sizes: nodeData.btn_sizes,
           state: nodeData.state,
-          url_id: nodeData.url_id,
+          url_id: nodeData.url_id
         }
 
         this.updateNode(editData)
@@ -455,6 +462,7 @@ export default {
     async create(createData) {
       try {
         const response = await axios.post(`${this.url}tg/bot/stage/create`, createData);
+        await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: response.data.data.insert.id, url_id: createData.url_id })
 
         if (createData.backhand) {
           if (createData.backhand == 'user_state') {
@@ -483,12 +491,24 @@ export default {
       }
     },
 
-    async updateNode(nodeData) {
+    async updateNode(nodeData, otherData) {
       try {
         let nodeId = this.selectedNode;
         let node = this.editor.getNodeFromId(nodeId);
+
+
         await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
+
+        // if (otherData.callback_url && !otherData.urls.find(item => item.url == otherData.callback_url)) {
+        //   if (otherData.callback_url.startsWith('https://')) {
+        //     await axios.post(`${this.url}tg/bot/callback/url/create`, {
+        //       url: otherData.callback_url,
+        //       user_id: 1
+        //     })
+        //   }
+        // }
         await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: nodeData.id, url_id: nodeData.url_id })
+
 
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
         if (node && contentElement) {

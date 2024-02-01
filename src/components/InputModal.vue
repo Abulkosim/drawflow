@@ -67,24 +67,25 @@
             <div v-if="!stageSelected">
               <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
 
-              <div class="buttons">
-                <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"
-                  :required="!stageSelected" v-model="callback_url">
-                <datalist id="datalist" class="datalist">
-                  <option v-for="item in urls" :key="item.description">
-                    <span v-if="item.url">{{ item.url }}</span>
-                    <!-- <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
-                  <span v-if="item.description">{{ item.description }}</span> -->
-                  </option>
-                </datalist>
-                <button class="create-url" @click.stop.prevent="create" title="Create URL">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#2c3e50" viewBox="0 0 256 256">
-                    <path
-                      d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z">
-                    </path>
-                  </svg>
-                </button>
-              </div>
+              <!-- <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"
+                :required="!stageSelected" v-model="callback_url">
+              <datalist id="datalist" class="datalist">
+                <option v-for="item in urls" :key="item.description">
+                  <span v-if="item.url">{{ item.url }}</span>
+                  <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
+                  <span v-if="item.description">{{ item.description }}</span>
+                </option>
+              </datalist> -->
+
+              <select id="url" class="input" v-model="callback_url" :required="!stageSelected">
+                <option value="" disabled selected hidden></option>
+                <option v-for="item in urls" :key="item.description" :value="item.url">
+                  <span v-if="item.url">{{ item.url }}</span>
+                  <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
+                  <span v-if="item.description">{{ item.description }}</span>
+                </option>
+              </select>
+
             </div>
             <div class="state" v-if="stageSelected">
               <div class="state-type">
@@ -276,18 +277,6 @@ export default {
       this.$emit('openStageButtonModal', id)
     },
 
-    async create() {
-      if (this.callback_url && !this.urls.find(item => item.url == this.callback_url)) {
-        if (this.callback_url.startsWith('https://')) {
-          await axios.post(`${this.url}tg/bot/callback/url/create`, {
-            url: this.callback_url,
-            user_id: 1
-          })
-        }
-      }
-      await this.getUrls()
-    },
-
     async getNum() {
       const response = await axios.get(`${this.url}tg/bot/stage/new?bot_id=122`)
       this.num = response.data.data
@@ -372,6 +361,16 @@ export default {
     },
 
     save() {
+
+      // if (this.callback_url && !this.urls.find(item => item.url == this.callback_url)) {
+      //   if (this.callback_url.startsWith('https://')) {
+      //     await axios.post(`${this.url}tg/bot/callback/url/create`, {
+      //       url: this.callback_url,
+      //       user_id: 1,
+      //     })
+      //   }
+      // }
+
       this.$emit('save', {
         id: this.id,
         alias: this.alias,
@@ -389,7 +388,8 @@ export default {
         stage_id: this.stages.find(item => item.alias == this.stage)?.id,
         state: 1,
         backhand: this.backhand,
-        backhand_id: this.backhand == 'user_state' ? 'user_state' : this.backhands.find(item => item.alias == this.backhand)?.id
+        backhand_id: this.backhand == 'user_state' ? 'user_state' : this.backhands.find(item => item.alias == this.backhand)?.id,
+        urls: this.urls
       })
     },
 
@@ -469,22 +469,4 @@ export default {
 </script>
 <style>
 @import '../assets/modal.css';
-
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.create-url {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  width: 39px;
-  height: 39px;
-  border: 2px solid lightgray;
-  border-radius: 5px;
-}
 </style>
