@@ -36,7 +36,7 @@
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
       :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
-      @openStageButtonModal="openStageButtonModal" />
+      @openStageButtonModal="openStageButtonModal" @create="showAddTextModal = true" />
 
     <div v-if="showStageButtonModal" class="overlay"></div>
 
@@ -46,6 +46,10 @@
     <div v-if="showAddButtonModal" class="overlay high-index"></div>
 
     <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal" />
+
+    <div v-if="showAddTextModal" class="overlay high-index"></div>
+
+    <AddTextModal v-if="showAddTextModal" :showAddTextModal="showAddTextModal" @close="closeTextModal" />
   </div>
 </template>
 
@@ -60,6 +64,7 @@ import axios from "axios";
 import './assets/main.css'
 import AddButtonModal from './components/AddButtonModal.vue'
 import StageButtonModal from './components/StageButtonModal.vue'
+import AddTextModal from './components/AddTextModal.vue'
 
 export default {
   name: 'App',
@@ -69,7 +74,8 @@ export default {
     Toast,
     InputModal,
     AddButtonModal,
-    StageButtonModal
+    StageButtonModal,
+    AddTextModal
   },
   data() {
     return {
@@ -79,6 +85,7 @@ export default {
       showModal: false,
       showInputModal: false,
       showAddButtonModal: false,
+      showAddTextModal: false,
       showStageButtonModal: false,
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
@@ -138,6 +145,8 @@ export default {
           this.showContextMenu = false;
         } else if (this.showAddButtonModal) {
           this.showAddButtonModal = false;
+        } else if (this.showAddTextModal) {
+          this.showAddTextModal = false;
         } else if (this.showStageButtonModal) {
           this.showStageButtonModal = false;
         } else if (this.showInputModal) {
@@ -591,6 +600,10 @@ export default {
 
     closeAddButtonModal() {
       this.showAddButtonModal = false;
+    },
+
+    closeTextModal() {
+      this.showAddTextModal = false;
     },
 
     closeStageButtonModal() {

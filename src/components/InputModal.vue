@@ -59,11 +59,21 @@
 
             <div v-if="stageSelected">
               <label for="text" class="label">Text</label>
-              <select id="text" class="input" v-model="text_alias">
-                <option value="" disabled selected hidden></option>
-                <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
-              </select>
+              <div class="buttons">
+                <select id="text" class="input" v-model="text_alias">
+                  <option value="" disabled selected hidden></option>
+                  <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
+                </select>
+                <button class="create-button" @click.stop.prevent="create" title="Create text">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#2c3e50" viewBox="0 0 256 256">
+                    <path
+                      d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z">
+                    </path>
+                  </svg>
+                </button>
+              </div>
             </div>
+
             <div v-if="!stageSelected">
               <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
 
@@ -283,6 +293,10 @@ export default {
       this.$emit('openStageButtonModal', id)
     },
 
+    create() {
+      this.$emit('create')
+    },
+
     async getNum() {
       const response = await axios.get(`${this.url}tg/bot/stage/new?bot_id=122`)
       this.num = response.data.data
@@ -483,4 +497,22 @@ export default {
 </script>
 <style>
 @import '../assets/modal.css';
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.create-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 39px;
+  height: 39px;
+  border: 2px solid lightgray;
+  border-radius: 5px;
+}
 </style>

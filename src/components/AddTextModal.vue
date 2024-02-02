@@ -47,7 +47,7 @@
 import axios from "axios";
 
 export default {
-  props: ['showAddButtonModal'],
+  props: ['showAddTextModal'],
   data() {
     return {
       heading: 'Create text',
@@ -90,8 +90,8 @@ export default {
           delete data.names[key]
         }
       }
-      console.log(data)
-      await axios.post(`${this.url}tg/bot/button/create`, data);
+
+      await axios.post(`${this.url}tg/bot/text/create`, data);
       this.close();
     }
   }
