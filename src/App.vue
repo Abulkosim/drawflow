@@ -692,7 +692,7 @@ export default {
   background: #fff;
   width: 160px;
   min-height: 40px;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 2px solid #36454f;
   color: #36454f;
   user-select: none;
