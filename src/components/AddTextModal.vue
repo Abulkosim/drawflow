@@ -50,7 +50,7 @@ export default {
   props: ['showAddButtonModal'],
   data() {
     return {
-      heading: 'Create button',
+      heading: 'Create text',
       alias: '',
       names: {
         en: null,

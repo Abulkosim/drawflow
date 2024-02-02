@@ -92,7 +92,7 @@ export default {
       y_: null,
       dragOffset: { x: 0, y: 0 },
       url: 'http://10.20.11.24:8080/api/',
-      stageButtonId: null,
+      stageButtonId: null
     }
   },
 
@@ -229,6 +229,19 @@ export default {
     },
 
     async transformApiData(apiData) {
+      const locales = await axios.get(`${this.url}tg/bot/flow/locales?bot_id=122`);
+      let locale = ''
+      if (locales.data.data.length) {
+        for (let item of locales.data.data) {
+          locale += item.locale + ', '
+        }
+
+        if (locale.at(-1) === ' ') {
+          locale = locale.slice(0, -2)
+        }
+      } else {
+        locale = 'no locales'
+      }
 
       const transformedData = {
         drawflow: {
@@ -260,7 +273,7 @@ export default {
                 "name": "Node 2",
                 "data": {},
                 "class": "nodeTwo",
-                "html": `<div class="card-devices"><span>uz, ru, en</span></div>`,
+                "html": `<div class="card-devices"><span></span></div>`,
                 "typenode": false,
                 "inputs": {
                   "input_1": {
@@ -289,6 +302,8 @@ export default {
           }
         }
       };
+
+      transformedData.drawflow.Home.data['2'].html = `<div class="card-devices"><span>${locale}</span></div>`;
 
       if (apiData && apiData.length) {
         apiData.forEach((item, index) => {
@@ -730,7 +745,7 @@ export default {
 
 .card-devices {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
   text-overflow: ellipsis;
   overflow: hidden;

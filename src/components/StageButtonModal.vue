@@ -110,10 +110,14 @@ export default {
       info: {},
     }
   },
-  async mounted() {
+
+  async created() {
+    await this.getOrder();
     await this.getStages()
     await this.getUrls()
     await this.getButtons();
+  }, 
+  async mounted() {
     if (this.stageButtonId) {
       await this.getInfo()
       this.heading = 'Edit button of the stage'
@@ -157,6 +161,11 @@ export default {
       const response = await axios.get(`${this.url}tg/bot/stage/button?id=${this.stageButtonId}`);
       this.info = response.data.data;
     },
+
+    async getOrder() {
+      const response = await axios.get(`${this.url}tg/bot/stage/button/new/order?stage_id=${this.stage_id}`);
+      this.btn_order = response.data.data;
+    }, 
 
     async submit() {
       const stageButtonData = {

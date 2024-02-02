@@ -160,9 +160,6 @@
             </div>
           </div>
 
-          <!-- <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" /> -->
-
-
           <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues"
             @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
 
@@ -188,7 +185,7 @@ import Toast from './Toast.vue';
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal'],
   components: {
-    ButtonsTable, 
+    ButtonsTable,
     Toast
   },
   data() {
@@ -259,12 +256,16 @@ export default {
     }
   },
 
-  async mounted() {
+  async created() {
     await this.getAliases()
     await this.getUrls()
     await this.getStages()
     await this.getNum()
     await this.getBackhands()
+
+  },
+
+  async mounted() {
 
 
     if (this.addMode) {
