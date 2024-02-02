@@ -272,12 +272,6 @@ export default {
     await this.getStages()
     await this.getNum()
     await this.getBackhands()
-
-  },
-
-  async mounted() {
-
-
     if (this.addMode) {
       this.heading = 'Add stage'
     } else {
@@ -285,6 +279,9 @@ export default {
       this.editData()
     }
 
+  },
+
+  async mounted() {
     this.initializeAceEditor()
   },
 

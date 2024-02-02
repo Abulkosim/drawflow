@@ -62,8 +62,10 @@ export default {
       stage_id: this.inputValues.id ?? null,
     };
   },
-  async mounted() {
+  async created() {
     await this.getTableData();
+  }, 
+  async mounted() {
     this.items.forEach((item) => {
       this.clicked[item.id] = false;
     });

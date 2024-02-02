@@ -39,7 +39,7 @@ export default {
   data() {
     return {}
   },
-  mounted() { },
+  mounted() {},
   methods: {
     close() {
       this.$emit('close');

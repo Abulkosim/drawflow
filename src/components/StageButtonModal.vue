@@ -116,8 +116,7 @@ export default {
     await this.getStages()
     await this.getUrls()
     await this.getButtons();
-  }, 
-  async mounted() {
+
     if (this.stageButtonId) {
       await this.getInfo()
       this.heading = 'Edit button of the stage'
@@ -130,6 +129,7 @@ export default {
       this.heading = 'Add button to the stage'
     }
   },
+  async mounted() { },
   methods: {
     close() {
       this.$emit('close')
@@ -165,7 +165,7 @@ export default {
     async getOrder() {
       const response = await axios.get(`${this.url}tg/bot/stage/button/new/order?stage_id=${this.stage_id}`);
       this.btn_order = response.data.data;
-    }, 
+    },
 
     async submit() {
       const stageButtonData = {
