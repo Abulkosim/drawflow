@@ -128,6 +128,7 @@ export default {
 <style scoped>
 .table-container {
   user-select: none;
+  overflow: auto;
 }
 
 .table-container::-webkit-scrollbar {

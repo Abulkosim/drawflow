@@ -74,7 +74,7 @@ export default {
       await axios.get(`${this.url}tg/bot/flow/locales?bot_id=122`)
         .then((response) => {
           this.locales = response.data.data
-        }, (error) => {
+        }, (error) => { 
           console.log(error);
         });
     },
@@ -92,6 +92,7 @@ export default {
       }
 
       await axios.post(`${this.url}tg/bot/text/create`, data);
+      this.$emit('closed')
       this.close();
     }
   }

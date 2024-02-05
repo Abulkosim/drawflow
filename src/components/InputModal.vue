@@ -193,7 +193,7 @@ import ButtonsTable from './ButtonsTable.vue';
 import Toast from './Toast.vue';
 
 export default {
-  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal'],
+  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts'],
   components: {
     ButtonsTable,
     Toast
@@ -272,6 +272,7 @@ export default {
     await this.getStages()
     await this.getNum()
     await this.getBackhands()
+
     if (this.addMode) {
       this.heading = 'Add stage'
     } else {
@@ -404,7 +405,6 @@ export default {
         this.condition = this.inputValues.condition;
 
         setTimeout(() => {
-          console.log(this.condition)
           this.editor.setValue(this.condition)
         }, 0);
 
@@ -487,6 +487,10 @@ export default {
     },
     stage(current) {
       this.getBackhands()
+    },
+    getTexts(current) {
+      console.log('getting texts')
+      this.getAliases()
     }
   }
 }

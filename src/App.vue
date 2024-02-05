@@ -35,7 +35,7 @@
     <div v-if="showInputModal" class="overlay"></div>
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
-      :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
+      :getTexts="getTexts" :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
       @openStageButtonModal="openStageButtonModal" @create="showAddTextModal = true" />
 
     <div v-if="showStageButtonModal" class="overlay"></div>
@@ -49,7 +49,8 @@
 
     <div v-if="showAddTextModal" class="overlay high-index"></div>
 
-    <AddTextModal v-if="showAddTextModal" :showAddTextModal="showAddTextModal" @close="closeTextModal" />
+    <AddTextModal v-if="showAddTextModal" :showAddTextModal="showAddTextModal" @close="closeTextModal"
+      @closed="getTexts = !getTexts" />
   </div>
 </template>
 
@@ -99,7 +100,8 @@ export default {
       y_: null,
       dragOffset: { x: 0, y: 0 },
       url: 'http://10.20.11.24:8080/api/',
-      stageButtonId: null
+      stageButtonId: null,
+      getTexts: true
     }
   },
 
