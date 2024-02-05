@@ -90,8 +90,8 @@ export default {
           delete data.names[key]
         }
       }
-      console.log(data)
       await axios.post(`${this.url}tg/bot/button/create`, data);
+      this.$emit('closed')
       this.close();
     }
   }

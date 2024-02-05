@@ -21,7 +21,7 @@
               <label for="button" class="label required">Button</label>
               <div class="buttons">
                 <select id="button" class="input" required v-model="button_id">
-                  <option v-for="button in buttons" :key="button.id" :value="button.id">{{ button.name }}</option>
+                  <option v-for="button in btns" :key="button.id" :value="button.id">{{ button.name }}</option>
                 </select>
                 <button class="create-button" @click.stop.prevent="create" title="Create button">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#2c3e50" viewBox="0 0 256 256">
@@ -89,13 +89,13 @@ import { get } from "ace-builds/src-noconflict/ace";
 import axios from "axios";
 
 export default {
-  props: ['showStageButtonModal', 'inputValues', 'stageButtonId'],
+  props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons'],
   data() {
     return {
       heading: 'Add button to the stage',
       url: 'http://10.20.11.24:8080/api/',
       stage_id: this.inputValues.id ?? null,
-      buttons: [],
+      btns: [],
       is_web_app: false,
       button_id: '',
       btn_order: '',
@@ -149,7 +149,7 @@ export default {
     async getButtons() {
       if (this.stage_id) {
         const response = await axios.get(`${this.url}tg/bot/user/buttons?user_id=1`);
-        this.buttons = response.data.data;
+        this.btns = response.data.data;
       }
     },
 
@@ -223,6 +223,9 @@ export default {
         this.backType = ''
         this.backString = ''
       }
+    },
+    buttons(current) {
+      this.getButtons()
     }
   }
 }

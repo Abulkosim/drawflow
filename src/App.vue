@@ -41,11 +41,13 @@
     <div v-if="showStageButtonModal" class="overlay"></div>
 
     <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal" :inputValues="inputValues"
-      :stageButtonId="stageButtonId" @close="closeStageButtonModal" @create="showAddButtonModal = true" />
+      :buttons="buttons" :stageButtonId="stageButtonId" @close="closeStageButtonModal"
+      @create="showAddButtonModal = true" />
 
     <div v-if="showAddButtonModal" class="overlay high-index"></div>
 
-    <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal" />
+    <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal"
+      @closed="buttons = !buttons" />
 
     <div v-if="showAddTextModal" class="overlay high-index"></div>
 
@@ -101,7 +103,8 @@ export default {
       dragOffset: { x: 0, y: 0 },
       url: 'http://10.20.11.24:8080/api/',
       stageButtonId: null,
-      getTexts: true
+      getTexts: true,
+      buttons: true,
     }
   },
 
@@ -709,6 +712,7 @@ div .node-drag {
 div .node-drag:hover {
   color: #2c3e50;
   background-color: white;
+  transition: all 0.3s linear;
 }
 
 @keyframes float {

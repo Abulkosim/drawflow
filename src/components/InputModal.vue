@@ -426,7 +426,6 @@ export default {
       }
 
       const response = await axios.post('http://10.20.11.24:8000/main/code/check', data)
-      console.log(response.data)
       if (response.data.success) {
         this.output = ''
         this.loading = false
@@ -489,7 +488,6 @@ export default {
       this.getBackhands()
     },
     getTexts(current) {
-      console.log('getting texts')
       this.getAliases()
     }
   }
