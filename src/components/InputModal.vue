@@ -4,6 +4,7 @@
       <div class="modal-header">
         <h3 class="modal-heading">
           {{ heading }}
+          <span v-if="!addMode" class="corner">{{ this.id }}</span>
         </h3>
         <button @click="close" type="button" class="modal-close" data-modal-toggle="crud-modal">
           <svg class="svg-close" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -280,6 +281,9 @@ export default {
       this.editData()
     }
 
+    // this.initializeAceEditor()
+
+
   },
 
   async mounted() {
@@ -513,5 +517,15 @@ export default {
   height: 39px;
   border: 2px solid lightgray;
   border-radius: 5px;
+}
+
+.corner {
+  font-family: monospace;
+  background-color: #d3d3d3;
+  color: #2c3e50;
+  font-size: 14px;
+  border-radius: 5px;
+  padding: 1px 4px;
+  font-weight: 600;
 }
 </style>
