@@ -201,7 +201,7 @@ export default {
           if (this.backType == 'next.' && this.backString != '') {
             return this.backType + this.stages.find(item => item.alias == this.backString)?.id
           } else {
-            return this.backType + this.backString
+            return this.backString
           }
         } else {
           return this.backString
@@ -214,7 +214,7 @@ export default {
             this.backType = 'next.'
             this.backString = this.stages.find(item => item.id == newValue.slice(5))?.alias ?? ''
           } else if (newValue.startsWith('url.')) {
-            this.backType = 'url.'
+            // this.backType = 'url.'
             this.backString = newValue.slice(4)
           } else {
             this.backType = 'other'

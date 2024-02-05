@@ -323,7 +323,7 @@ export default {
             name: `Node ${item.id}`,
             data: {},
             class: `node${item.id}`,
-            html: `<div class="card-devices"><span>${item.alias}</span></div>`,
+            html: `<div class="card-devices">(<span>${item.id}</span>) <span>${item.alias}</span></div>`,
             typenode: false,
             inputs: {},
             outputs: {},
