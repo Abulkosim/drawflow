@@ -221,6 +221,7 @@ export default {
         this.backType = 'other'
       } else {
         this.backType = ''
+        this.backString = ''
       }
     }
   }

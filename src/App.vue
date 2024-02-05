@@ -19,7 +19,7 @@
         </Transition>
       </div>
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
-        <span>Add node</span>
+        <span>Add stage</span>
       </div>
     </div>
 
