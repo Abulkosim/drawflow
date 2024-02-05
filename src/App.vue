@@ -323,7 +323,7 @@ export default {
             name: `Node ${item.id}`,
             data: {},
             class: `node${item.id}`,
-            html: `<div class="card-devices">(<span>${item.id}</span>) <span>${item.alias}</span></div>`,
+            html: `<div class="card-devices"><span>${item.alias}</span><span class="corner">${item.id}</span></div>`,
             typenode: false,
             inputs: {},
             outputs: {},
@@ -685,36 +685,43 @@ export default {
   cursor: grab;
 }
 
-.node-drag {
+div .node-drag {
   position: absolute;
   bottom: 5px;
   left: calc(50% - 70px);
   display: flex;
   justify-content: center;
-  background: #fff;
   width: 160px;
   min-height: 40px;
   border-radius: 5px;
-  border: 2px solid #36454f;
   color: #36454f;
+  background: #2c3e50;
+  color: white;
   user-select: none;
   z-index: 1;
   padding: 15px;
   cursor: grab;
   animation: float 3s ease-in-out infinite;
+  border: 2px solid #36454f;
+  box-shadow: 0 4px 6px -1px #36454f77, 0 2px 4px -2px #36454f77;
+}
+
+div .node-drag:hover {
+  color: #2c3e50;
+  background-color: white;
 }
 
 @keyframes float {
   0% {
-    transform: translatey(0px);
+    transform: translateY(0px);
   }
 
   50% {
-    transform: translatey(-3px);
+    transform: translateY(-3px);
   }
 
   100% {
-    transform: translatey(0px);
+    transform: translateY(0px);
   }
 }
 
@@ -759,10 +766,29 @@ export default {
 }
 
 .card-devices {
+  display: flex;
+  gap: 7px;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
   font-weight: 600;
   font-size: 18px;
   text-align: center;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.card-devices span {
+  display: inline-block;
+}
+
+.card-devices .corner {
+  font-family: monospace;
+  background-color: #d3d3d3;
+  color: #2c3e50;
+  font-size: 14px;
+  border-radius: 5px;
+  padding: 1px 4px;
+  font-weight: 600;
 }
 </style>

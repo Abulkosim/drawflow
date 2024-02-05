@@ -48,10 +48,9 @@
             <div class="state">
               <div class="state-type">
                 <label for="back-type" class="label">Back type</label>
-                <select id="back-type" class="input" v-model="backType" @change="backString = ''">
+                <select id="back-type" class="input" v-model="backType" @change="backString = ''" :disabled="is_web_app">
                   <option value="" disabled selected hidden></option>
                   <option value="next.">next.</option>
-                  <option value="url.">url.</option>
                   <option value="other">other</option>
                 </select>
               </div>
@@ -59,9 +58,6 @@
                 <label for="back-string" class="label">Back string</label>
                 <input list="datalist" type="text" name="back-string" id="back-string" class="input" autocomplete="off"
                   v-model="backString" :disabled="backString == 'reply'">
-                <datalist id="datalist" class="datalist" v-if="backType == 'url.'">
-                  <option v-for="item in urls" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
-                </datalist>
               </div>
 
               <div class="state-string" v-if="backType == 'next.'">
@@ -200,8 +196,6 @@ export default {
         if (this.backType != 'other') {
           if (this.backType == 'next.' && this.backString != '') {
             return this.backType + this.stages.find(item => item.alias == this.backString)?.id
-          } else {
-            return this.backString
           }
         } else {
           return this.backString
@@ -213,14 +207,20 @@ export default {
           if (newValue.startsWith('next.')) {
             this.backType = 'next.'
             this.backString = this.stages.find(item => item.id == newValue.slice(5))?.alias ?? ''
-          } else if (newValue.startsWith('url.')) {
-            // this.backType = 'url.'
-            this.backString = newValue.slice(4)
           } else {
             this.backType = 'other'
             this.backString = newValue
           }
         }
+      }
+    }
+  },
+  watch: {
+    is_web_app(newValue) {
+      if (newValue) {
+        this.backType = 'other'
+      } else {
+        this.backType = ''
       }
     }
   }
