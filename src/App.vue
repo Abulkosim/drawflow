@@ -326,7 +326,7 @@ export default {
             name: `Node ${item.id}`,
             data: {},
             class: `node${item.id}`,
-            html: `<div class="card-devices"><span>${item.alias}</span><span class="corner">${item.id}</span></div>`,
+            html: `<div class="card-devices"><span>${item.alias}</span><p class="corner">${item.id}</p></div>`,
             typenode: false,
             inputs: {},
             outputs: {},
@@ -780,6 +780,7 @@ div .node-drag:hover {
   text-align: center;
   text-overflow: ellipsis;
   overflow: hidden;
+  font-family: monospace;
 }
 
 .card-devices span {
@@ -795,4 +796,9 @@ div .node-drag:hover {
   padding: 1px 4px;
   font-weight: 600;
 }
+
+/*   display: inline;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; */
 </style>
