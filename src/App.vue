@@ -730,7 +730,7 @@ div .node-drag {
   color: white;
   user-select: none;
   z-index: 1;
-  padding: 12px;
+  padding: 10px;
   cursor: grab;
   animation: float 3s ease-in-out infinite;
   border: 2px solid #36454f;
