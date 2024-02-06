@@ -87,7 +87,7 @@ export default {
 
       for (let key in data.names) {
         if (data.names[key] === null) {
-          delete data.names[key]
+          delete data.names[key];
         }
       }
       await axios.post(`${this.url}tg/bot/button/create`, data);

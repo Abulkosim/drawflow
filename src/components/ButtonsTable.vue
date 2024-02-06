@@ -64,7 +64,7 @@ export default {
   },
   async created() {
     await this.getTableData();
-  }, 
+  },
   async mounted() {
     this.items.forEach((item) => {
       this.clicked[item.id] = false;
@@ -226,7 +226,7 @@ button {
   padding: 8px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.1s ease;
 }
 
 .options div:hover {
@@ -238,11 +238,11 @@ button {
 }
 
 .fade-enter-active {
-  transition: opacity 0.2s;
+  transition: opacity 0.1s;
 }
 
 .fade-leave-active {
-  transition: opacity 0.2s;
+  transition: opacity 0.1s;
 }
 
 .fade-enter,
