@@ -26,6 +26,9 @@
     <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
       @editNode="openInputModal" :node="selectedNode" />
 
+    <LocalesContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @editNode="openLocaleModal"
+      :node="selectedNode" />
+
     <div v-if="showModal" class="overlay"></div>
 
     <ConfirmationModal :showModal="showModal" @close="closeConfirmationModal" @confirm="confirmDeletion" />
@@ -53,6 +56,11 @@
 
     <AddTextModal v-if="showAddTextModal" :showAddTextModal="showAddTextModal" @close="closeTextModal"
       @closed="getTexts = !getTexts" />
+
+    <div v-if="showLocalesModal" class="overlay"></div>
+
+    <LocalesModal v-if="showLocalesModal" @close="closeLocaleModal" @closed="rerender" />
+
   </div>
 </template>
 
@@ -68,6 +76,8 @@ import './assets/main.css'
 import AddButtonModal from './components/AddButtonModal.vue'
 import StageButtonModal from './components/StageButtonModal.vue'
 import AddTextModal from './components/AddTextModal.vue'
+import LocalesModal from './components/LocalesModal.vue'
+import LocalesContextMenu from './components/LocalesContextMenu.vue'
 
 export default {
   name: 'App',
@@ -78,7 +88,9 @@ export default {
     InputModal,
     AddButtonModal,
     StageButtonModal,
-    AddTextModal
+    AddTextModal,
+    LocalesContextMenu,
+    LocalesModal
   },
   data() {
     return {
@@ -90,6 +102,7 @@ export default {
       showAddButtonModal: false,
       showAddTextModal: false,
       showStageButtonModal: false,
+      showLocalesModal: false,
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
       showToast: false,
@@ -113,6 +126,10 @@ export default {
   },
 
   async mounted() {
+    const url = new URLSearchParams(window.location.search);
+    const bot_id = url.get('bot_id');
+    const user_id = url.get('user_id');
+    console.log(`user_id: ${user_id}, bot_id: ${bot_id}`)
 
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
@@ -149,6 +166,8 @@ export default {
       if (event.key === 'Escape') {
         if (this.showContextMenu) {
           this.showContextMenu = false;
+        } else if (this.showLocalesModal) {
+          this.showLocalesModal = false;
         } else if (this.showAddButtonModal) {
           this.showAddButtonModal = false;
         } else if (this.showAddTextModal) {
@@ -248,11 +267,11 @@ export default {
       let locale = ''
       if (locales.data.data.length) {
         for (let item of locales.data.data) {
-          locale += item.locale + ', '
+          locale += item.locale + ','
         }
 
-        if (locale.at(-1) === ' ') {
-          locale = locale.slice(0, -2)
+        if (locale.at(-1) === ',') {
+          locale = locale.slice(0, -1)
         }
       } else {
         locale = 'no locales'
@@ -280,8 +299,8 @@ export default {
                     ]
                   }
                 },
-                "pos_x": 30,
-                "pos_y": 200
+                "pos_x": 0,
+                "pos_y": 250
               },
               "2": {
                 "id": 2,
@@ -310,8 +329,8 @@ export default {
                     ]
                   }
                 },
-                "pos_x": 250,
-                "pos_y": 200
+                "pos_x": 240,
+                "pos_y": 250
               },
             }
           }
@@ -600,6 +619,11 @@ export default {
       this.showInputModal = true;
     },
 
+    async openLocaleModal() {
+      this.showContextMenu = false;
+      this.showLocalesModal = true;
+    },
+
     closeInputModal() {
       this.showInputModal = false;
     },
@@ -610,6 +634,10 @@ export default {
 
     closeTextModal() {
       this.showAddTextModal = false;
+    },
+
+    closeLocaleModal() {
+      this.showLocalesModal = false;
     },
 
     closeStageButtonModal() {
@@ -800,5 +828,6 @@ div .node-drag:hover {
 .center {
   display: flex;
   justify-content: center;
+  font-size: 17px;
 }
 </style>
