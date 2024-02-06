@@ -82,27 +82,21 @@ div::-webkit-scrollbar {
   width: 100%;
   display: block;
 }
-.drawflow .drawflow-node .input,
-.drawflow .drawflow-node .output {
-  position: relative;
-  width: 14px;
-  height: 14px;
-  background: #fff;
-  border-radius: 50%;
-  border: 2px solid #36454f;
-  cursor: crosshair;
+
+.drawflow .drawflow-node .input {
   z-index: 10;
   margin-bottom: 5px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 12px;
+  border-color: transparent transparent transparent #36454f;
+  background: transparent;
 }
 .drawflow .drawflow-node .input {
-  left: -24px;
+  left: -28px;
   top: 2px;
-  background: white;
-}
-.drawflow .drawflow-node .output {
-  right: -8px;
-  top: 2px;
-  background: white;
+  background: transparent;
 }
 .drawflow svg {
   z-index: 0;

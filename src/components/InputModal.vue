@@ -519,7 +519,7 @@ export default {
   border-radius: 5px;
 }
 
-.corner {
+.modal-heading .corner {
   font-family: monospace;
   background-color: #d3d3d3;
   color: #2c3e50;

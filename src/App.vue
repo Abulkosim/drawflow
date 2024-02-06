@@ -19,7 +19,7 @@
         </Transition>
       </div>
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
-        <span>Add stage</span>
+        <span>Drag to create</span>
       </div>
     </div>
 
@@ -117,7 +117,6 @@ export default {
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
-
     if (!this.data.length) {
       await this.getStages()
     }
@@ -128,6 +127,8 @@ export default {
     this.editor.on('nodeSelected', (node) => {
       this.selectedNode = node;
     });
+
+    this.editor.zoom_out()
 
     this.editor.on('nodeMoved', (node) => {
       const nodeData = this.editor.getNodeFromId(node);
@@ -266,7 +267,7 @@ export default {
                 "name": "Node 1",
                 "data": {},
                 "class": "nodeOne",
-                "html": `<div class="card-devices"><span>/start</span></div>`,
+                "html": `<div class="card-devices center"><span>/start</span></div>`,
                 "typenode": false,
                 "inputs": {},
                 "outputs": {
@@ -287,7 +288,7 @@ export default {
                 "name": "Node 2",
                 "data": {},
                 "class": "nodeTwo",
-                "html": `<div class="card-devices"><span></span></div>`,
+                "html": `<div class="card-devices center"><span></span></div>`,
                 "typenode": false,
                 "inputs": {
                   "input_1": {
@@ -317,7 +318,7 @@ export default {
         }
       };
 
-      transformedData.drawflow.Home.data['2'].html = `<div class="card-devices"><span>${locale}</span></div>`;
+      transformedData.drawflow.Home.data['2'].html = `<div class="card-devices center"><span>${locale}</span></div>`;
 
       if (apiData && apiData.length) {
         apiData.forEach((item, index) => {
@@ -694,7 +695,6 @@ div .node-drag {
   left: calc(50% - 70px);
   display: flex;
   justify-content: center;
-  width: 160px;
   min-height: 40px;
   border-radius: 5px;
   color: #36454f;
@@ -702,7 +702,7 @@ div .node-drag {
   color: white;
   user-select: none;
   z-index: 1;
-  padding: 15px;
+  padding: 12px;
   cursor: grab;
   animation: float 3s ease-in-out infinite;
   border: 2px solid #36454f;
@@ -712,7 +712,7 @@ div .node-drag {
 div .node-drag:hover {
   color: #2c3e50;
   background-color: white;
-  transition: all 0.3s linear;
+  transition: all 0.2s linear;
 }
 
 @keyframes float {
@@ -721,7 +721,7 @@ div .node-drag:hover {
   }
 
   50% {
-    transform: translateY(-3px);
+    transform: translateY(-5px);
   }
 
   100% {
@@ -791,14 +791,14 @@ div .node-drag:hover {
   font-family: monospace;
   background-color: #d3d3d3;
   color: #2c3e50;
-  font-size: 14px;
+  font-size: 12px;
   border-radius: 5px;
-  padding: 1px 4px;
+  padding: 0px 3px;
   font-weight: 600;
 }
 
-/*   display: inline;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden; */
+.center {
+  display: flex;
+  justify-content: center;
+}
 </style>
