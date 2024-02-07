@@ -38,8 +38,11 @@
               <div class="cont">
                 <input type="number" name="order" id="order" class="input" autocomplete="off" v-model="btn_order">
                 <div class="check">
-                  <input type="checkbox" name="is_web_app" id="is_web_app" class="checkbox" v-model="is_web_app">
-                  <label for="is_web_app" class="label">is_web_app</label>
+                  <label for="is_web_app" class="label switch">
+                    <input type="checkbox" name="is_web_app" id="is_web_app" class="checkbox" v-model="is_web_app">
+                    <span class="slider round"></span>
+                  </label>
+                  <span class="is_web_app">Is it a web app?</span>
                 </div>
               </div>
               <span v-if="errors[0]" class="output">Required field!</span>
@@ -290,16 +293,92 @@ export default {
   display: inline;
 }
 
-.check {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
 .cont {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   user-select: none;
+}
+
+.cont input {
+  width: 50%
+}
+
+.check {
+  width: 1/2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  top: 3px;
+}
+
+.check .is_web_app {
+  font-weight: 500;
+  position: relative;
+  top: -5px;
+  font-size: 15px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: #2c3e50;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #2c3e50;
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 </style>
