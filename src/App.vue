@@ -38,28 +38,30 @@
     <div v-if="showInputModal" class="overlay"></div>
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
-      :getTexts="getTexts" :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
-      @openStageButtonModal="openStageButtonModal" @create="showAddTextModal = true" />
+      :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :showStageButtonModal="showStageButtonModal"
+      @close="closeInputModal" @save="save" @openStageButtonModal="openStageButtonModal"
+      @create="showAddTextModal = true" />
 
     <div v-if="showStageButtonModal" class="overlay"></div>
 
     <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal" :inputValues="inputValues"
-      :buttons="buttons" :stageButtonId="stageButtonId" @close="closeStageButtonModal"
+      :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId" @close="closeStageButtonModal"
       @create="showAddButtonModal = true" />
 
     <div v-if="showAddButtonModal" class="overlay high-index"></div>
 
     <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal"
-      @closed="buttons = !buttons" />
+      :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
 
     <div v-if="showAddTextModal" class="overlay high-index"></div>
 
     <AddTextModal v-if="showAddTextModal" :showAddTextModal="showAddTextModal" @close="closeTextModal"
-      @closed="getTexts = !getTexts" />
+      @closed="getTexts = !getTexts" :bot_id="bot_id" :user_id="user_id" />
 
     <div v-if="showLocalesModal" class="overlay"></div>
 
-    <LocalesModal v-if="showLocalesModal" @close="closeLocaleModal" @closed="rerender" />
+    <LocalesModal v-if="showLocalesModal" @close="closeLocaleModal" @closed="rerender" :bot_id="bot_id"
+      :user_id="user_id" />
 
   </div>
 </template>
@@ -118,6 +120,8 @@ export default {
       stageButtonId: null,
       getTexts: true,
       buttons: true,
+      bot_id: null,
+      user_id: null
     }
   },
 
@@ -127,10 +131,8 @@ export default {
 
   async mounted() {
     const url = new URLSearchParams(window.location.search);
-    const bot_id = url.get('bot_id');
-    const user_id = url.get('user_id');
-    console.log(`user_id: ${user_id}, bot_id: ${bot_id}`)
-
+    this.bot_id = url.get('bot_id');
+    this.user_id = url.get('user_id');
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
@@ -254,7 +256,7 @@ export default {
 
     async getStages() {
       try {
-        const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
+        const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=${this.bot_id}`);
         const apiData = response.data.data;
         this.data = await this.transformApiData(apiData);
       } catch (error) {
@@ -263,7 +265,7 @@ export default {
     },
 
     async transformApiData(apiData) {
-      const locales = await axios.get(`${this.url}tg/bot/flow/locales?bot_id=122`);
+      const locales = await axios.get(`${this.url}tg/bot/flow/locales?bot_id=${this.bot_id}`);
       let locale = ''
       if (locales.data.data.length) {
         for (let item of locales.data.data) {
@@ -385,7 +387,7 @@ export default {
         }
       }
 
-      const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=122`);
+      const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=${this.bot_id}`);
 
       const connections = [...response.data.data.btns, ...response.data.data.states];
       if (connections) {

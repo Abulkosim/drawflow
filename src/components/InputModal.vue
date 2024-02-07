@@ -194,7 +194,7 @@ import ButtonsTable from './ButtonsTable.vue';
 import Toast from './Toast.vue';
 
 export default {
-  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts'],
+  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'bot_id', 'user_id'],
   components: {
     ButtonsTable,
     Toast
@@ -282,8 +282,6 @@ export default {
     }
 
     // this.initializeAceEditor()
-
-
   },
 
   async mounted() {
@@ -300,7 +298,7 @@ export default {
     },
 
     async getNum() {
-      const response = await axios.get(`${this.url}tg/bot/stage/new?bot_id=122`)
+      const response = await axios.get(`${this.url}tg/bot/stage/new?bot_id=${this.bot_id}`)
       this.num = response.data.data
       if (!this.alias) {
         this.alias = `stage ${this.num}`
@@ -325,7 +323,7 @@ export default {
     },
 
     async getAliases() {
-      const response = await axios.get(`${this.url}v1/bot/user/texts?user_id=1`)
+      const response = await axios.get(`${this.url}v1/bot/user/texts?user_id=${this.user_id}`)
       this.aliases = response.data.data
 
       if (this.inputValues) {
@@ -334,12 +332,12 @@ export default {
     },
 
     async getStages() {
-      const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
+      const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=${this.bot_id}`);
       this.stages = response.data.data;
     },
 
     async getUrls() {
-      const response = await axios.get(`${this.url}tg/bot/user/callback_urls?user_id=1`)
+      const response = await axios.get(`${this.url}tg/bot/user/callback_urls?user_id=${this.user_id}`)
       this.urls = response.data.data
     },
 
@@ -369,16 +367,6 @@ export default {
     },
 
     save() {
-
-      // if (this.callback_url && !this.urls.find(item => item.url == this.callback_url)) {
-      //   if (this.callback_url.startsWith('https://')) {
-      //     await axios.post(`${this.url}tg/bot/callback/url/create`, {
-      //       url: this.callback_url,
-      //       user_id: 1,
-      //     })
-      //   }
-      // }
-
       this.$emit('save', {
         id: this.id,
         alias: this.alias,
@@ -390,7 +378,7 @@ export default {
         condition: this.editor.getValue(),
         updated_by: 1,
         created_by: 1,
-        bot_id: 122,
+        bot_id: this.bot_id,
         btn_type: this.btn_type,
         btn_sizes: this.btn_sizes,
         stage_id: this.stages.find(item => item.alias == this.stage)?.id,

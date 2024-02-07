@@ -38,6 +38,7 @@
 import axios from "axios";
 
 export default {
+  props: ['bot_id', 'user_id'],
   data() {
     return {
       heading: 'Edit locales',
@@ -76,13 +77,13 @@ export default {
     },
 
     async getBotLocales() {
-      const reponse = await axios.get(`${this.url}tg/bot/flow/locales?bot_id=122`)
+      const reponse = await axios.get(`${this.url}tg/bot/flow/locales?bot_id=${this.bot_id}`)
       this.checked = reponse.data.data
     },
 
     async submit() {
       const data = {
-        bot_id: 122,
+        bot_id: this.bot_id,
 
         // langs: "{'8', '9'}"
         langs: `{'${this.checked.map(item => item.id).join("', '")}'}`
@@ -149,7 +150,7 @@ export default {
 }
 
 .submit-button:disabled {
- cursor: not-allowed;
+  cursor: not-allowed;
   background-color: #2f3d4ba1;
 }
 </style>

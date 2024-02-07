@@ -89,7 +89,7 @@ import { get } from "ace-builds/src-noconflict/ace";
 import axios from "axios";
 
 export default {
-  props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons'],
+  props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons', 'bot_id', 'user_id'],
   data() {
     return {
       heading: 'Add button to the stage',
@@ -137,18 +137,18 @@ export default {
       this.$emit('create')
     },
     async getStages() {
-      const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=122`);
+      const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=${this.bot_id}`);
       this.stages = response.data.data;
     },
 
     async getUrls() {
-      const response = await axios.get(`${this.url}tg/bot/user/callback_urls?user_id=1`)
+      const response = await axios.get(`${this.url}tg/bot/user/callback_urls?user_id=${this.user_id}`)
       this.urls = response.data.data
     },
 
     async getButtons() {
       if (this.stage_id) {
-        const response = await axios.get(`${this.url}tg/bot/user/buttons?user_id=1`);
+        const response = await axios.get(`${this.url}tg/bot/user/buttons?user_id=${this.user_id}`);
         this.btns = response.data.data;
       }
     },

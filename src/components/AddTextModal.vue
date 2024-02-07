@@ -47,7 +47,7 @@
 import axios from "axios";
 
 export default {
-  props: ['showAddTextModal'],
+  props: ['showAddTextModal', 'bot_id', 'user_id'],
   data() {
     return {
       heading: 'Create text',
@@ -71,10 +71,10 @@ export default {
       this.$emit('close')
     },
     async getLocales() {
-      await axios.get(`${this.url}tg/bot/flow/locales?bot_id=122`)
+      await axios.get(`${this.url}tg/bot/flow/locales?bot_id=${this.bot_id}`)
         .then((response) => {
           this.locales = response.data.data
-        }, (error) => { 
+        }, (error) => {
           console.log(error);
         });
     },
@@ -82,7 +82,7 @@ export default {
       const data = {
         alias: this.alias,
         names: this.names,
-        user_id: 1
+        user_id: this.user_id
       }
 
       for (let key in data.names) {
