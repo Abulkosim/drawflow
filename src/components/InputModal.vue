@@ -280,8 +280,6 @@ export default {
       this.heading = 'Edit stage'
       this.editData()
     }
-
-    // this.initializeAceEditor()
   },
 
   async mounted() {

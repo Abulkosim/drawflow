@@ -1,0 +1,163 @@
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+
+#container {
+  position: relative;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  background-color: #6b7280;
+  opacity: 0.5;
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.high-index {
+  z-index: 101;
+}
+
+#drawflow {
+  position: relative;
+  width: 100%;
+  height: calc(100vh);
+  background-size: 20px 20px;
+  border-radius: 5px;
+  background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 19px,
+      #0c41601f 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 19px,
+      #0c41601f 20px
+    );
+  cursor: grab;
+}
+
+div .node-drag {
+  position: absolute;
+  bottom: 5px;
+  left: calc(50% - 70px);
+  display: flex;
+  justify-content: center;
+  min-height: 40px;
+  border-radius: 5px;
+  color: #36454f;
+  background: #2c3e50;
+  color: white;
+  user-select: none;
+  z-index: 1;
+  padding: 10px;
+  cursor: grab;
+  animation: float 3s ease-in-out infinite;
+  border: 2px solid #36454f;
+  box-shadow: 0 4px 6px -1px #36454f77, 0 2px 4px -2px #36454f77;
+}
+
+div .node-drag:hover {
+  color: #2c3e50;
+  background-color: white;
+  transition: all 0.2s linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+#buttons {
+  display: none;
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+#buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  font-size: 26px;
+  padding: 10px;
+  color: #2c3e50;
+  border: 2px solid #2c3e50;
+  margin: 2px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-enter-to,
+.v-leave-from {
+  opacity: 1;
+}
+
+.card-devices {
+  display: flex;
+  gap: 7px;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-family: monospace;
+}
+
+.card-devices span {
+  display: inline-block;
+}
+
+.card-devices .corner {
+  font-family: monospace;
+  background-color: #d3d3d3;
+  color: #2c3e50;
+  font-size: 12px;
+  border-radius: 5px;
+  padding: 0px 3px;
+  font-weight: 600;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  font-size: 17px;
+}
