@@ -656,7 +656,7 @@ export default {
     },
 
     showSuccessToast() {
-      this.toastMessage = 'Successfully done!';
+      this.toastMessage = 'Operation suceeded!';
       this.isSuccessful = true;
       this.showToast = true;
 
@@ -666,7 +666,7 @@ export default {
     },
 
     showFailedToast(error) {
-      this.toastMessage = error;
+      this.toastMessage = 'Oops! Something went wrong.';
       this.isSuccessful = false;
       this.showToast = true;
 

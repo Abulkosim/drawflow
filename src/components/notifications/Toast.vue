@@ -1,6 +1,6 @@
 <template>
   <div v-if="show" class="toast-container" :class="{ success: success, fail: !success }">
-    <div class="toast">
+    <div class="toast" :class="{ failed: !success }">
       <div class="svg-container" :class="{ success: success, fail: !success }">
         <svg v-if="success" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
           <path
