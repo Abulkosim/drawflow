@@ -1,23 +1,6 @@
 <template>
   <div>
     <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
-      <div id="buttons">
-        <button @click="showButtons = !showButtons">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            <line x1="11" y1="8" x2="11" y2="14" />
-            <line x1="8" y1="11" x2="14" y2="11" />
-          </svg>
-        </button>
-        <Transition>
-          <div v-if="showButtons">
-            <button @click="zoomIn">+</button>
-            <button @click="zoomOut">-</button>
-          </div>
-        </Transition>
-      </div>
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
         <span>Drag to create</span>
       </div>
@@ -35,14 +18,14 @@
 
     <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
 
-    <div v-if="showInputModal" class="overlay"></div>
+    <div v-if="showInputModal && !showStageButtonModal && !showAddButtonModal && !showAddTextModal" class="overlay"></div>
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
       :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :showStageButtonModal="showStageButtonModal"
       @close="closeInputModal" @save="save" @openStageButtonModal="openStageButtonModal"
       @create="showAddTextModal = true" />
 
-    <div v-if="showStageButtonModal" class="overlay"></div>
+    <div v-if="showStageButtonModal && !showAddButtonModal" class="overlay"></div>
 
     <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal" :inputValues="inputValues"
       :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId" @close="closeStageButtonModal"
