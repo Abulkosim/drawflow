@@ -546,15 +546,6 @@ export default {
 
 
         await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
-
-        // if (otherData.callback_url && !otherData.urls.find(item => item.url == otherData.callback_url)) {
-        //   if (otherData.callback_url.startsWith('https://')) {
-        //     await axios.post(`${this.url}tg/bot/callback/url/create`, {
-        //       url: otherData.callback_url,
-        //       user_id: 1
-        //     })
-        //   }
-        // }
         await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: nodeData.id, url_id: nodeData.url_id })
 
 
