@@ -234,7 +234,7 @@ export default {
 }
 </script>
 <style scoped>
-@import '../assets/modal.css';
+@import '../../assets/modal.css';
 
 
 .modal {

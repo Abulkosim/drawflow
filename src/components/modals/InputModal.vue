@@ -190,8 +190,8 @@ import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-cobalt';
 
 import axios from "axios";
-import ButtonsTable from './ButtonsTable.vue';
-import Toast from './Toast.vue';
+import ButtonsTable from '../lists/ButtonsTable.vue';
+import Toast from '../notifications/Toast.vue';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'bot_id', 'user_id'],
@@ -485,7 +485,7 @@ export default {
 
 </script>
 <style>
-@import '../assets/modal.css';
+@import '../../assets/modal.css';
 
 .buttons {
   display: flex;

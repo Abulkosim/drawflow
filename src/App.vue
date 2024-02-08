@@ -69,17 +69,17 @@
 <script>
 import Vue from 'vue'
 import Drawflow from 'drawflow'
-import ContextMenu from './components/ContextMenu.vue'
-import ConfirmationModal from './components/ConfirmationModal.vue'
-import Toast from './components/Toast.vue'
-import InputModal from './components/InputModal.vue'
+import ContextMenu from './components/menus/ContextMenu.vue'
+import ConfirmationModal from './components/modals/ConfirmationModal.vue'
+import Toast from './components/notifications/Toast.vue'
+import InputModal from './components/modals/InputModal.vue'
 import axios from "axios";
 import './assets/main.css'
-import AddButtonModal from './components/AddButtonModal.vue'
-import StageButtonModal from './components/StageButtonModal.vue'
-import AddTextModal from './components/AddTextModal.vue'
-import LocalesModal from './components/LocalesModal.vue'
-import LocalesContextMenu from './components/LocalesContextMenu.vue'
+import AddButtonModal from './components/modals/AddButtonModal.vue'
+import StageButtonModal from './components/modals/StageButtonModal.vue'
+import AddTextModal from './components/modals/AddTextModal.vue'
+import LocalesModal from './components/modals/LocalesModal.vue'
+import LocalesContextMenu from './components/menus/LocalesContextMenu.vue'
 
 export default {
   name: 'App',

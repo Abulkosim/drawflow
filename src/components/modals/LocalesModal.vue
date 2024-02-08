@@ -84,7 +84,6 @@ export default {
     async submit() {
       const data = {
         bot_id: this.bot_id,
-
         // langs: "{'8', '9'}"
         langs: `{'${this.checked.map(item => item.id).join("', '")}'}`
       }
@@ -97,7 +96,7 @@ export default {
 }
 </script>
 <style scoped>
-@import '../assets/modal.css';
+@import '../../assets/modal.css';
 
 .modal {
   max-width: 420px;
