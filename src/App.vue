@@ -173,14 +173,6 @@ export default {
   },
 
   methods: {
-    zoomIn() {
-      this.editor.zoom_in()
-    },
-
-    zoomOut() {
-      this.editor.zoom_out()
-    },
-
     closeModal() {
       this.showModal = false;
     },

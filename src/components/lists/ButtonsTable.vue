@@ -60,6 +60,7 @@ export default {
       columns: ['id', 'btn_order', 'alias', 'is_web_app', 'back', 'actions'],
       items: [],
       stage_id: this.inputValues.id ?? null,
+      url: 'http://10.20.11.24:8080/api/'
     };
   },
   async created() {
@@ -79,7 +80,7 @@ export default {
     if (this.showStageButtonModal == false) {
       setInterval(() => {
         this.getTableData();
-      }, 500);
+      }, 300);
     }
 
   },
@@ -98,7 +99,7 @@ export default {
 
     async getTableData() {
       if (this.stage_id) {
-        const response = await axios.get(`http://10.20.11.24:8080/api/tg/bot/stage/button/list?stage_id=${this.stage_id}`);
+        const response = await axios.get(`${this.url}tg/bot/stage/button/list?stage_id=${this.stage_id}`);
         this.items = response.data.data;
       }
 
@@ -110,7 +111,7 @@ export default {
     },
 
     async deleteButton(id) {
-      await axios.delete(`http://10.20.11.24:8080/api/tg/bot/stage/button/delete?id=${id}`)
+      await axios.delete(`${this.url}tg/bot/stage/button/delete?id=${id}`)
       await this.getTableData();
     },
 
