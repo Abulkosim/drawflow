@@ -23,6 +23,7 @@
               <label :for="locale.id" class="label">{{ locale.name }}</label>
             </div>
 
+
           </div>
           <div class="modal-save">
             <button @click="submit" class="submit-button" :disabled="disabled">

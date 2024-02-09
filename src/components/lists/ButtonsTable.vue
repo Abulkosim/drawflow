@@ -44,7 +44,7 @@
           </td>
         </tr>
       </tbody>
-      <button @click.stop.prevent="addButton" title="Add Button">+</button>
+      <button @click.stop.prevent="addButton" type="button" title="Add Button">+</button>
     </table>
   </div>
 </template>
@@ -67,13 +67,6 @@ export default {
     await this.getTableData();
   },
   async mounted() {
-    document.addEventListener('click', this.handleClickOutside);
-    this.items.forEach((item) => {
-      this.$set(this.clicked, item.id, false);
-    });
-
-    document.addEventListener('click', this.handleClickOutside);
-
   },
 
   methods: {
@@ -83,7 +76,6 @@ export default {
       if (this.clicked[itemId]) {
         this.clicked[itemId] = false;
       } else {
-        this.resetClicked();
         this.clicked[itemId] = true;
       }
     },
@@ -101,15 +93,6 @@ export default {
       }
     },
 
-    handleClickOutside(e) {
-      this.resetClicked();
-    },
-    resetClicked() {
-      Object.keys(this.clicked).forEach((key) => {
-        this.clicked[key] = false;
-      });
-    },
-
     async deleteButton(id) {
       await axios.delete(`${this.url}tg/bot/stage/button/delete?id=${id}`)
       await this.getTableData();
@@ -123,9 +106,7 @@ export default {
       this.$emit('openStageButtonModal', id);
     },
   },
-  beforeDestroy() {
-    document.removeEventListener('click', this.handleClickOutside);
-  },
+
   watch: {
     updateTable() {
       this.getTableData();
