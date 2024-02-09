@@ -50,6 +50,7 @@
 
 div .node-drag {
   position: absolute;
+  font-size: 17px;
   bottom: 5px;
   left: calc(50% - 70px);
   display: flex;
