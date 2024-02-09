@@ -42,7 +42,7 @@
                     <input type="checkbox" name="is_web_app" id="is_web_app" class="checkbox" v-model="is_web_app">
                     <span class="slider round"></span>
                   </label>
-                  <span class="is_web_app">Is it a web app?</span>
+                  <span class="is_web_app">Web app?</span>
                 </div>
               </div>
               <span v-if="errors[0]" class="output">Required field!</span>
