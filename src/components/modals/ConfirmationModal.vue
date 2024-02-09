@@ -13,8 +13,7 @@
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
-          <h3 class="confirmation">Are you sure you want to delete this
-            node? </h3>
+          <h3 class="confirmation">Are you sure you want to delete it?</h3>
           <div class="yes-no">
             <button data-modal-hide="popup-modal" type="button" @click="confirm" class="yes">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 256 256">
@@ -39,7 +38,7 @@ export default {
   data() {
     return {}
   },
-  mounted() {},
+  mounted() { },
   methods: {
     close() {
       this.$emit('close');
@@ -67,16 +66,16 @@ export default {
 
 .confirmation-container {
   position: relative;
-  padding: 2rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 1.25rem 2rem;
+  border-radius: 8px;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 .close-button {
   display: flex;
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1.25rem;
+  right: 1.25rem;
   justify-content: center;
   align-items: center;
   border-radius: 0.5rem;
@@ -99,7 +98,7 @@ export default {
   text-align: center;
 
   @media (min-width: 768px) {
-    padding: 1.25rem;
+    padding: 1rem;
   }
 }
 
@@ -112,16 +111,15 @@ export default {
 
 .yes {
   display: flex;
-  height: 44px;
-  width: 120px;
+  height: 40px;
+  width: 110px;
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  padding: 0.625rem 1.25rem;
+  padding: 0.325rem 0.75rem;
   align-items: center;
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
   font-size: 18px;
-  line-height: 1.25rem;
   font-weight: 500;
   text-align: center;
   color: white;
@@ -138,18 +136,16 @@ export default {
 
 .no {
   display: flex;
-  height: 44px;
-  width: 120px;
+  height: 40px;
+  width: 110px;
   text-align: center;
   justify-content: center;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.625rem 1.25rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  border-radius: 0.5rem;
+  padding: 0.325rem 0.75rem;
   font-size: 18px;
-  line-height: 1.25rem;
+  border-radius: 0.25rem;
+  font-size: 18px;
   color: #6B7280;
   background-color: #ffffff;
   border: none;
@@ -163,7 +159,7 @@ export default {
 
 
 .confirmation {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
   font-size: 1.25rem;
   line-height: 1.75rem;
   color: #6B7280;
