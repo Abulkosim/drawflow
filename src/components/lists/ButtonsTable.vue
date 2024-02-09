@@ -65,18 +65,31 @@ export default {
   },
   async created() {
     await this.getTableData();
+    document.addEventListener('click', this.closeMenuOnClickOutside);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.closeMenuOnClickOutside);
   },
   async mounted() {
   },
 
   methods: {
+
     openContextMenu(event, itemId) {
       event.stopPropagation();
-      this.getTableData()
+      this.getTableData();
       if (this.clicked[itemId]) {
-        this.clicked[itemId] = false;
+        this.clicked = {};
       } else {
-        this.clicked[itemId] = true;
+        this.clicked = { [itemId]: true };
+      }
+    },
+
+    closeMenuOnClickOutside(event) {
+      const clickedElement = event.target;
+      const isOptionsMenuClicked = clickedElement.closest('.options');
+      if (!isOptionsMenuClicked) {
+        this.clicked = {};
       }
     },
 
