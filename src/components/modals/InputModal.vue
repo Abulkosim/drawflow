@@ -171,7 +171,7 @@
             </div>
           </div>
 
-          <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues"
+          <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues" :updateTable="updateTable"
             @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
 
           <div class="modal-save">
@@ -194,7 +194,7 @@ import ButtonsTable from '../lists/ButtonsTable.vue';
 import Toast from '../notifications/Toast.vue';
 
 export default {
-  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'bot_id', 'user_id'],
+  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'updateTable', 'bot_id', 'user_id'],
   components: {
     ButtonsTable,
     Toast

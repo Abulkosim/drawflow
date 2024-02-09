@@ -133,9 +133,6 @@ export default {
     close() {
       this.$emit('close')
     },
-    submit() {
-      this.close()
-    },
     create() {
       this.$emit('create')
     },
@@ -176,21 +173,12 @@ export default {
       }
       if (this.stageButtonId) {
         await axios.post(`${this.url}tg/bot/stage/button/update?id=${this.stageButtonId}`, stageButtonData)
-          .then((response) => {
-            this.close()
-          }, (error) => {
-            console.log(error);
-          });
         this.close()
       } else {
         await axios.post(`${this.url}tg/bot/stage/button/create`, stageButtonData)
-          .then((response) => {
-            this.close()
-          }, (error) => {
-            console.log(error);
-          });
         this.close()
       }
+      this.$emit('updateTable')
     }
   },
   computed: {

@@ -21,15 +21,15 @@
     <div v-if="showInputModal && !showStageButtonModal && !showAddButtonModal && !showAddTextModal" class="overlay"></div>
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
-      :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :showStageButtonModal="showStageButtonModal"
-      @close="closeInputModal" @save="save" @openStageButtonModal="openStageButtonModal"
-      @create="showAddTextModal = true" />
+      :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :updateTable="updateTable"
+      :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
+      @openStageButtonModal="openStageButtonModal" @create="showAddTextModal = true" />
 
     <div v-if="showStageButtonModal && !showAddButtonModal" class="overlay"></div>
 
     <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal" :inputValues="inputValues"
       :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId" @close="closeStageButtonModal"
-      @create="showAddButtonModal = true" />
+      @updateTable="updateTable = !updateTable" @create="showAddButtonModal = true" />
 
     <div v-if="showAddButtonModal" class="overlay high-index"></div>
 
@@ -94,6 +94,7 @@ export default {
       isSuccessful: false,
       toastMessage: '',
       addMode: true,
+      updateTable: false,
       data: [],
       inputValues: {},
       x_: null,
