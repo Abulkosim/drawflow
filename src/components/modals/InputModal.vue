@@ -206,7 +206,7 @@
 <script>
 import ace from 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/theme-cobalt';
+import 'ace-builds/src-noconflict/theme-dawn';
 
 import axios from "axios";
 import ButtonsTable from '../lists/ButtonsTable.vue';
@@ -377,8 +377,8 @@ export default {
         }
         this.editor = ace.edit(this.$refs.editor);
         this.editor.session.setMode('ace/mode/python');
-        this.editor.setTheme('ace/theme/cobalt');
-        this.editor.renderer.setPadding(10);
+        this.editor.setTheme('ace/theme/dawn');
+        editor.session.setUseSoftTabs(true);
         this.editor.session.setUseWrapMode(true);
       });
     },
@@ -514,7 +514,8 @@ export default {
   color: #226CE6;
   font-size: 14px;
   border-radius: 200px;
-  padding: 2px 5px;
+  padding: 3px 7px;
   font-weight: 600;
+  user-select: none;
 }
 </style>

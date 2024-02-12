@@ -74,25 +74,26 @@
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-weight: 600;
+  color: #2e363e;
 }
 
 .modal-close {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.5rem;
+  border-radius: 50%;
   width: 2rem;
   height: 2rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  background-color: transparent;
+  background: white;
   cursor: pointer;
+  color: #434b53;
   border: none;
 }
 
 .modal-close:hover {
-  color: #2c3e50c0;
-  background-color: #e5e7eb;
+  background: #e2eaf2;
 }
 
 .form {
@@ -192,7 +193,7 @@ form .input {
   top: 2px;
   right: 5px;
   font-size: 24px;
-  color: #929AA2;
+  color: #929aa2;
   pointer-events: none;
 }
 

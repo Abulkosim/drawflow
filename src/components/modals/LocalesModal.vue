@@ -133,9 +133,7 @@ export default {
 }
 
 .form {
-  @media (min-width: 768px) {
-    padding: 0.6rem 1rem;
-  }
+  padding: 24px 16px
 }
 
 .checkbox {

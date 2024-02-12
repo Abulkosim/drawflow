@@ -12,9 +12,12 @@ table {
   border-collapse: collapse;
   width: 100%;
   text-align: center;
-  color: #929aa2;
   position: relative;
   border-bottom: 1px solid #226ce655;
+}
+
+tbody.empty-body {
+  height: 80px;
 }
 
 th {
@@ -29,6 +32,7 @@ th {
 td {
   border: 1px solid #ced6de;
   padding: 10px;
+  color: #929aa2;
 }
 
 button {
@@ -79,10 +83,12 @@ button {
   border-radius: 10px;
   z-index: 10;
   top: 40px;
-  left: -50px;
-  border: 1px solid #ccc;
+  left: -40px;
+  border: 1px solid #ddd;
   border-top-right-radius: 0;
   background-color: white;
+  color: #565e66;
+  font-size: 14px;
 }
 
 .options div {
