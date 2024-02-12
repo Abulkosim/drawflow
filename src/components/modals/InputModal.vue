@@ -41,36 +41,38 @@
               </div>
               <div>
                 <label for="action" class="label">Action</label>
-                <select v-model="selected" @change="toggleEditor" id="action" class="input">
-                  <option value="STAGE" selected>STAGE</option>
-                  <option value="URL">URL</option>
-                </select>
+                <div class="select-wrapper">
+                  <select v-model="selected" @change="toggleEditor" id="action" class="input">
+                    <option value="STAGE" selected>STAGE</option>
+                    <option value="URL">URL</option>
+                  </select>
+                </div>
               </div>
               <div>
                 <label for="type" class="label" :class="{ required: stageSelected }">Button type</label>
-                <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="btn_type"
-                  @change="isDisabled = false; stateString = ''">
-                  <option value="INLINE" selected>INLINE</option>
-                  <option value="REPLY">REPLY</option>
-                  <option value="CONTACT">CONTACT</option>
-                  <option value="LOCATION">LOCATION</option>
-                </select>
+                <div class="select-wrapper">
+                  <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="btn_type"
+                    @change="isDisabled = false; stateString = ''">
+                    <option value="INLINE" selected>INLINE</option>
+                    <option value="REPLY">REPLY</option>
+                    <option value="CONTACT">CONTACT</option>
+                    <option value="LOCATION">LOCATION</option>
+                  </select>
+                </div>
               </div>
             </div>
 
             <div v-if="stageSelected">
               <label for="text" class="label">Text</label>
               <div class="buttons">
-                <select id="text" class="input" v-model="text_alias">
-                  <option value="" disabled selected hidden></option>
-                  <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
-                </select>
+                <div class="select-wrapper">
+                  <select id="text" class="input" v-model="text_alias">
+                    <option value="" disabled selected hidden></option>
+                    <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
+                  </select>
+                </div>
                 <button class="create-button" type="button" @click.stop.prevent="create" title="Create text">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#2c3e50" viewBox="0 0 256 256">
-                    <path
-                      d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z">
-                    </path>
-                  </svg>
+                  <span>+</span>
                 </button>
               </div>
             </div>
@@ -88,26 +90,30 @@
                 </option>
               </datalist> -->
 
-              <select id="url" class="input" v-model="callback_url" :required="!stageSelected">
-                <option value="" disabled selected hidden></option>
-                <option v-for="item in urls" :key="item.description" :value="item.url">
-                  <span v-if="item.url">{{ item.url }}</span>
-                  <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
-                  <span v-if="item.description">{{ item.description }}</span>
-                </option>
-              </select>
+              <div class="select-wrapper">
+                <select id="url" class="input" v-model="callback_url" :required="!stageSelected">
+                  <option value="" disabled selected hidden></option>
+                  <option v-for="item in urls" :key="item.description" :value="item.url">
+                    <span v-if="item.url">{{ item.url }}</span>
+                    <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
+                    <span v-if="item.description">{{ item.description }}</span>
+                  </option>
+                </select>
+              </div>
 
             </div>
             <div class="state" v-if="stageSelected">
               <div class="state-type">
                 <label for="state-type" class="label">State type</label>
-                <select id="state-type" class="input" v-model="stateType" @change="stateString = ''"
-                  :disabled="isDisabled">
-                  <option value="" disabled selected hidden></option>
-                  <option value="next.">next.</option>
-                  <option value="url.">url.</option>
-                  <option value="other">other</option>
-                </select>
+                <div class="select-wrapper">
+                  <select id="state-type" class="input" v-model="stateType" @change="stateString = ''"
+                    :disabled="isDisabled">
+                    <option value="" disabled selected hidden></option>
+                    <option value="next.">next.</option>
+                    <option value="url.">url.</option>
+                    <option value="other">other</option>
+                  </select>
+                </div>
               </div>
               <div class="state-string" v-if="stateType != 'next.'">
                 <label for="state-string" class="label">State string</label>
@@ -119,10 +125,17 @@
               </div>
               <div class="state-string" v-else-if="stateType == 'next.'">
                 <label for="state-string" class="label">State string</label>
-                <select id="state-string" class="input" v-model="stateString">
-                  <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
-                </select>
+                <div class="select-wrapper">
+                  <select id="state-string" class="input" v-model="stateString">
+                    <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
+                  </select>
+                </div>
               </div>
+            </div>
+
+            <div v-if="stageSelected">
+              <label for="user" class="label">User State</label>
+              <input type="text" name="user" id="user" class="input" :value="user_state" autocomplete="off" disabled>
             </div>
 
             <div class="condition" v-if="stageSelected && editorVisible">
@@ -143,30 +156,31 @@
 
               <div>
                 <label for="cond-type" class="label">Condition Type</label>
-                <select id="cond-type" class="input" v-model="conditionType">
-                  <option value="" disabled selected hidden></option>
-                  <option value="update">update</option>
-                  <option value="input">input</option>
-                </select>
+                <div class="select-wrapper">
+                  <select id="cond-type" class="input" v-model="conditionType">
+                    <option value="" disabled selected hidden></option>
+                    <option value="update">update</option>
+                    <option value="input">input</option>
+                  </select>
+                </div>
               </div>
-            </div>
-
-            <div v-if="stageSelected">
-              <label for="user" class="label">User State</label>
-              <input type="text" name="user" id="user" class="input" :value="user_state" autocomplete="off" disabled>
             </div>
 
             <div v-if="stageSelected && addMode">
               <label for="connection" class="label">Back hand</label>
               <div class="input-container">
-                <select id="connection" class="input" v-model="stage" @input="getBackhands">
-                  <option value="" disabled selected hidden></option>
-                  <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
-                </select>
-                <select class="input" v-model="backhand">
-                  <option value="" disabled selected hidden></option>
-                  <option v-for="item in backhands" :key="item.id" :value="item.alias">{{ item.alias }}</option>
-                </select>
+                <div class="select-wrapper">
+                  <select id="connection" class="input" v-model="stage" @input="getBackhands">
+                    <option value="" disabled selected hidden></option>
+                    <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
+                  </select>
+                </div>
+                <div class="select-wrapper">
+                  <select class="input" v-model="backhand">
+                    <option value="" disabled selected hidden></option>
+                    <option v-for="item in backhands" :key="item.id" :value="item.alias">{{ item.alias }}</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -176,7 +190,12 @@
 
           <div class="modal-save">
             <button type="submit" class="submit-button">
-              Save
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#fff" viewBox="0 0 256 256">
+                <path
+                  d="M219.31,80,176,36.69A15.86,15.86,0,0,0,164.69,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V91.31A15.86,15.86,0,0,0,219.31,80ZM168,208H88V152h80Zm40,0H184V152a16,16,0,0,0-16-16H88a16,16,0,0,0-16,16v56H48V48H164.69L208,91.31ZM160,72a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h56A8,8,0,0,1,160,72Z">
+                </path>
+              </svg>
+              <span>Save</span>
             </button>
           </div>
         </form>
@@ -487,31 +506,15 @@ export default {
 <style>
 @import '../../assets/modal.css';
 
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-}
 
-.create-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  width: 39px;
-  height: 39px;
-  border: 2px solid lightgray;
-  border-radius: 5px;
-}
 
 .modal-heading .corner {
   font-family: monospace;
-  background-color: #d3d3d3;
-  color: #2c3e50;
+  background-color: #F2F6FA;
+  color: #226CE6;
   font-size: 14px;
-  border-radius: 5px;
-  padding: 1px 4px;
+  border-radius: 200px;
+  padding: 2px 5px;
   font-weight: 600;
 }
 </style>

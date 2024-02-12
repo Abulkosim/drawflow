@@ -44,6 +44,11 @@
           </td>
         </tr>
       </tbody>
+      <tbody v-if="!items.length">
+        <tr>
+          <td :colspan="columns.length">No data available</td>
+        </tr>
+      </tbody>
       <button @click.stop.prevent="addButton" type="button" title="Add Button">+</button>
     </table>
   </div>

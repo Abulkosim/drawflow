@@ -20,15 +20,13 @@
             <div>
               <label for="button" class="label required">Button</label>
               <div class="buttons">
-                <select id="button" class="input" required v-model="button_id">
-                  <option v-for="button in btns" :key="button.id" :value="button.id">{{ button.name }}</option>
-                </select>
+                <div class="select-wrapper">
+                  <select id="button" class="input" required v-model="button_id">
+                    <option v-for="button in btns" :key="button.id" :value="button.id">{{ button.name }}</option>
+                  </select>
+                </div>
                 <button class="create-button" @click.stop.prevent="create" title="Create button">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#2c3e50" viewBox="0 0 256 256">
-                    <path
-                      d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z">
-                    </path>
-                  </svg>
+                  <span>+</span>
                 </button>
               </div>
             </div>
@@ -79,7 +77,12 @@
           </div>
           <div class="modal-save">
             <button class="submit-button">
-              Save
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 256 256">
+                <path
+                  d="M219.31,80,176,36.69A15.86,15.86,0,0,0,164.69,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V91.31A15.86,15.86,0,0,0,219.31,80ZM168,208H88V152h80Zm40,0H184V152a16,16,0,0,0-16-16H88a16,16,0,0,0-16,16v56H48V48H164.69L208,91.31ZM160,72a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h56A8,8,0,0,1,160,72Z">
+                </path>
+              </svg>
+              <span>Save</span>
             </button>
           </div>
         </form>
@@ -247,44 +250,10 @@ export default {
   }
 }
 
-.form-content {
-  gap: 0.5rem;
-}
-
-.modal-save {
-  padding: 1rem;
-
-  @media (min-width: 768px) {
-    padding: 1rem;
-  }
-}
-
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.create-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  width: 39px;
-  height: 39px;
-  border: 2px solid lightgray;
-  border-radius: 5px;
-}
-
-.label {
-  display: inline;
-}
-
 .cont {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
   user-select: none;
 }
 
@@ -304,7 +273,7 @@ export default {
 .check .is_web_app {
   font-weight: 500;
   position: relative;
-  top: -5px;
+  top: -3px;
   font-size: 15px;
 }
 
@@ -330,7 +299,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #A6AEB6;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -348,11 +317,11 @@ export default {
 }
 
 input:checked+.slider {
-  background-color: #2c3e50;
+  background-color: #226CE6;
 }
 
 input:focus+.slider {
-  box-shadow: 0 0 1px #2c3e50;
+  box-shadow: 0 0 1px #226CE6;
 }
 
 input:checked+.slider:before {

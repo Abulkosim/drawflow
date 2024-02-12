@@ -12,29 +12,23 @@ table {
   border-collapse: collapse;
   width: 100%;
   text-align: center;
-  color: #2c3e50;
+  color: #929aa2;
   position: relative;
-  border-bottom: 2px solid #2c3e50;
+  border-bottom: 1px solid #226ce655;
 }
 
 th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+  background-color: #f2f6fa;
+  color: #434b53;
+  font-weight: 500;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #ced6de;
+  font-size: 17px;
 }
 
 td {
-  border: 1px solid #ddd;
+  border: 1px solid #ced6de;
   padding: 10px;
-}
-
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-tr:hover {
-  background-color: #f5f5f5;
 }
 
 button {
@@ -42,16 +36,16 @@ button {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   outline: none;
   font-size: 24px;
-  background-color: #2c3e50;
+  background-color: #226ce6;
   color: white;
   border: none;
   position: absolute;
-  bottom: -12px;
+  bottom: -18px;
   left: 50%;
   transform: translateX(-50%);
 }
