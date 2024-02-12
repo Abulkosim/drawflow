@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 #app {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2e363e;
@@ -151,4 +150,48 @@ div .node-drag:hover svg {
 .center {
   display: flex;
   justify-content: center;
+}
+
+#drawflow .inline {
+  background: #00b06c;
+  border: 2px solid #00b06c;
+  color: white;
+}
+
+#drawflow .reply {
+  background: #efa62a;
+  border: 2px solid #efa62a;
+  color: white;
+}
+
+#drawflow .contact {
+  background: #ff3e68;
+  border: 2px solid #ff3e68;
+  color: white;
+}
+
+#drawflow .location {
+  background: #8e4fcb;
+  border: 2px solid #8e4fcb;
+  color: white;
+}
+
+#drawflow .inline.selected {
+  background: white;
+  color: #00b06c;
+}
+
+#drawflow .reply.selected {
+  background: white;
+  color: #efa62a;
+}
+
+#drawflow .contact.selected {
+  background: white;
+  color: #ff3e68;
+}
+
+#drawflow .location.selected {
+  background: white;
+  color: #8e4fcb;
 }

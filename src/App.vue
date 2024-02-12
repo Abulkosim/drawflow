@@ -332,7 +332,7 @@ export default {
             id: item.id,
             name: `Node ${item.id}`,
             data: {},
-            class: `node${item.id}`,
+            class: `${item.btn_type.toLowerCase()}`,
             html: `<div class="card-devices"><span>${item.alias}</span><p class="corner">${item.id}</p></div>`,
             typenode: false,
             inputs: {},

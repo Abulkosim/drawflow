@@ -120,7 +120,7 @@ export default {
   align-items: center;
   border-radius: 12px;
   font-size: 16px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 500;
   text-align: center;
   color: white;
@@ -145,7 +145,7 @@ export default {
   gap: 0.25rem;
   padding: 0.325rem 0.75rem;
   font-size: 16px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   border-radius: 12px;
   color: #6B7280;
   background-color: #ffffff;
