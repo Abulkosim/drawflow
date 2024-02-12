@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 #app {
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -53,7 +55,7 @@ div .node-drag {
   position: absolute;
   bottom: 10px;
   font-size: 20px;
-  left: calc(50% - 100px);
+  left: calc(50% - 90px);
   display: flex;
   justify-content: center;
   border-radius: 60px;
@@ -65,7 +67,7 @@ div .node-drag {
   cursor: grab;
   border: 2px solid #226ce6;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 200px;
+  width: 180px;
   min-height: 56px;
 }
 

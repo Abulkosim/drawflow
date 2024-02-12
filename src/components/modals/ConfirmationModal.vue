@@ -16,7 +16,7 @@
           <h3 class="confirmation">Are you sure you want to delete it?</h3>
           <div class="yes-no">
             <button data-modal-hide="popup-modal" type="button" @click="confirm" class="yes">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 256 256">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 256 256">
                 <path
                   d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z">
                 </path>
@@ -66,7 +66,7 @@ export default {
 
 .confirmation-container {
   position: relative;
-  padding: 1.25rem 2rem;
+  padding: 2rem 2rem;
   border-radius: 8px;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
@@ -78,7 +78,7 @@ export default {
   right: 1.25rem;
   justify-content: center;
   align-items: center;
-  border-radius: 0.5rem;
+  border-radius: 50%;
   width: 2rem;
   height: 2rem;
   color: #9CA3AF;
@@ -98,7 +98,7 @@ export default {
   text-align: center;
 
   @media (min-width: 768px) {
-    padding: 1rem;
+    padding: 0.5rem;
   }
 }
 
@@ -111,41 +111,42 @@ export default {
 
 .yes {
   display: flex;
-  height: 40px;
-  width: 110px;
+  height: 36px;
+  width: 100px;
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
   padding: 0.325rem 0.75rem;
   align-items: center;
-  border-radius: 0.25rem;
-  font-size: 18px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
   text-align: center;
   color: white;
-  outline: 2px solid #E02424;
-  background-color: #E02424;
+  outline: 2px solid #F43834;
+  background-color: #F43834;
   border: none;
   cursor: pointer;
 }
 
 .yes:hover {
-  background-color: #d62828;
-  outline-color: #d62828;
+  background-color: #e03330;
+  outline-color: #e03330;
 }
 
 .no {
   display: flex;
-  height: 40px;
-  width: 110px;
+  height: 36px;
+  width: 100px;
   text-align: center;
   justify-content: center;
   align-items: center;
   gap: 0.25rem;
   padding: 0.325rem 0.75rem;
-  font-size: 18px;
-  border-radius: 0.25rem;
-  font-size: 18px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 12px;
   color: #6B7280;
   background-color: #ffffff;
   border: none;
@@ -154,7 +155,7 @@ export default {
 }
 
 .no:hover {
-  background-color: rgb(248, 248, 248);
+  background-color: #F2F6FA;
 }
 
 

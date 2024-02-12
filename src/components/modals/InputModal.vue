@@ -299,6 +299,7 @@ export default {
       this.heading = 'Edit stage'
       this.editData()
     }
+
   },
 
   async mounted() {
@@ -378,7 +379,7 @@ export default {
         this.editor = ace.edit(this.$refs.editor);
         this.editor.session.setMode('ace/mode/python');
         this.editor.setTheme('ace/theme/dawn');
-        editor.session.setUseSoftTabs(true);
+        this.editor.renderer.setPadding(10);
         this.editor.session.setUseWrapMode(true);
       });
     },
