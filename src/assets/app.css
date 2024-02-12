@@ -1,8 +1,8 @@
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: #2e363e;
 }
 
 #container {
@@ -31,62 +31,53 @@
   position: relative;
   width: 100%;
   height: calc(100vh);
-  background-size: 20px 20px;
+  background: #f2f6fa;
+  background-size: 50px 50px;
   border-radius: 5px;
   background-image: repeating-linear-gradient(
       0deg,
       transparent,
-      transparent 19px,
-      #0c41601f 20px
+      transparent 49px,
+      #0c41601f 50px
     ),
     repeating-linear-gradient(
       90deg,
       transparent,
-      transparent 19px,
-      #0c41601f 20px
+      transparent 49px,
+      #0c41601f 50px
     );
   cursor: grab;
 }
 
 div .node-drag {
   position: absolute;
-  font-size: 17px;
-  bottom: 5px;
-  left: calc(50% - 70px);
+  bottom: 10px;
+  font-size: 20px;
+  left: calc(50% - 100px);
   display: flex;
   justify-content: center;
-  min-height: 40px;
-  border-radius: 5px;
-  color: #36454f;
-  background: #2c3e50;
-  color: white;
+  border-radius: 60px;
+  color: #226ce6;
+  background: white;
   user-select: none;
   z-index: 1;
-  padding: 10px;
+  padding: 10px 24px;
   cursor: grab;
-  animation: float 3s ease-in-out infinite;
-  border: 2px solid #36454f;
-  box-shadow: 0 4px 6px -1px #36454f77, 0 2px 4px -2px #36454f77;
+  border: 2px solid #226ce6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 200px;
+  min-height: 56px;
 }
 
 div .node-drag:hover {
-  color: #2c3e50;
-  background-color: white;
+  color: white;
+  background-color: #226ce6;
   transition: all 0.2s linear;
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-5px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
+div .node-drag:hover svg {
+  fill: white;
+  transition: all 0.2s linear;
 }
 
 #buttons {
@@ -107,8 +98,8 @@ div .node-drag:hover {
   background-color: white;
   font-size: 26px;
   padding: 10px;
-  color: #2c3e50;
-  border: 2px solid #2c3e50;
+  color: #2e363e;
+  border: 2px solid #2e363e;
   margin: 2px;
   border-radius: 50%;
   cursor: pointer;
@@ -136,11 +127,10 @@ div .node-drag:hover {
   align-items: center;
   justify-content: space-between;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
   text-overflow: ellipsis;
   overflow: hidden;
-  font-family: monospace;
 }
 
 .card-devices span {
@@ -148,17 +138,15 @@ div .node-drag:hover {
 }
 
 .card-devices .corner {
-  font-family: monospace;
-  background-color: #d3d3d3;
-  color: #2c3e50;
-  font-size: 12px;
-  border-radius: 5px;
-  padding: 0px 3px;
+  background-color: #f2f6fa;
+  color: #434b53;
+  font-size: 14px;
+  border-radius: 200px;
+  padding: 2px 6px;
   font-weight: 600;
 }
 
 .center {
   display: flex;
   justify-content: center;
-  font-size: 17px;
 }

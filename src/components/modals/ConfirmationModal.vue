@@ -90,7 +90,7 @@ export default {
 }
 
 .close-button:hover {
-  color: #2c3e50;
+  color: #2E363E;
   background-color: #E5E7EB;
 }
 

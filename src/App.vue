@@ -2,8 +2,15 @@
   <div>
     <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
-        <span>Drag to create</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#226ce6" viewBox="0 0 256 256">
+          <path
+            d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z">
+          </path>
+        </svg>
+        <span>Create</span>
       </div>
+
+      <TipMenu />
     </div>
 
     <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
@@ -56,6 +63,7 @@ import ContextMenu from './components/menus/ContextMenu.vue'
 import ConfirmationModal from './components/modals/ConfirmationModal.vue'
 import Toast from './components/notifications/Toast.vue'
 import InputModal from './components/modals/InputModal.vue'
+import TipMenu from './components/menus/TipMenu.vue'
 import axios from "axios";
 import './assets/main.css'
 import AddButtonModal from './components/modals/AddButtonModal.vue'
@@ -75,7 +83,8 @@ export default {
     StageButtonModal,
     AddTextModal,
     LocalesContextMenu,
-    LocalesModal
+    LocalesModal,
+    TipMenu
   },
   data() {
     return {
@@ -245,11 +254,11 @@ export default {
       let locale = ''
       if (locales.data.data.length) {
         for (let item of locales.data.data) {
-          locale += item.locale + ','
+          locale += item.locale + ', '
         }
 
-        if (locale.at(-1) === ',') {
-          locale = locale.slice(0, -1)
+        if (locale.at(-1) === ' ') {
+          locale = locale.slice(0, -2)
         }
       } else {
         locale = 'no locales'

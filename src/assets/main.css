@@ -41,14 +41,14 @@
   display: flex;
   align-items: center;
   position: absolute;
-  background: #fff;
-  width: 160px;
-  min-height: 40px;
-  border-radius: 5px;
-  border: 2px solid #36454f;
-  color: #36454f;
+  background: #226ce6;
+  width: 200px;
+  min-height: 56px;
+  border-radius: 60px;
+  border: 2px solid #226ce6;
+  color: white;
   z-index: 1;
-  padding: 10px;
+  padding: 10px 20px;
 }
 .drawflow .drawflow-node span {
   display: inline;
@@ -57,8 +57,8 @@
   overflow: hidden;
 }
 .drawflow .drawflow-node.selected {
-  background: #2c3e50;
-  color: white;
+  background: white;
+  color: #226ce6;
 }
 .drawflow .drawflow-node:hover {
   cursor: move;
@@ -79,11 +79,11 @@
   height: 0;
   border-style: solid;
   border-width: 5px 0 5px 12px;
-  border-color: transparent transparent transparent #36454f;
+  border-color: transparent transparent transparent #bac2ca;
   background: transparent;
 }
 .drawflow .drawflow-node .input {
-  left: -25px;
+  left: -36px;
   top: 2px;
   background: transparent;
 }
@@ -100,16 +100,10 @@
 .drawflow .connection .main-path {
   fill: none;
   stroke-width: 3px;
-  stroke: #36454fbb;
+  stroke: #bac2ca;
   pointer-events: all;
 }
-.drawflow .connection .main-path:hover {
-  stroke: #36454fdd;
-  cursor: pointer;
-}
-.drawflow .connection .main-path.selected {
-  stroke: #36454fff;
-}
+
 .drawflow .connection .point {
   cursor: move;
   stroke: #000;
@@ -135,12 +129,11 @@
   width: 20px;
   height: 20px;
   background: white;
-  color: #2c3e50;
+  color: #2E363E;
   z-index: 10;
-  border: 2px solid #2c3e50;
+  border: 2px solid #2E363E;
   font-weight: 700;
   border-radius: 50%;
-  font-family: monospace;
   cursor: pointer;
 }
 /* .drawflow > .drawflow-delete {

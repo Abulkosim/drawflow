@@ -509,7 +509,6 @@ export default {
 
 
 .modal-heading .corner {
-  font-family: monospace;
   background-color: #F2F6FA;
   color: #226CE6;
   font-size: 14px;
