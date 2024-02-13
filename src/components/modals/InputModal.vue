@@ -116,7 +116,7 @@
                 </div>
               </div>
               <div class="state-string" v-if="stateType != 'next.'">
-                <label for="state-string" class="label">User state body</label>
+                <label for="state-string" class="label">User state value</label>
                 <input list="datalist" type="text" name="state-string" id="state-string" class="input"
                   v-model="stateString" :disabled="stateString == 'reply'" autocomplete="off">
                 <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
@@ -124,7 +124,7 @@
                 </datalist>
               </div>
               <div class="state-string" v-else-if="stateType == 'next.'">
-                <label for="state-string" class="label">User state body</label>
+                <label for="state-string" class="label">User state value</label>
                 <div class="select-wrapper">
                   <select id="state-string" class="input" v-model="stateString">
                     <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>

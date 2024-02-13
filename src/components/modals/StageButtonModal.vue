@@ -56,13 +56,13 @@
                 </select>
               </div>
               <div class="state-string" v-if="backType != 'next.'">
-                <label for="back-string" class="label">Back string</label>
+                <label for="back-string" class="label">Back value</label>
                 <input list="datalist" type="text" name="back-string" id="back-string" class="input" autocomplete="off"
                   v-model="backString" :disabled="backString == 'reply'">
               </div>
 
               <div class="state-string" v-if="backType == 'next.'">
-                <label for="back-string" class="label">Back string</label>
+                <label for="back-string" class="label">Back value</label>
                 <select id="back-string" class="input" v-model="backString">
                   <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
                 </select>
@@ -211,11 +211,15 @@ export default {
   },
   watch: {
     is_web_app(newValue) {
+      console.log(this.is_web_app)
       if (newValue) {
+        if (this.backType == 'next.') {
+          this.backString = ''
+        }
         this.backType = 'other'
       } else {
-        this.backType = ''
-        this.backString = ''
+        this.backType = '';
+        this.backString = '';
       }
     },
     buttons(current) {

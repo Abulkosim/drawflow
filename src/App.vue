@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="1">
     <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#226ce6" viewBox="0 0 256 256">
@@ -54,6 +54,7 @@
       :user_id="user_id" />
 
   </div>
+  <PageNotFound v-else />
 </template>
 
 <script>
@@ -71,6 +72,7 @@ import StageButtonModal from './components/modals/StageButtonModal.vue'
 import AddTextModal from './components/modals/AddTextModal.vue'
 import LocalesModal from './components/modals/LocalesModal.vue'
 import LocalesContextMenu from './components/menus/LocalesContextMenu.vue'
+import PageNotFound from './components/PageNotFound.vue'
 
 export default {
   name: 'App',
@@ -84,7 +86,8 @@ export default {
     AddTextModal,
     LocalesContextMenu,
     LocalesModal,
-    TipMenu
+    TipMenu,
+    PageNotFound
   },
   data() {
     return {

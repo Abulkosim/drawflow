@@ -19,7 +19,7 @@
             <div>
               <ValidationProvider rules="required" v-slot="{ errors }">
                 <div>
-                  <label for="alias" class="label required">Alias</label>
+                  <label for="alias" class="label required">Name</label>
                   <input type="text" name="alias" id="alias" class="input" v-model="alias" autocomplete="off">
                   <span v-if="errors[0]" class="output">Required field!</span>
                 </div>
