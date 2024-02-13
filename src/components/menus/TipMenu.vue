@@ -1,6 +1,6 @@
 <template>
   <div class="tip">
-    <p>Node Types: </p>
+    <p>Node Types</p>
     <div class="list">
       <div>
         <div class="circle inline"></div>
@@ -19,8 +19,24 @@
         <span>Location</span>
       </div>
     </div>
+    <button type="button" @click="close" class="tip-close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 256 256">
+        <path
+          d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z">
+        </path>
+      </svg>
+    </button>
   </div>
 </template>
+<script>
+export default {
+  methods: {
+    close() {
+      this.$emit('close');
+    },
+  },
+};
+</script>
 <style scoped>
 div .tip {
   position: absolute;
@@ -41,8 +57,7 @@ div .tip {
 
 .tip p {
   color: #929AA2;
-  text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   font-size: 18px;
 }
 
@@ -73,5 +88,26 @@ div .tip {
   display: flex;
   align-items: center;
   gap: 7px;
+}
+
+.tip-close {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: white;
+  cursor: pointer;
+  color: #434b53;
+  border: none;
+
+}
+
+.tip-close:hover {
+  background: #e2eaf2;
 }
 </style>

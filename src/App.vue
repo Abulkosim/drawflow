@@ -10,7 +10,7 @@
         <span>Create</span>
       </div>
 
-      <TipMenu />
+      <TipMenu @close="closeTipMenu" v-if="showTipMenu" />
     </div>
 
     <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
@@ -97,6 +97,7 @@ export default {
       showAddTextModal: false,
       showStageButtonModal: false,
       showLocalesModal: false,
+      showTipMenu: true,
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
       showToast: false,
@@ -185,6 +186,10 @@ export default {
   methods: {
     closeModal() {
       this.showModal = false;
+    },
+
+    closeTipMenu() {
+      this.showTipMenu = false;
     },
 
     handleRightClick(event) {

@@ -155,7 +155,7 @@ export default {
 }
 
 .no:hover {
-  background-color: #F2F6FA;
+  background-color: #f3f3f3;
 }
 
 
