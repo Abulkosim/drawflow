@@ -3,7 +3,7 @@
     <table>
       <thead>
         <tr>
-          <th v-for="column in columns" :key="column">{{ column }}</th>
+          <th v-for="column in headings" :key="column">{{ column }}</th>
         </tr>
       </thead>
       <tbody>
@@ -63,6 +63,7 @@ export default {
     return {
       clicked: {},
       columns: ['id', 'btn_order', 'alias', 'is_web_app', 'back', 'actions'],
+      headings: ['id', 'order', 'name', 'is web_app?', 'back', 'actions'],
       items: [],
       stage_id: this.inputValues.id ?? null,
       url: 'http://10.20.11.24:8080/api/'

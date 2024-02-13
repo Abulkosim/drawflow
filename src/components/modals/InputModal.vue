@@ -22,7 +22,7 @@
               <div>
                 <ValidationProvider rules="required" v-slot="{ errors }">
                   <div>
-                    <label for="alias" class="label required">Alias</label>
+                    <label for="alias" class="label required">Name</label>
                     <input type="text" name="alias" id="alias" class="input" v-model="alias" autocomplete="off">
                     <span v-if="errors[0]" class="output">Required field!</span>
                   </div>
@@ -40,7 +40,7 @@
 
               </div>
               <div>
-                <label for="action" class="label">Action</label>
+                <label for="action" class="label">Type</label>
                 <div class="select-wrapper">
                   <select v-model="selected" @change="toggleEditor" id="action" class="input">
                     <option value="STAGE" selected>STAGE</option>
@@ -104,7 +104,7 @@
             </div>
             <div class="state" v-if="stageSelected">
               <div class="state-type">
-                <label for="state-type" class="label">State type</label>
+                <label for="state-type" class="label">User state type</label>
                 <div class="select-wrapper">
                   <select id="state-type" class="input" v-model="stateType" @change="stateString = ''"
                     :disabled="isDisabled">
@@ -116,7 +116,7 @@
                 </div>
               </div>
               <div class="state-string" v-if="stateType != 'next.'">
-                <label for="state-string" class="label">State string</label>
+                <label for="state-string" class="label">User state body</label>
                 <input list="datalist" type="text" name="state-string" id="state-string" class="input"
                   v-model="stateString" :disabled="stateString == 'reply'" autocomplete="off">
                 <datalist id="datalist" class="datalist" v-if="stateType == 'url.'">
@@ -124,7 +124,7 @@
                 </datalist>
               </div>
               <div class="state-string" v-else-if="stateType == 'next.'">
-                <label for="state-string" class="label">State string</label>
+                <label for="state-string" class="label">User state body</label>
                 <div class="select-wrapper">
                   <select id="state-string" class="input" v-model="stateString">
                     <option v-for="item in stages" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
@@ -139,7 +139,7 @@
             </div>
 
             <div class="condition" v-if="stageSelected && editorVisible">
-              <label for="condition" class="label">Condition <span v-if="output" class="output">{{ output
+              <label for="condition" class="label">Condition code area <span v-if="output" class="output">{{ output
               }}</span></label>
               <div id="condition" ref="editor" class="editor"></div>
             </div>
@@ -147,7 +147,7 @@
             <div class="dist" v-if="stageSelected">
               <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(\:\d+)?(\:\d+)?$/ }">
                 <div>
-                  <label for="btn-sizes" class="label">btn_sizes</label>
+                  <label for="btn-sizes" class="label">Button sizes</label>
                   <input type="text" name="btn-sizes" id="btn-sizes" class="input" v-model="btn_sizes"
                     @change="validateSize" autocomplete='off' :class="{ error: error }">
                   <span v-if="errors[0]" class="output">Invalid format!</span>
@@ -155,7 +155,7 @@
               </ValidationProvider>
 
               <div>
-                <label for="cond-type" class="label">Condition Type</label>
+                <label for="cond-type" class="label">Condition templates</label>
                 <div class="select-wrapper">
                   <select id="cond-type" class="input" v-model="conditionType">
                     <option value="" disabled selected hidden></option>
@@ -167,7 +167,7 @@
             </div>
 
             <div v-if="stageSelected && addMode">
-              <label for="connection" class="label">Back hand</label>
+              <label for="connection" class="label">Connection old stage</label>
               <div class="input-container">
                 <div class="select-wrapper">
                   <select id="connection" class="input" v-model="stage" @input="getBackhands">
