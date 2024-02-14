@@ -127,7 +127,7 @@ export default {
       x_: null,
       y_: null,
       dragOffset: { x: 0, y: 0 },
-      url: 'http://10.20.11.24:8080/api/',
+      url: 'https://bot-platon.platon.uz/services/platon-core/api/',
       stageButtonId: null,
       getTexts: true,
       buttons: true,
@@ -524,7 +524,9 @@ export default {
 
     async create(createData) {
       try {
+        console.log(createData)
         const response = await axios.post(`${this.url}tg/bot/stage/create`, createData);
+        console.log(response)
         await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: response.data.data.insert.id, url_id: createData.url_id })
 
         if (createData.backhand) {
@@ -596,7 +598,8 @@ export default {
 
     async deleteNode(id) {
       try {
-        await axios.delete(`${this.url}tg/bot/stage/delete?id=${id}`);
+        console.log('id', id)
+        const response = await axios.delete(`${this.url}tg/bot/stage/delete?id=${id}`);
         this.editor.removeNodeId(`node-${id}`)
         await this.rerender()
       } catch (error) {
@@ -675,7 +678,7 @@ export default {
       this.toastMessage = 'Oops! Something went wrong.';
       this.isSuccessful = false;
       this.showToast = true;
-
+      
       setTimeout(() => {
         this.showToast = false;
       }, 2000);

@@ -66,7 +66,7 @@ export default {
       headings: ['id', 'order', 'name', 'is web_app?', 'back', 'actions'],
       items: [],
       stage_id: this.inputValues.id ?? null,
-      url: 'http://10.20.11.24:8080/api/'
+      url: 'https://bot-platon.platon.uz/services/platon-core/api/'
     };
   },
   async created() {

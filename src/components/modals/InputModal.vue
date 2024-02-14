@@ -246,7 +246,7 @@ export default {
       stages: [],
       num: '',
       backhands: [],
-      url: 'http://10.20.11.24:8080/api/',
+      url: 'https://bot-platon.platon.uz/services/platon-core/api/',
       stage: '',
       backhand: ''
     }
@@ -397,8 +397,8 @@ export default {
         callback_url: this.callback_url,
         user_state: this.user_state == '' ? null : this.user_state,
         condition: this.editor.getValue(),
-        updated_by: 1,
-        created_by: 1,
+        updated_by: this.user_id,
+        created_by: this.user_id,
         bot_id: this.bot_id,
         btn_type: this.btn_type,
         btn_sizes: this.btn_sizes,

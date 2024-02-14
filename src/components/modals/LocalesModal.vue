@@ -57,7 +57,7 @@ export default {
       },
       locales: [],
       checked: [],
-      url: 'http://10.20.11.24:8080/api/'
+      url: 'https://bot-platon.platon.uz/services/platon-core/api/'
     }
   },
   computed: {

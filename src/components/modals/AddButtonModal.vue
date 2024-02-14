@@ -65,7 +65,7 @@ export default {
         qq: null
       },
       locales: [],
-      url: 'http://10.20.11.24:8080/api/'
+      url: 'https://bot-platon.platon.uz/services/platon-core/api/'
     }
   },
   created() {
@@ -126,5 +126,4 @@ export default {
     padding: 0.6rem 1rem;
   }
 }
-
 </style>

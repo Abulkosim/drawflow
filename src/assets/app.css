@@ -140,11 +140,12 @@ div .node-drag:hover svg {
 
 .card-devices .corner {
   background-color: #f2f6fa;
-  color: #434b53;
+  color: #226ce6;
   font-size: 14px;
   border-radius: 200px;
-  padding: 2px 6px;
+  padding: 1px 8px;
   font-weight: 600;
+  user-select: none;
 }
 
 .center {
