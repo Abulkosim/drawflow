@@ -440,12 +440,12 @@ export default {
 
       const response = await axios.post('http://10.20.11.24:8000/main/code/check', data)
       if (response.data.success) {
-      this.output = ''
-      this.loading = false
+        this.output = ''
+        this.loading = false
       } else {
-      this.output = response.data.message
-      this.loading = false
-      return
+        this.output = response.data.message
+        this.loading = false
+        return
       }
 
       this.save();

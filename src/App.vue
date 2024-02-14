@@ -25,7 +25,7 @@
       @editNode="openInputModal" :node="selectedNode" />
 
     <LocalesContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @editNode="openLocaleModal"
-      :node="selectedNode"` />
+      :node="selectedNode" />
 
     <div v-if="showModal" class="overlay"></div>
 
