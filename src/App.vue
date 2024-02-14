@@ -680,7 +680,7 @@ export default {
         this.showToast = false;
       }, 2000);
     }
-  }
+  },
 }
 </script>
 
