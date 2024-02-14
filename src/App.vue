@@ -10,7 +10,15 @@
         <span>Create</span>
       </div>
 
-      <TipMenu @close="closeTipMenu" v-if="showTipMenu" />
+      <transition name="fade">
+        <TipMenu @close="closeTipMenu" v-if="showTipMenu" />
+      </transition>
+      <transition name="fade">
+        <TipDrag @close="closeTipDrag" v-if="showTipDrag" :showTipMenu="showTipMenu" />
+      </transition>
+      <transition name="fade">
+        <TipEdit @close="closeTipEdit" v-if="showTipEdit" :showTipMenu="showTipMenu" :showTipDrag="showTipDrag" />
+      </transition>
     </div>
 
     <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
@@ -73,6 +81,8 @@ import AddTextModal from './components/modals/AddTextModal.vue'
 import LocalesModal from './components/modals/LocalesModal.vue'
 import LocalesContextMenu from './components/menus/LocalesContextMenu.vue'
 import PageNotFound from './components/PageNotFound.vue'
+import TipDrag from './components/menus/TipDrag.vue'
+import TipEdit from './components/menus/TipEdit.vue'
 
 export default {
   name: 'App',
@@ -87,7 +97,9 @@ export default {
     LocalesContextMenu,
     LocalesModal,
     TipMenu,
-    PageNotFound
+    PageNotFound,
+    TipDrag,
+    TipEdit
   },
   data() {
     return {
@@ -101,6 +113,8 @@ export default {
       showStageButtonModal: false,
       showLocalesModal: false,
       showTipMenu: true,
+      showTipDrag: true,
+      showTipEdit: true,
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
       showToast: false,
@@ -193,6 +207,14 @@ export default {
 
     closeTipMenu() {
       this.showTipMenu = false;
+    },
+
+    closeTipDrag() {
+      this.showTipDrag = false;
+    },
+
+    closeTipEdit() {
+      this.showTipEdit = false;
     },
 
     handleRightClick(event) {
@@ -664,4 +686,14 @@ export default {
 
 <style>
 @import './assets/app.css';
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

@@ -1,23 +1,15 @@
 <template>
-  <div class="tip">
-    <p>Node Types</p>
-    <div class="list">
+  <div class="tip" :class="{ onTop: !showTipMenu }">
+
+    <div class="drag-tip">
       <div>
-        <div class="circle inline"></div>
-        <span>Inline</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#434b53" viewBox="0 0 256 256">
+          <path
+            d="M188,80a27.79,27.79,0,0,0-13.36,3.4,28,28,0,0,0-46.64-11A28,28,0,0,0,80,92v20H68a28,28,0,0,0-28,28v12a88,88,0,0,0,176,0V108A28,28,0,0,0,188,80Zm12,72a72,72,0,0,1-144,0V140a12,12,0,0,1,12-12H80v24a8,8,0,0,0,16,0V92a12,12,0,0,1,24,0v28a8,8,0,0,0,16,0V92a12,12,0,0,1,24,0v28a8,8,0,0,0,16,0V108a12,12,0,0,1,24,0Z">
+          </path>
+        </svg>
       </div>
-      <div>
-        <div class="circle reply"></div>
-        <span>Reply</span>
-      </div>
-      <div>
-        <div class="circle contact"></div>
-        <span>Contact</span>
-      </div>
-      <div>
-        <div class="circle location"></div>
-        <span>Location</span>
-      </div>
+      <span>Drag & drop to create a node</span>
     </div>
     <button type="button" @click="close" class="tip-close">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 256 256">
@@ -30,6 +22,7 @@
 </template>
 <script>
 export default {
+  props: ['showTipMenu'],
   methods: {
     close() {
       this.$emit('close');
@@ -40,7 +33,7 @@ export default {
 <style scoped>
 div .tip {
   position: absolute;
-  top: 10px;
+  top: 178px;
   right: 10px;
   font-size: 20px;
   border-radius: 8px;
@@ -48,47 +41,17 @@ div .tip {
   background: white;
   user-select: none;
   z-index: 1;
-  padding: 15px;
+  padding: 10px 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   width: 180px;
   font-size: 16px;
   cursor: crosshair;
 }
 
-.tip p {
-  color: #434b53;
-  margin-bottom: 5px;
-  font-size: 18px;
+div .onTop {
+  top: 10px;
 }
 
-.circle {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-
-}
-
-.inline {
-  background: #00B06C;
-}
-
-.reply {
-  background: #EFA62A;
-}
-
-.contact {
-  background: #FF3E68;
-}
-
-.location {
-  background: #8E4FCB;
-}
-
-.list div {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
 
 .tip-close {
   display: inline-flex;
@@ -98,16 +61,32 @@ div .tip {
   width: 26px;
   height: 26px;
   position: absolute;
-  top: 5px;
+  top: 16px;
   right: 5px;
   background: white;
   cursor: pointer;
   color: #434b53;
   border: none;
-
 }
 
 .tip-close:hover {
   background: #e2eaf2;
 }
-</style>
+
+.drag-tip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.drag-tip div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drag-tip span {
+  color: #434b53;
+  line-height: 20px;
+  font-size: 15px;
+}</style>
