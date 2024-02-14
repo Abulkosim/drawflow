@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="content" ref="notFound">
-      <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="#2e363e" viewBox="0 0 256 256">
+      <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="#5e5e5e" viewBox="0 0 256 256">
         <path
           d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z">
         </path>
@@ -43,14 +43,14 @@ export default {
   text-align: center;
   font-family: 'Open Sans', sans-serif;
   background: #f2f6fa;
-  color: #2e363e
+  color: #5e5e5e
 }
 
 .content {
   position: relative;
   top: -30px;
   user-select: none;
-  animation: fade-in 0.7s ease-out;
+  animation: fade-in 0.5s ease-out;
 }
 
 @keyframes fade-in {
@@ -66,5 +66,28 @@ export default {
 .title {
   font-size: 3rem;
   line-height: 4rem;
+
+  @media screen and (max-width: 540px) {
+    font-size: 2.5rem;
+    line-height: 3.2rem;
+  }
+
+  @media screen and (max-width: 320px) {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+
+  }
+}
+
+svg {
+  @media screen and (max-width: 540px) {
+    width: 120px;
+    height: 120px;
+  }
+
+  @media screen and (max-width: 320px) {
+    width: 100px;
+    height: 100px;
+  }
 }
 </style>

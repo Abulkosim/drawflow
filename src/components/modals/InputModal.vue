@@ -438,15 +438,15 @@ export default {
         code: this.editor.getValue()
       }
 
-      const response = await axios.post('http://10.20.11.24:8000/main/code/check', data)
-      if (response.data.success) {
-        this.output = ''
-        this.loading = false
-      } else {
-        this.output = response.data.message
-        this.loading = false
-        return
-      }
+      // const response = await axios.post('http://10.20.11.24:8000/main/code/check', data)
+      // if (response.data.success) {
+      this.output = ''
+      this.loading = false
+      // } else {
+      // this.output = response.data.message
+      // this.loading = false
+      // return
+      // }
 
       this.save();
       this.close();
