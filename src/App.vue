@@ -1,5 +1,5 @@
 <template>
-  <div v-if="1">
+  <div>
     <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#226ce6" viewBox="0 0 256 256">
@@ -62,7 +62,6 @@
       :user_id="user_id" />
 
   </div>
-  <PageNotFound v-else />
 </template>
 
 <script>
