@@ -1,14 +1,5 @@
-.table-container {
-  user-select: none;
-  overflow: auto;
-}
-
-.table-container::-webkit-scrollbar {
-  display: none;
-}
-
 table {
-  margin: 20px 0;
+  margin: 20px 0 40px;
   border-collapse: collapse;
   width: 100%;
   text-align: center;

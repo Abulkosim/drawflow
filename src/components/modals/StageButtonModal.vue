@@ -190,9 +190,15 @@ export default {
         if (this.backType != 'other') {
           if (this.backType == 'next.' && this.backString != '') {
             return this.backType + this.stages.find(item => item.alias == this.backString)?.id
+          } else if (this.backType == 'next.' && this.backString == '') {
+            return this.backType
           }
         } else {
-          return this.backString
+          if (this.backString.trim() == '') {
+            return null
+          } else {
+            return this.backString
+          }
         }
       },
 
