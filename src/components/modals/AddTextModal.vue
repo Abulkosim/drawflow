@@ -95,7 +95,6 @@ export default {
           delete data.names[key]
         }
       }
-
       await axios.post(`${this.url}tg/bot/text/create`, data);
       this.$emit('closed')
       this.close();

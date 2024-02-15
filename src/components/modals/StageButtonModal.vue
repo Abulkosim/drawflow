@@ -211,7 +211,6 @@ export default {
   },
   watch: {
     is_web_app(newValue) {
-      console.log(this.is_web_app)
       if (newValue) {
         if (this.backType == 'next.') {
           this.backString = ''

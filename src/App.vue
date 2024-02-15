@@ -60,7 +60,6 @@
 
     <LocalesModal v-if="showLocalesModal" @close="closeLocaleModal" @closed="rerender" :bot_id="bot_id"
       :user_id="user_id" />
-
   </div>
 </template>
 
@@ -523,9 +522,7 @@ export default {
 
     async create(createData) {
       try {
-        console.log(createData)
         const response = await axios.post(`${this.url}tg/bot/stage/create`, createData);
-        console.log(response)
         await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: response.data.data.insert.id, url_id: createData.url_id })
 
         if (createData.backhand) {
@@ -597,8 +594,7 @@ export default {
 
     async deleteNode(id) {
       try {
-        console.log('id', id)
-        const response = await axios.delete(`${this.url}tg/bot/stage/delete?id=${id}`);
+        const response = await axios.put(`${this.url}tg/bot/stage/delete?id=${id}`);
         this.editor.removeNodeId(`node-${id}`)
         await this.rerender()
       } catch (error) {

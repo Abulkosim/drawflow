@@ -113,7 +113,7 @@ export default {
     },
 
     async deleteButton(id) {
-      await axios.delete(`${this.url}tg/bot/stage/button/delete?id=${id}`)
+      await axios.put(`${this.url}tg/bot/stage/button/delete?id=${id}`)
       await this.getTableData();
     },
 
