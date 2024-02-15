@@ -90,17 +90,21 @@
                 </option>
               </datalist> -->
 
-              <div class="select-wrapper">
-                <select id="url" class="input" v-model="callback_url" :required="!stageSelected">
-                  <option value="" disabled selected hidden></option>
-                  <option v-for="item in urls" :key="item.description" :value="item.url">
-                    <span v-if="item.url">{{ item.url }}</span>
-                    <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
-                    <span v-if="item.description">{{ item.description }}</span>
-                  </option>
-                </select>
+              <div class="buttons">
+                <div class="select-wrapper">
+                  <select id="url" class="input" v-model="callback_url" :required="!stageSelected">
+                    <option value="" disabled selected hidden></option>
+                    <option v-for="item in urls" :key="item.description" :value="item.url">
+                      <span v-if="item.url">{{ item.url }}</span>
+                      <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
+                      <span v-if="item.description">{{ item.description }}</span>
+                    </option>
+                  </select>
+                </div>
+                <button class="create-button" type="button" @click.stop.prevent="createURL" title="Create URL">
+                  <span>+</span>
+                </button>
               </div>
-
             </div>
             <div class="state" v-if="stageSelected">
               <div class="state-type">
@@ -213,7 +217,7 @@ import ButtonsTable from '../lists/ButtonsTable.vue';
 import Toast from '../notifications/Toast.vue';
 
 export default {
-  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'updateTable', 'bot_id', 'user_id'],
+  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
   components: {
     ButtonsTable,
     Toast
@@ -313,6 +317,10 @@ export default {
 
     create() {
       this.$emit('create')
+    },
+
+    createURL() {
+      this.$emit('createURL')
     },
 
     async getNum() {
@@ -502,6 +510,9 @@ export default {
     },
     getTexts(current) {
       this.getAliases()
+    },
+    getCallbacks(current) {
+      this.getUrls()
     }
   }
 }

@@ -36,9 +36,9 @@
     <div v-if="showInputModal && !showStageButtonModal && !showAddButtonModal && !showAddTextModal" class="overlay"></div>
 
     <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
-      :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :updateTable="updateTable"
+      :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :getCallbacks="getCallbacks" :updateTable="updateTable"
       :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
-      @openStageButtonModal="openStageButtonModal" @create="showAddTextModal = true" />
+      @openStageButtonModal="openStageButtonModal" @create="showAddTextModal = true" @createURL="showURLModal = true" />
 
     <div v-if="showStageButtonModal && !showAddButtonModal" class="overlay"></div>
 
@@ -51,7 +51,11 @@
     <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal"
       :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
 
-    <div v-if="showAddTextModal" class="overlay high-index"></div>
+    <div v-if="showAddTextModal || showURLModal" class="overlay high-index"></div>
+
+    <URLModal v-if="showURLModal" :showURLModal="showURLModal" @close="closeURLModal"
+      @closed="getCallbacks = !getCallbacks" :bot_id="bot_id" :user_id="user_id" />
+
 
     <AddTextModal v-if="showAddTextModal" :showAddTextModal="showAddTextModal" @close="closeTextModal"
       @closed="getTexts = !getTexts" :bot_id="bot_id" :user_id="user_id" />
@@ -76,6 +80,7 @@ import './assets/main.css'
 import AddButtonModal from './components/modals/AddButtonModal.vue'
 import StageButtonModal from './components/modals/StageButtonModal.vue'
 import AddTextModal from './components/modals/AddTextModal.vue'
+import URLModal from './components/modals/URLModal.vue'
 import LocalesModal from './components/modals/LocalesModal.vue'
 import LocalesContextMenu from './components/menus/LocalesContextMenu.vue'
 import PageNotFound from './components/PageNotFound.vue'
@@ -97,7 +102,8 @@ export default {
     TipMenu,
     PageNotFound,
     TipDrag,
-    TipEdit
+    TipEdit,
+    URLModal
   },
   data() {
     return {
@@ -110,6 +116,7 @@ export default {
       showAddTextModal: false,
       showStageButtonModal: false,
       showLocalesModal: false,
+      showURLModal: false,
       showTipMenu: true,
       showTipDrag: true,
       showTipEdit: true,
@@ -128,6 +135,7 @@ export default {
       url: 'https://bot-platon.platon.uz/services/platon-core/api/',
       stageButtonId: null,
       getTexts: true,
+      getCallbacks: true,
       buttons: true,
       bot_id: null,
       user_id: null
@@ -183,6 +191,8 @@ export default {
           this.showAddButtonModal = false;
         } else if (this.showAddTextModal) {
           this.showAddTextModal = false;
+        } else if (this.showURLModal) {
+          this.showURLModal = false;
         } else if (this.showStageButtonModal) {
           this.showStageButtonModal = false;
         } else if (this.showInputModal) {
@@ -640,6 +650,10 @@ export default {
 
     closeTextModal() {
       this.showAddTextModal = false;
+    },
+
+    closeURLModal() {
+      this.showURLModal = false;
     },
 
     closeLocaleModal() {

@@ -144,7 +144,7 @@
 .dist {
   display: flex;
   gap: 0.8rem;
-  margin-bottom: 12px
+  margin-bottom: 12px;
 }
 
 .dist div {
@@ -167,7 +167,7 @@ select {
   display: block;
   margin-bottom: 0.3rem;
   font-weight: 500;
-  user-select: none; 
+  user-select: none;
 }
 
 form .input {
@@ -229,6 +229,7 @@ form select {
   border-radius: 10px;
   background-color: #e4eeff;
   color: #226ce6;
+  outline: none;
 }
 
 .create-button span {
