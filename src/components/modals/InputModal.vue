@@ -70,6 +70,13 @@
                     <option value="" disabled selected hidden></option>
                     <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
                   </select>
+                  <button class="clear-button" v-if="text_alias" @click.stop.prevent="text_alias = ''">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-close" aria-hidden="true" fill="none"
+                      viewBox="0 0 14 14">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                  </button>
                 </div>
                 <button class="create-button" type="button" @click.stop.prevent="create" title="Create text">
                   <span>+</span>
@@ -117,6 +124,13 @@
                     <option value="url.">url.</option>
                     <option value="other">other</option>
                   </select>
+                  <button class="clear-button" v-if="stateType" @click.stop.prevent="stateType = ''">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-close" aria-hidden="true" fill="none"
+                      viewBox="0 0 14 14">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                  </button>
                 </div>
               </div>
               <div class="state-string" v-if="stateType != 'next.'">
@@ -521,8 +535,6 @@ export default {
 <style>
 @import '../../assets/modal.css';
 
-
-
 .modal-heading .corner {
   background-color: #F2F6FA;
   color: #226CE6;
@@ -531,5 +543,28 @@ export default {
   padding: 3px 7px;
   font-weight: 600;
   user-select: none;
+}
+
+.clear-button {
+  position: absolute;
+  top: 9.5px;
+  right: 20px;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  color: #929aa2;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+}
+
+.clear-button:hover {
+  color: #7a7d80;
+}
+
+.svg-close {
+  width: 0.6rem;
+  height: 0.6rem;
 }
 </style>

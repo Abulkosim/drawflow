@@ -248,7 +248,7 @@ export default {
 
       const rect = ev.target.getBoundingClientRect();
       this.dragOffset.x = ev.clientX - rect.left;
-      this.dragOffset.y = ev.clientY - rect.top;
+      this.dragOffset.y = ev.clientY - rect.top; 
     },
 
     drop(ev) {
