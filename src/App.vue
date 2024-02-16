@@ -248,7 +248,7 @@ export default {
 
       const rect = ev.target.getBoundingClientRect();
       this.dragOffset.x = ev.clientX - rect.left;
-      this.dragOffset.y = ev.clientY - rect.top; 
+      this.dragOffset.y = ev.clientY - rect.top;
     },
 
     drop(ev) {
@@ -363,6 +363,8 @@ export default {
       };
 
       transformedData.drawflow.Home.data['2'].html = `<div class="card-devices center"><span>${locale}</span></div>`;
+      transformedData.drawflow.Home.data['1'].pos_y = window.innerHeight / 2 - 50;
+      transformedData.drawflow.Home.data['2'].pos_y = window.innerHeight / 2 - 50;
 
       if (apiData && apiData.length) {
         apiData.forEach((item, index) => {
