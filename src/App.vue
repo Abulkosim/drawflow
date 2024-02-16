@@ -363,6 +363,7 @@ export default {
       };
 
       transformedData.drawflow.Home.data['2'].html = `<div class="card-devices center"><span>${locale}</span></div>`;
+      // Positions of the first two nodes
       transformedData.drawflow.Home.data['1'].pos_y = window.innerHeight / 2 - 50;
       transformedData.drawflow.Home.data['2'].pos_y = window.innerHeight / 2 - 50;
 
