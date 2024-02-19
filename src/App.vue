@@ -269,7 +269,7 @@ export default {
 
     async updatePosition(nodeData) {
       try {
-        await axios.put(`${this.url}tg/bot/stage/update`, nodeData);
+        await axios.put(`${this.url}tg/bot/stage/position/update`, nodeData);
         await this.rerender()
       } catch (error) {
         console.error(`Error updating node: ${error}`);
