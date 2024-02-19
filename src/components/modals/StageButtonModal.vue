@@ -379,4 +379,8 @@ input:checked+.slider:before {
 .clear-button:hover {
   color: #7a7d80;
 }
+
+label {
+  color: #2e363e;
+}
 </style>
