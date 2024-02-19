@@ -124,6 +124,7 @@ export default {
   font-size: 16px;
   position: relative;
   top: 2px;
+  color: #2e363e;
 }
 
 .check-container {
