@@ -70,7 +70,7 @@
                     <option value="" disabled selected hidden></option>
                     <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
                   </select>
-                  <button class="clear-button" v-if="text_alias" @click.stop.prevent="text_alias = ''">
+                  <button class="clear-button" v-if="text_alias" @click.stop.prevent="clearTextAlias">
                     <svg xmlns="http://www.w3.org/2000/svg" class="svg-close" aria-hidden="true" fill="none"
                       viewBox="0 0 14 14">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -124,7 +124,7 @@
                     <option value="url.">url.</option>
                     <option value="other">other</option>
                   </select>
-                  <button class="clear-button" v-if="stateType" @click.stop.prevent="stateType = ''">
+                  <button class="clear-button" v-if="stateType" @click.stop.prevent="clearStateType">
                     <svg xmlns="http://www.w3.org/2000/svg" class="svg-close" aria-hidden="true" fill="none"
                       viewBox="0 0 14 14">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -327,6 +327,15 @@ export default {
   methods: {
     openStageButtonModal(id) {
       this.$emit('openStageButtonModal', id)
+    },
+
+    clearTextAlias() {
+      this.text_alias = ''
+    },
+
+    clearStateType() {
+      this.stateType = ''
+      this.stateString = ''
     },
 
     create() {
@@ -532,7 +541,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 @import '../../assets/modal.css';
 
 .modal-heading .corner {
@@ -561,10 +570,5 @@ export default {
 
 .clear-button:hover {
   color: #7a7d80;
-}
-
-.svg-close {
-  width: 0.6rem;
-  height: 0.6rem;
 }
 </style>

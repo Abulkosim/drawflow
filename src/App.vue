@@ -269,7 +269,7 @@ export default {
 
     async updatePosition(nodeData) {
       try {
-        await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
+        await axios.put(`${this.url}tg/bot/stage/update`, nodeData);
         await this.rerender()
       } catch (error) {
         console.error(`Error updating node: ${error}`);
@@ -522,6 +522,7 @@ export default {
 
         this.updateNode(editData)
           .then(() => {
+            console.log(editData)
             this.showSuccessToast()
           })
           .catch((error) => {
@@ -571,7 +572,7 @@ export default {
         let node = this.editor.getNodeFromId(nodeId);
 
 
-        await axios.post(`${this.url}tg/bot/stage/update`, nodeData);
+        await axios.put(`${this.url}tg/bot/stage/update`, nodeData);
         await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: nodeData.id, url_id: nodeData.url_id })
 
 

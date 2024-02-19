@@ -49,11 +49,21 @@
             <div class="state">
               <div class="state-type">
                 <label for="back-type" class="label">Back type</label>
-                <select id="back-type" class="input" v-model="backType" @change="backString = ''" :disabled="is_web_app">
-                  <option value="" disabled selected hidden></option>
-                  <option value="next.">next.</option>
-                  <option value="other">other</option>
-                </select>
+                <div class="select-wrapper">
+                  <select id="back-type" class="input" v-model="backType" @change="backString = ''"
+                    :disabled="is_web_app">
+                    <option value="" disabled selected hidden></option>
+                    <option value="next.">next.</option>
+                    <option value="other">other</option>
+                  </select>
+                  <button class="clear-button" v-if="backType" @click.stop.prevent="clearBackType">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" aria-hidden="true" fill="none"
+                      viewBox="0 0 14 14">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div class="state-string" v-if="backType != 'next.'">
                 <label for="back-string" class="label">Back value</label>
@@ -133,6 +143,10 @@ export default {
   },
   async mounted() { },
   methods: {
+    clearBackType() {
+      this.backType = '';
+      this.backString = '';
+    },
     close() {
       this.$emit('close')
     },
@@ -175,7 +189,7 @@ export default {
         back: this.back
       }
       if (this.stageButtonId) {
-        await axios.post(`${this.url}tg/bot/stage/button/update?id=${this.stageButtonId}`, stageButtonData)
+        await axios.put(`${this.url}tg/bot/stage/button/update?id=${this.stageButtonId}`, stageButtonData)
         this.close()
       } else {
         await axios.post(`${this.url}tg/bot/stage/button/create`, stageButtonData)
@@ -346,5 +360,23 @@ input:checked+.slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.clear-button {
+  position: absolute;
+  top: 11px;
+  right: 20px;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  color: #929aa2;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+}
+
+.clear-button:hover {
+  color: #7a7d80;
 }
 </style>
