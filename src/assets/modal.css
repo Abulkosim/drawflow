@@ -198,11 +198,18 @@ form .input {
   font-size: 24px;
   color: #929aa2;
   pointer-events: none;
+  -webkit-appearance: none;
 }
 
 form select {
   width: 100%;
   box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.select-wrapper select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;

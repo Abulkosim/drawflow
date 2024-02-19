@@ -298,6 +298,7 @@ export default {
   position: relative;
   top: -3px;
   font-size: 15px;
+  color: #2e363e;
 }
 
 .switch {
