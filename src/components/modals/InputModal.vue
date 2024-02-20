@@ -469,7 +469,7 @@ export default {
         code: this.editor.getValue()
       }
 
-      const response = await axios.post('http://10.20.11.24:8000/main/code/check', data)
+      const response = await axios.post('https://bot-platon.platon.uz/bot/main/code/check', data)
       if (response.data.success) {
         this.output = ''
         this.loading = false
