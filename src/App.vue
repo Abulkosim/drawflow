@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
-      <BotName v-if="bot_name" :bot_name="bot_name" />
+      <BotName v-if="bot_name" :bot_name="bot_name" :link="link" />
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#226ce6" viewBox="0 0 256 256">
           <path
@@ -142,7 +142,8 @@ export default {
       buttons: true,
       bot_id: null,
       user_id: null,
-      bot_name: null
+      bot_name: null,
+      link: null
     }
   },
 
@@ -285,7 +286,8 @@ export default {
       try {
         const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=${this.bot_id}`);
         const apiData = response.data.data;
-        this.bot_name = apiData[0].bot_name
+        this.bot_name = apiData[0].bot_name;
+        this.link = apiData[0].link;
         console.log(apiData)
         this.data = await this.transformApiData(apiData);
       } catch (error) {
