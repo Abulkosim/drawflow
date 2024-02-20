@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
+      <BotName v-if="bot_name" :bot_name="bot_name" />
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#226ce6" viewBox="0 0 256 256">
           <path
@@ -86,6 +87,7 @@ import LocalesContextMenu from './components/menus/LocalesContextMenu.vue'
 import PageNotFound from './components/PageNotFound.vue'
 import TipDrag from './components/menus/TipDrag.vue'
 import TipEdit from './components/menus/TipEdit.vue'
+import BotName from './components/menus/BotName.vue'
 
 export default {
   name: 'App',
@@ -103,7 +105,8 @@ export default {
     PageNotFound,
     TipDrag,
     TipEdit,
-    URLModal
+    URLModal,
+    BotName
   },
   data() {
     return {
@@ -138,12 +141,13 @@ export default {
       getCallbacks: true,
       buttons: true,
       bot_id: null,
-      user_id: null
+      user_id: null,
+      bot_name: null
     }
   },
 
   async created() {
-    await this.getStages()
+    // await this.getStages()
   },
 
   async mounted() {
@@ -281,6 +285,8 @@ export default {
       try {
         const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=${this.bot_id}`);
         const apiData = response.data.data;
+        this.bot_name = apiData[0].bot_name
+        console.log(apiData)
         this.data = await this.transformApiData(apiData);
       } catch (error) {
         console.error('Failed to fetch data:', error);
