@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import http from "../../interceptors/http";
 
 export default {
   props: ['showAddTextModal', 'bot_id', 'user_id'],
@@ -65,7 +65,6 @@ export default {
         qq: null
       },
       locales: [],
-      url: 'https://bot-platon.platon.uz/services/platon-core/api/'
     }
   },
   created() {
@@ -76,7 +75,7 @@ export default {
       this.$emit('close')
     },
     async getLocales() {
-      await axios.get(`${this.url}tg/bot/flow/locales?bot_id=${this.bot_id}`)
+      await http.get(`tg/bot/flow/locales?bot_id=${this.bot_id}`)
         .then((response) => {
           this.locales = response.data.data
         }, (error) => {
@@ -95,7 +94,7 @@ export default {
           delete data.names[key]
         }
       }
-      await axios.post(`${this.url}tg/bot/text/create`, data);
+      await http.post(`tg/bot/text/create`, data);
       this.$emit('closed')
       this.close();
     }

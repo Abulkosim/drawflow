@@ -102,14 +102,13 @@
 </template>
 <script>
 import { get } from "ace-builds/src-noconflict/ace";
-import axios from "axios";
+import http from "../../interceptors/http";
 
 export default {
   props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons', 'bot_id', 'user_id'],
   data() {
     return {
       heading: 'Add button to the stage',
-      url: 'https://bot-platon.platon.uz/services/platon-core/api/',
       stage_id: this.inputValues.id ?? null,
       btns: [],
       is_web_app: false,
@@ -154,29 +153,29 @@ export default {
       this.$emit('create')
     },
     async getStages() {
-      const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=${this.bot_id}`);
+      const response = await http.get(`v1/bot/stage/list?bot_id=${this.bot_id}`);
       this.stages = response.data.data;
     },
 
     async getUrls() {
-      const response = await axios.get(`${this.url}tg/bot/user/callback_urls?user_id=${this.user_id}`)
+      const response = await http.get(`tg/bot/user/callback_urls?user_id=${this.user_id}`)
       this.urls = response.data.data
     },
 
     async getButtons() {
       if (this.stage_id) {
-        const response = await axios.get(`${this.url}tg/bot/user/buttons?user_id=${this.user_id}`);
+        const response = await http.get(`tg/bot/user/buttons?user_id=${this.user_id}`);
         this.btns = response.data.data;
       }
     },
 
     async getInfo() {
-      const response = await axios.get(`${this.url}tg/bot/stage/button?id=${this.stageButtonId}`);
+      const response = await http.get(`tg/bot/stage/button?id=${this.stageButtonId}`);
       this.info = response.data.data;
     },
 
     async getOrder() {
-      const response = await axios.get(`${this.url}tg/bot/stage/button/new/order?stage_id=${this.stage_id}`);
+      const response = await http.get(`tg/bot/stage/button/new/order?stage_id=${this.stage_id}`);
       this.btn_order = response.data.data;
     },
 
@@ -189,10 +188,10 @@ export default {
         back: this.back
       }
       if (this.stageButtonId) {
-        await axios.put(`${this.url}tg/bot/stage/button/update?id=${this.stageButtonId}`, stageButtonData)
+        await http.put(`tg/bot/stage/button/update?id=${this.stageButtonId}`, stageButtonData)
         this.close()
       } else {
-        await axios.post(`${this.url}tg/bot/stage/button/create`, stageButtonData)
+        await http.post(`tg/bot/stage/button/create`, stageButtonData)
         this.close()
       }
       this.$emit('updateTable')

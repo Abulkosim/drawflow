@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import http from '../../interceptors/http';
 
 export default {
   props: ['inputValues', 'showStageButtonModal', 'updateTable'],
@@ -66,7 +66,6 @@ export default {
       headings: ['id', 'order', 'name', 'is web_app?', 'back', 'actions'],
       items: [],
       stage_id: this.inputValues.id ?? null,
-      url: 'https://bot-platon.platon.uz/services/platon-core/api/'
     };
   },
   async created() {
@@ -101,7 +100,7 @@ export default {
 
     async getTableData() {
       if (this.stage_id) {
-        const response = await axios.get(`${this.url}tg/bot/stage/button/list?stage_id=${this.stage_id}`);
+        const response = await http.get(`tg/bot/stage/button/list?stage_id=${this.stage_id}`);
         this.items = response.data.data;
       }
 
@@ -113,7 +112,7 @@ export default {
     },
 
     async deleteButton(id) {
-      await axios.put(`${this.url}tg/bot/stage/button/delete?id=${id}`)
+      await http.put(`tg/bot/stage/button/delete?id=${id}`)
       await this.getTableData();
     },
 

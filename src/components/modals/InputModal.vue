@@ -226,9 +226,10 @@ import ace from 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-dawn';
 
-import axios from "axios";
 import ButtonsTable from '../lists/ButtonsTable.vue';
 import Toast from '../notifications/Toast.vue';
+
+import http from '../../interceptors/http';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
@@ -264,7 +265,6 @@ export default {
       stages: [],
       num: '',
       backhands: [],
-      url: 'https://bot-platon.platon.uz/services/platon-core/api/',
       stage: '',
       backhand: ''
     }
@@ -347,7 +347,7 @@ export default {
     },
 
     async getNum() {
-      const response = await axios.get(`${this.url}tg/bot/stage/new?bot_id=${this.bot_id}`)
+      const response = await http.get(`tg/bot/stage/new?bot_id=${this.bot_id}`)
       this.num = response.data.data
       if (!this.alias) {
         this.alias = `stage ${this.num}`
@@ -361,7 +361,7 @@ export default {
     async getBackhands() {
       if (this.stage) {
         const id = this.stages.find(item => item.alias == this.stage)?.id
-        const response = await axios.get(`${this.url}tg/bot/stage/availabe/hands?stage_id=${id}`)
+        const response = await http.get(`tg/bot/stage/availabe/hands?stage_id=${id}`)
         this.backhands = response.data.data.buttons
 
         if (response.data.data.user_state) {
@@ -372,7 +372,7 @@ export default {
     },
 
     async getAliases() {
-      const response = await axios.get(`${this.url}v1/bot/user/texts?user_id=${this.user_id}`)
+      const response = await http.get(`v1/bot/user/texts?user_id=${this.user_id}`)
       this.aliases = response.data.data
 
       if (this.inputValues) {
@@ -381,12 +381,12 @@ export default {
     },
 
     async getStages() {
-      const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=${this.bot_id}`);
+      const response = await http.get(`v1/bot/stage/list?bot_id=${this.bot_id}`);
       this.stages = response.data.data;
     },
 
     async getUrls() {
-      const response = await axios.get(`${this.url}tg/bot/user/callback_urls?user_id=${this.user_id}`)
+      const response = await http.get(`tg/bot/user/callback_urls?user_id=${this.user_id}`)
       this.urls = response.data.data
     },
 
@@ -469,7 +469,7 @@ export default {
         code: this.editor.getValue()
       }
 
-      const response = await axios.post('https://bot-platon.platon.uz/bot/main/code/check', data)
+      const response = await http.post('https://bot-platon.platon.uz/bot/main/code/check', data)
       if (response.data.success) {
         this.output = ''
         this.loading = false

@@ -76,7 +76,6 @@ import ConfirmationModal from './components/modals/ConfirmationModal.vue'
 import Toast from './components/notifications/Toast.vue'
 import InputModal from './components/modals/InputModal.vue'
 import TipMenu from './components/menus/TipMenu.vue'
-import axios from "axios";
 import './assets/main.css'
 import AddButtonModal from './components/modals/AddButtonModal.vue'
 import StageButtonModal from './components/modals/StageButtonModal.vue'
@@ -88,6 +87,8 @@ import PageNotFound from './components/PageNotFound.vue'
 import TipDrag from './components/menus/TipDrag.vue'
 import TipEdit from './components/menus/TipEdit.vue'
 import BotName from './components/menus/BotName.vue'
+
+import http from './interceptors/http'
 
 export default {
   name: 'App',
@@ -135,7 +136,6 @@ export default {
       x_: null,
       y_: null,
       dragOffset: { x: 0, y: 0 },
-      url: 'https://bot-platon.platon.uz/services/platon-core/api/',
       stageButtonId: null,
       getTexts: true,
       getCallbacks: true,
@@ -274,7 +274,7 @@ export default {
 
     async updatePosition(nodeData) {
       try {
-        await axios.put(`${this.url}tg/bot/stage/position/update`, nodeData);
+        await http.put(`tg/bot/stage/position/update`, nodeData);
         await this.rerender()
       } catch (error) {
         console.error(`Error updating node: ${error}`);
@@ -284,11 +284,10 @@ export default {
 
     async getStages() {
       try {
-        const response = await axios.get(`${this.url}v1/bot/stage/list?bot_id=${this.bot_id}`);
+        const response = await http.get(`v1/bot/stage/list?bot_id=${this.bot_id}`);
         const apiData = response.data.data;
         this.bot_name = apiData[0].bot_name;
         this.link = apiData[0].link;
-        console.log(apiData)
         this.data = await this.transformApiData(apiData);
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -296,7 +295,7 @@ export default {
     },
 
     async transformApiData(apiData) {
-      const locales = await axios.get(`${this.url}tg/bot/flow/locales?bot_id=${this.bot_id}`);
+      const locales = await http.get(`tg/bot/flow/locales?bot_id=${this.bot_id}`);
       let locale = ''
       if (locales.data.data.length) {
         for (let item of locales.data.data) {
@@ -421,7 +420,7 @@ export default {
         }
       }
 
-      const response = await axios.get(`${this.url}tg/bot/stage/connections?bot_id=${this.bot_id}`);
+      const response = await http.get(`tg/bot/stage/connections?bot_id=${this.bot_id}`);
 
       const connections = [...response.data.data.btns, ...response.data.data.states];
       if (connections) {
@@ -458,7 +457,7 @@ export default {
 
     async getNode(id) {
       try {
-        const response = await axios.get(`${this.url}v1/bot/stage?id=${id}`);
+        const response = await http.get(`v1/bot/stage?id=${id}`);
         const apiData = response.data.data.stage;
         this.inputValues = {
           alias: apiData.alias,
@@ -530,7 +529,6 @@ export default {
 
         this.updateNode(editData)
           .then(() => {
-            console.log(editData)
             this.showSuccessToast()
           })
           .catch((error) => {
@@ -544,8 +542,8 @@ export default {
 
     async create(createData) {
       try {
-        const response = await axios.post(`${this.url}tg/bot/stage/create`, createData);
-        await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: response.data.data.insert.id, url_id: createData.url_id })
+        const response = await http.post(`tg/bot/stage/create`, createData);
+        await http.put(`tg/bot/stage/update/callback_url`, { stage_id: response.data.data.insert.id, url_id: createData.url_id })
 
         if (createData.backhand) {
           if (createData.backhand == 'user_state') {
@@ -554,14 +552,14 @@ export default {
               stage_id: response.data.data.insert.id,
               type: 's'
             };
-            await axios.post(`${this.url}tg/bot/stage/back/hand/create`, sendData);
+            await http.post(`tg/bot/stage/back/hand/create`, sendData);
           } else {
             const sendData = {
               id: createData.backhand_id,
               stage_id: response.data.data.insert.id,
               type: 'b'
             };
-            await axios.post(`${this.url}tg/bot/stage/back/hand/create`, sendData);
+            await http.post(`tg/bot/stage/back/hand/create`, sendData);
           }
         }
 
@@ -580,8 +578,8 @@ export default {
         let node = this.editor.getNodeFromId(nodeId);
 
 
-        await axios.put(`${this.url}tg/bot/stage/update`, nodeData);
-        await axios.put(`${this.url}tg/bot/stage/update/callback_url`, { stage_id: nodeData.id, url_id: nodeData.url_id })
+        await http.put(`tg/bot/stage/update`, nodeData);
+        await http.put(`tg/bot/stage/update/callback_url`, { stage_id: nodeData.id, url_id: nodeData.url_id })
 
 
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
@@ -616,7 +614,7 @@ export default {
 
     async deleteNode(id) {
       try {
-        const response = await axios.put(`${this.url}tg/bot/stage/delete?id=${id}`);
+        const response = await http.put(`tg/bot/stage/delete?id=${id}`);
         this.editor.removeNodeId(`node-${id}`)
         await this.rerender()
       } catch (error) {

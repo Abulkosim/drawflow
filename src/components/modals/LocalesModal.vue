@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import http from "../../interceptors/http";
 
 export default {
   props: ['bot_id', 'user_id'],
@@ -57,7 +57,6 @@ export default {
       },
       locales: [],
       checked: [],
-      url: 'https://bot-platon.platon.uz/services/platon-core/api/'
     }
   },
   computed: {
@@ -74,7 +73,7 @@ export default {
       this.$emit('close')
     },
     async getLocales() {
-      await axios.get(`${this.url}tg/locales`)
+      await http.get(`tg/locales`)
         .then((response) => {
           this.locales = response.data.data
         }, (error) => {
@@ -83,7 +82,7 @@ export default {
     },
 
     async getBotLocales() {
-      const reponse = await axios.get(`${this.url}tg/bot/flow/locales?bot_id=${this.bot_id}`)
+      const reponse = await http.get(`tg/bot/flow/locales?bot_id=${this.bot_id}`)
       this.checked = reponse.data.data
     },
 
@@ -94,7 +93,7 @@ export default {
         langs: `{'${this.checked.map(item => item.id).join("', '")}'}`
       }
 
-      await axios.post(`${this.url}tg/bot/locale/update`, data);
+      await http.post(`tg/bot/locale/update`, data);
       this.$emit('closed')
       this.close();
     }

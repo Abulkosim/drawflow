@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import http from '../../interceptors/http'
 
 export default {
   props: ['showURLModal', 'bot_id', 'user_id'],
@@ -60,7 +60,6 @@ export default {
       heading: 'Create URL',
       url: '',
       description: '',
-      api: 'https://bot-platon.platon.uz/services/platon-core/api/'
     }
   },
   methods: {
@@ -74,7 +73,7 @@ export default {
         description: this.description
       }
 
-      await axios.post(`${this.api}tg/bot/callback/url/create`, data);
+      await http.post(`tg/bot/callback/url/create`, data);
 
       this.$emit('closed')
       this.close();
