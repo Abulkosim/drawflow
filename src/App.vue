@@ -89,6 +89,7 @@ import TipEdit from './components/menus/TipEdit.vue'
 import BotName from './components/menus/BotName.vue'
 
 import http from './interceptors/http'
+import { updatePos, fetchStages, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage } from './api/api.drawflow'
 
 export default {
   name: 'App',
@@ -269,19 +270,13 @@ export default {
     },
 
     async updatePosition(nodeData) {
-      try {
-        await http.put(`tg/bot/stage/position/update`, nodeData);
-        await this.rerender()
-      } catch (error) {
-        console.error(`Error updating node: ${error}`);
-        throw error;
-      }
+      await updatePos(nodeData)
+      await this.rerender()
     },
 
     async getStages() {
       try {
-        const response = await http.get(`v1/bot/stage/list?bot_id=${this.bot_id}`);
-        const apiData = response.data.data;
+        const apiData = await fetchStages(this.bot_id);
         this.bot_name = apiData[0].bot_name;
         this.link = apiData[0].link;
         this.data = await this.transformApiData(apiData);
@@ -291,7 +286,7 @@ export default {
     },
 
     async transformApiData(apiData) {
-      const locales = await http.get(`tg/bot/flow/locales?bot_id=${this.bot_id}`);
+      const locales = await fetchBotLocales(this.bot_id)
       let locale = ''
       if (locales.data.data.length) {
         for (let item of locales.data.data) {
@@ -416,7 +411,7 @@ export default {
         }
       }
 
-      const response = await http.get(`tg/bot/stage/connections?bot_id=${this.bot_id}`);
+      const response = await fetchConnections(this.bot_id)
 
       const connections = [...response.data.data.btns, ...response.data.data.states];
       if (connections) {
@@ -453,8 +448,7 @@ export default {
 
     async getNode(id) {
       try {
-        const response = await http.get(`v1/bot/stage?id=${id}`);
-        const apiData = response.data.data.stage;
+        const apiData = await fetchStage(id)
         this.inputValues = {
           alias: apiData.alias,
           btn_sizes: apiData.btn_sizes,
@@ -538,8 +532,9 @@ export default {
 
     async create(createData) {
       try {
-        const response = await http.post(`tg/bot/stage/create`, createData);
-        await http.put(`tg/bot/stage/update/callback_url`, { stage_id: response.data.data.insert.id, url_id: createData.url_id })
+        const response = await createStage(createData)
+
+        await updateCallback({ stage_id: response.data.data.insert.id, url_id: createData.url_id })
 
         if (createData.backhand) {
           if (createData.backhand == 'user_state') {
@@ -548,14 +543,14 @@ export default {
               stage_id: response.data.data.insert.id,
               type: 's'
             };
-            await http.post(`tg/bot/stage/back/hand/create`, sendData);
+            await createBack(sendData)
           } else {
             const sendData = {
               id: createData.backhand_id,
               stage_id: response.data.data.insert.id,
               type: 'b'
             };
-            await http.post(`tg/bot/stage/back/hand/create`, sendData);
+            await createBack(sendData)
           }
         }
 
@@ -574,8 +569,8 @@ export default {
         let node = this.editor.getNodeFromId(nodeId);
 
 
-        await http.put(`tg/bot/stage/update`, nodeData);
-        await http.put(`tg/bot/stage/update/callback_url`, { stage_id: nodeData.id, url_id: nodeData.url_id })
+        await updateStage(nodeData)
+        await updateCallback({ stage_id: nodeData.id, url_id: nodeData.url_id })
 
 
         let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
@@ -610,7 +605,7 @@ export default {
 
     async deleteNode(id) {
       try {
-        const response = await http.put(`tg/bot/stage/delete?id=${id}`);
+        await deleteStage(id)
         this.editor.removeNodeId(`node-${id}`)
         await this.rerender()
       } catch (error) {
