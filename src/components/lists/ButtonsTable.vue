@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import http from '../../interceptors/http';
+import { deleteButton, fetchButtons } from '../../api/api.table';
 
 export default {
   props: ['inputValues', 'showStageButtonModal', 'updateTable'],
@@ -100,8 +100,7 @@ export default {
 
     async getTableData() {
       if (this.stage_id) {
-        const response = await http.get(`tg/bot/stage/button/list?stage_id=${this.stage_id}`);
-        this.items = response.data.data;
+        this.items = await fetchButtons(this.stage_id);
       }
 
       for (let item of this.items) {
@@ -112,7 +111,7 @@ export default {
     },
 
     async deleteButton(id) {
-      await http.put(`tg/bot/stage/button/delete?id=${id}`)
+      await deleteButton(id);
       await this.getTableData();
     },
 

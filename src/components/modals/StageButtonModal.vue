@@ -101,8 +101,7 @@
   </div>
 </template>
 <script>
-import { get } from "ace-builds/src-noconflict/ace";
-import http from "../../interceptors/http";
+import { fetchStages, fetchURLs, fetchButtons, fetchInfo, fetchOrder, create, update } from '../../api/api.stagebutton'
 
 export default {
   props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons', 'bot_id', 'user_id'],
@@ -140,7 +139,6 @@ export default {
       this.heading = 'Add button to the stage'
     }
   },
-  async mounted() { },
   methods: {
     clearBackType() {
       this.backType = '';
@@ -153,30 +151,25 @@ export default {
       this.$emit('create')
     },
     async getStages() {
-      const response = await http.get(`v1/bot/stage/list?bot_id=${this.bot_id}`);
-      this.stages = response.data.data;
+      this.stages = await fetchStages(this.bot_id)
     },
 
     async getUrls() {
-      const response = await http.get(`tg/bot/user/callback_urls?user_id=${this.user_id}`)
-      this.urls = response.data.data
+      this.urls = await fetchURLs(this.user_id)
     },
 
     async getButtons() {
       if (this.stage_id) {
-        const response = await http.get(`tg/bot/user/buttons?user_id=${this.user_id}`);
-        this.btns = response.data.data;
+        this.btns = await fetchButtons(this.user_id)
       }
     },
 
     async getInfo() {
-      const response = await http.get(`tg/bot/stage/button?id=${this.stageButtonId}`);
-      this.info = response.data.data;
+      this.info = await fetchInfo(this.stageButtonId)
     },
 
     async getOrder() {
-      const response = await http.get(`tg/bot/stage/button/new/order?stage_id=${this.stage_id}`);
-      this.btn_order = response.data.data;
+      this.btn_order = await fetchOrder(this.stage_id)
     },
 
     async submit() {
@@ -188,10 +181,10 @@ export default {
         back: this.back
       }
       if (this.stageButtonId) {
-        await http.put(`tg/bot/stage/button/update?id=${this.stageButtonId}`, stageButtonData)
+        await update(this.stageButtonId, stageButtonData)
         this.close()
       } else {
-        await http.post(`tg/bot/stage/button/create`, stageButtonData)
+        await create(stageButtonData)
         this.close()
       }
       this.$emit('updateTable')

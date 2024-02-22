@@ -147,10 +147,6 @@ export default {
     }
   },
 
-  async created() {
-    // await this.getStages()
-  },
-
   async mounted() {
     const url = new URLSearchParams(window.location.search);
     this.bot_id = url.get('bot_id');

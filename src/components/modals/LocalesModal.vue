@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import http from "../../interceptors/http";
+import { fetchLocales, fetchBotLocales, updateBotLocale } from "../../api/api.locales";
 
 export default {
   props: ['bot_id', 'user_id'],
@@ -73,27 +73,20 @@ export default {
       this.$emit('close')
     },
     async getLocales() {
-      await http.get(`tg/locales`)
-        .then((response) => {
-          this.locales = response.data.data
-        }, (error) => {
-          console.log(error);
-        });
+      this.locales = await fetchLocales()
     },
 
     async getBotLocales() {
-      const reponse = await http.get(`tg/bot/flow/locales?bot_id=${this.bot_id}`)
-      this.checked = reponse.data.data
+      this.checked = await fetchBotLocales(this.bot_id)
     },
 
     async submit() {
       const data = {
         bot_id: this.bot_id,
-        // langs: "{'8', '9'}"
         langs: `{'${this.checked.map(item => item.id).join("', '")}'}`
       }
 
-      await http.post(`tg/bot/locale/update`, data);
+      await updateBotLocale(data)
       this.$emit('closed')
       this.close();
     }

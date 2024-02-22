@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import http from "../../interceptors/http";
+import { fetchLocales, create } from '../../api/api.text'
 
 export default {
   props: ['showAddTextModal', 'bot_id', 'user_id'],
@@ -75,12 +75,7 @@ export default {
       this.$emit('close')
     },
     async getLocales() {
-      await http.get(`tg/bot/flow/locales?bot_id=${this.bot_id}`)
-        .then((response) => {
-          this.locales = response.data.data
-        }, (error) => {
-          console.log(error);
-        });
+      this.locales = await fetchLocales(this.bot_id)
     },
     async submit() {
       const data = {
@@ -94,7 +89,7 @@ export default {
           delete data.names[key]
         }
       }
-      await http.post(`tg/bot/text/create`, data);
+      await create(data)
       this.$emit('closed')
       this.close();
     }

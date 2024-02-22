@@ -229,7 +229,7 @@ import 'ace-builds/src-noconflict/theme-dawn';
 import ButtonsTable from '../lists/ButtonsTable.vue';
 import Toast from '../notifications/Toast.vue';
 
-import http from '../../interceptors/http';
+import { fetchNum, fetchBackhands, fetchAliases, fetchStages, fetchURLs, checkCode } from '../../api/api.stage';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
@@ -347,8 +347,7 @@ export default {
     },
 
     async getNum() {
-      const response = await http.get(`tg/bot/stage/new?bot_id=${this.bot_id}`)
-      this.num = response.data.data
+      this.num = await fetchNum(this.bot_id)
       if (!this.alias) {
         this.alias = `stage ${this.num}`
       }
@@ -361,7 +360,7 @@ export default {
     async getBackhands() {
       if (this.stage) {
         const id = this.stages.find(item => item.alias == this.stage)?.id
-        const response = await http.get(`tg/bot/stage/availabe/hands?stage_id=${id}`)
+        const response = await fetchBackhands(id)
         this.backhands = response.data.data.buttons
 
         if (response.data.data.user_state) {
@@ -372,8 +371,7 @@ export default {
     },
 
     async getAliases() {
-      const response = await http.get(`v1/bot/user/texts?user_id=${this.user_id}`)
-      this.aliases = response.data.data
+      this.aliases = await fetchAliases(this.user_id)
 
       if (this.inputValues) {
         this.text_alias = this.aliases.find(item => item.id == this.inputValues.text_id)
@@ -381,13 +379,11 @@ export default {
     },
 
     async getStages() {
-      const response = await http.get(`v1/bot/stage/list?bot_id=${this.bot_id}`);
-      this.stages = response.data.data;
+      this.stages = await fetchStages(this.bot_id)
     },
 
     async getUrls() {
-      const response = await http.get(`tg/bot/user/callback_urls?user_id=${this.user_id}`)
-      this.urls = response.data.data
+      this.urls = await fetchURLs(this.user_id)
     },
 
     validateSize() {
@@ -469,7 +465,7 @@ export default {
         code: this.editor.getValue()
       }
 
-      const response = await http.post('https://bot-platon.platon.uz/bot/main/code/check', data)
+      const response = await checkCode(data)
       if (response.data.success) {
         this.output = ''
         this.loading = false

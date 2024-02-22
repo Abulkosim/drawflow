@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-import http from '../../interceptors/http'
+import { createURL } from '../../api/api.url'
 
 export default {
   props: ['showURLModal', 'bot_id', 'user_id'],
@@ -73,7 +73,7 @@ export default {
         description: this.description
       }
 
-      await http.post(`tg/bot/callback/url/create`, data);
+      await createURL(data)
 
       this.$emit('closed')
       this.close();
