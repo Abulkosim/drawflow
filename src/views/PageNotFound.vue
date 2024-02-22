@@ -20,7 +20,7 @@ export default {
     animateNotFound() {
       const notFound = this.$refs.notFound;
       notFound.animate([
-        { transform: 'translateY(-20px)', opacity: 0 },
+        { transform: 'translateY(-10px)', opacity: 0 },
         { transform: 'translateY(0)', opacity: 1 }
       ], {
         duration: 700,
