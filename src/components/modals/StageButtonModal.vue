@@ -5,12 +5,8 @@
         <h3 class="modal-heading">
           {{ heading }}
         </h3>
-        <button @click="close" type="button" class="modal-close" data-modal-toggle="crud-modal">
-          <svg class="svg-close" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-          </svg>
-        </button>
+
+        <CloseButton @close="close" />
 
       </div>
       <ValidationObserver ref="observer" v-slot="{ invalid, validate }">
@@ -87,11 +83,7 @@
           </div>
           <div class="modal-save">
             <button class="submit-button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 256 256">
-                <path
-                  d="M219.31,80,176,36.69A15.86,15.86,0,0,0,164.69,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V91.31A15.86,15.86,0,0,0,219.31,80ZM168,208H88V152h80Zm40,0H184V152a16,16,0,0,0-16-16H88a16,16,0,0,0-16,16v56H48V48H164.69L208,91.31ZM160,72a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h56A8,8,0,0,1,160,72Z">
-                </path>
-              </svg>
+              <SaveIcon />
               <span>Save</span>
             </button>
           </div>
@@ -102,6 +94,8 @@
 </template>
 <script>
 import { fetchStages, fetchURLs, fetchButtons, fetchInfo, fetchOrder, create, update } from '../../api/api.stagebutton'
+import SaveIcon from "../icons/SaveIcon.vue";
+import CloseButton from '../buttons/CloseButton.vue';
 
 export default {
   props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons', 'bot_id', 'user_id'],
@@ -118,25 +112,24 @@ export default {
       urls: [],
       stages: [],
       info: {},
-    }
+    };
   },
-
   async created() {
     await this.getOrder();
-    await this.getStages()
-    await this.getUrls()
+    await this.getStages();
+    await this.getUrls();
     await this.getButtons();
-
     if (this.stageButtonId) {
-      await this.getInfo()
-      this.heading = 'Edit button of the stage'
+      await this.getInfo();
+      this.heading = 'Edit button of the stage';
       this.stage_id = this.info.stage_id;
       this.button_id = this.info.button_id;
       this.btn_order = this.info.btn_order;
       this.is_web_app = this.info.is_web_app;
       this.back = this.info.back;
-    } else {
-      this.heading = 'Add button to the stage'
+    }
+    else {
+      this.heading = 'Add button to the stage';
     }
   },
   methods: {
@@ -145,33 +138,28 @@ export default {
       this.backString = '';
     },
     close() {
-      this.$emit('close')
+      this.$emit('close');
     },
     create() {
-      this.$emit('create')
+      this.$emit('create');
     },
     async getStages() {
-      this.stages = await fetchStages(this.bot_id)
+      this.stages = await fetchStages(this.bot_id);
     },
-
     async getUrls() {
-      this.urls = await fetchURLs(this.user_id)
+      this.urls = await fetchURLs(this.user_id);
     },
-
     async getButtons() {
       if (this.stage_id) {
-        this.btns = await fetchButtons(this.user_id)
+        this.btns = await fetchButtons(this.user_id);
       }
     },
-
     async getInfo() {
-      this.info = await fetchInfo(this.stageButtonId)
+      this.info = await fetchInfo(this.stageButtonId);
     },
-
     async getOrder() {
-      this.btn_order = await fetchOrder(this.stage_id)
+      this.btn_order = await fetchOrder(this.stage_id);
     },
-
     async submit() {
       const stageButtonData = {
         stage_id: this.stage_id,
@@ -179,15 +167,16 @@ export default {
         btn_order: this.btn_order,
         is_web_app: this.is_web_app,
         back: this.back
-      }
+      };
       if (this.stageButtonId) {
-        await update(this.stageButtonId, stageButtonData)
-        this.close()
-      } else {
-        await create(stageButtonData)
-        this.close()
+        await update(this.stageButtonId, stageButtonData);
+        this.close();
       }
-      this.$emit('updateTable')
+      else {
+        await create(stageButtonData);
+        this.close();
+      }
+      this.$emit('updateTable');
     }
   },
   computed: {
@@ -195,27 +184,30 @@ export default {
       get() {
         if (this.backType != 'other') {
           if (this.backType == 'next.' && this.backString != '') {
-            return this.backType + this.stages.find(item => item.alias == this.backString)?.id
-          } else if (this.backType == 'next.' && this.backString == '') {
-            return this.backType
+            return this.backType + this.stages.find(item => item.alias == this.backString)?.id;
           }
-        } else {
+          else if (this.backType == 'next.' && this.backString == '') {
+            return this.backType;
+          }
+        }
+        else {
           if (this.backString.trim() == '') {
-            return null
-          } else {
-            return this.backString
+            return null;
+          }
+          else {
+            return this.backString;
           }
         }
       },
-
       set(newValue) {
         if (newValue) {
           if (newValue.startsWith('next.')) {
-            this.backType = 'next.'
-            this.backString = this.stages.find(item => item.id == newValue.slice(5))?.alias ?? ''
-          } else {
-            this.backType = 'other'
-            this.backString = newValue
+            this.backType = 'next.';
+            this.backString = this.stages.find(item => item.id == newValue.slice(5))?.alias ?? '';
+          }
+          else {
+            this.backType = 'other';
+            this.backString = newValue;
           }
         }
       }
@@ -225,155 +217,23 @@ export default {
     is_web_app(newValue) {
       if (newValue) {
         if (this.backType == 'next.') {
-          this.backString = ''
+          this.backString = '';
         }
-        this.backType = 'other'
-      } else {
+        this.backType = 'other';
+      }
+      else {
         this.backType = '';
         this.backString = '';
       }
     },
     buttons(current) {
-      this.getButtons()
+      this.getButtons();
     }
-  }
+  },
+  components: { SaveIcon, CloseButton }
 }
 </script>
 <style scoped>
 @import '../../assets/modal.css';
-
-
-.modal {
-  max-width: 540px;
-  max-height: calc(100% - 50px)
-}
-
-.modal-content {
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-}
-
-.modal-header {
-  @media (min-width: 768px) {
-    padding: 1rem;
-  }
-}
-
-.form {
-
-  @media (min-width: 768px) {
-    padding: 1rem;
-  }
-}
-
-.cont {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  user-select: none;
-}
-
-.cont input {
-  width: 50%
-}
-
-.check {
-  width: 1/2;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  position: relative;
-  top: 3px;
-}
-
-.check .is_web_app {
-  font-weight: 500;
-  position: relative;
-  top: -3px;
-  font-size: 15px;
-  color: #2e363e;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 42px;
-  height: 24px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #A6AEB6;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked+.slider {
-  background-color: #226CE6;
-}
-
-input:focus+.slider {
-  box-shadow: 0 0 1px #226CE6;
-}
-
-input:checked+.slider:before {
-  -webkit-transform: translateX(18px);
-  -ms-transform: translateX(18px);
-  transform: translateX(18px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 24px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-.clear-button {
-  position: absolute;
-  top: 11px;
-  right: 20px;
-  width: 1.5rem;
-  height: 1.5rem;
-  cursor: pointer;
-  color: #929aa2;
-  background: transparent;
-  border: none;
-  outline: none;
-  border-radius: 50%;
-}
-
-.clear-button:hover {
-  color: #7a7d80;
-}
-
-label {
-  color: #2e363e;
-}
+@import '../../assets/stage.button.css'
 </style>

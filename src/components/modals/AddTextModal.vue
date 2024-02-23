@@ -5,12 +5,8 @@
         <h3 class="modal-heading">
           {{ heading }}
         </h3>
-        <button @click="close" type="button" class="modal-close" data-modal-toggle="crud-modal">
-          <svg class="svg-close" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-          </svg>
-        </button>
+
+        <CloseButton @close="close" />
 
       </div>
       <ValidationObserver ref="observer" v-slot="{ invalid, validate }">
@@ -35,11 +31,7 @@
           </div>
           <div class="modal-save">
             <button @click="submit" class="submit-button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#fff" viewBox="0 0 256 256">
-                <path
-                  d="M219.31,80,176,36.69A15.86,15.86,0,0,0,164.69,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V91.31A15.86,15.86,0,0,0,219.31,80ZM168,208H88V152h80Zm40,0H184V152a16,16,0,0,0-16-16H88a16,16,0,0,0-16,16v56H48V48H164.69L208,91.31ZM160,72a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h56A8,8,0,0,1,160,72Z">
-                </path>
-              </svg>
+              <SaveIcon />
               <span>Save</span>
             </button>
           </div>
@@ -50,6 +42,8 @@
 </template>
 <script>
 import { fetchLocales, create } from '../../api/api.text'
+import SaveIcon from "../icons/SaveIcon.vue";
+import CloseButton from '../buttons/CloseButton.vue';
 
 export default {
   props: ['showAddTextModal', 'bot_id', 'user_id'],
@@ -65,35 +59,35 @@ export default {
         qq: null
       },
       locales: [],
-    }
+    };
   },
   created() {
-    this.getLocales()
+    this.getLocales();
   },
   methods: {
     close() {
-      this.$emit('close')
+      this.$emit('close');
     },
     async getLocales() {
-      this.locales = await fetchLocales(this.bot_id)
+      this.locales = await fetchLocales(this.bot_id);
     },
     async submit() {
       const data = {
         alias: this.alias,
         names: this.names,
         user_id: this.user_id
-      }
-
+      };
       for (let key in data.names) {
         if (data.names[key] === null) {
-          delete data.names[key]
+          delete data.names[key];
         }
       }
-      await create(data)
-      this.$emit('closed')
+      await create(data);
+      this.$emit('closed');
       this.close();
     }
-  }
+  },
+  components: { SaveIcon, CloseButton }
 }
 </script>
 <style scoped>

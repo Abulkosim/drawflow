@@ -1,0 +1,44 @@
+.modal {
+  max-width: 420px;
+  max-height: calc(100% - 80px);
+  z-index: 101;
+}
+
+.modal-content {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.modal-header {
+  @media (min-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+.label {
+  font-size: 16px;
+  position: relative;
+  top: 2px;
+  color: #2e363e;
+}
+
+.check-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form {
+  padding: 24px 16px;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  outline: none;
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  cursor: not-allowed;
+  background-color: #2f3d4ba1;
+}
