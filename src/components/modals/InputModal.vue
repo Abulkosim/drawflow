@@ -12,6 +12,7 @@
         <div class="loading" v-if="loading">
         </div>
       </div>
+
       <ValidationObserver ref="observer" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
@@ -83,16 +84,6 @@
 
             <div v-if="!stageSelected">
               <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
-
-              <!-- <input list="datalist" type="text" name="url" id="url" class="input" autocomplete="off"
-                :required="!stageSelected" v-model="callback_url">
-              <datalist id="datalist" class="datalist">
-                <option v-for="item in urls" :key="item.description">
-                  <span v-if="item.url">{{ item.url }}</span>
-                  <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
-                  <span v-if="item.description">{{ item.description }}</span>
-                </option>
-              </datalist> -->
 
               <div class="buttons">
                 <div class="select-wrapper">
@@ -364,12 +355,10 @@ export default {
           this.backhands.push({ id: response.data.data.user_state, alias: response.data.data.user_state ? 'user_state' : '' })
         }
       }
-
     },
 
     async getAliases() {
       this.aliases = await fetchAliases(this.user_id)
-
       if (this.inputValues) {
         this.text_alias = this.aliases.find(item => item.id == this.inputValues.text_id)
       }
