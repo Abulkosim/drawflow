@@ -3,11 +3,7 @@
     <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
       <BotName v-if="bot_name" :bot_name="bot_name" :link="link" />
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#226ce6" viewBox="0 0 256 256">
-          <path
-            d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z">
-          </path>
-        </svg>
+        <PlusIcon />
         <span>Create</span>
       </div>
 
@@ -86,6 +82,7 @@ import LocalesContextMenu from '../components/menus/LocalesContextMenu.vue'
 import TipDrag from '../components/menus/TipDrag.vue'
 import TipEdit from '../components/menus/TipEdit.vue'
 import BotName from '../components/menus/BotName.vue'
+import PlusIcon from '../components/icons/PlusIcon.vue'
 
 import { updatePos, fetchStages, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage } from '../api/api.drawflow'
 
@@ -105,7 +102,8 @@ export default {
     TipDrag,
     TipEdit,
     URLModal,
-    BotName
+    BotName,
+    PlusIcon
   },
   data() {
     return {
@@ -156,7 +154,7 @@ export default {
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
     if (!this.data.length) {
-      await this.getStages()  
+      await this.getStages()
     }
 
     this.editor.import(this.data);
