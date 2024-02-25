@@ -432,7 +432,7 @@ export default {
 
         setTimeout(() => {
           this.editor.setValue(this.condition)
-        }, 0);
+        }, 0); 
 
         this.id = this.inputValues.id;
         this.stage_order = this.inputValues.stage_order;
