@@ -86,7 +86,7 @@ import PlusIcon from '../components/icons/PlusIcon.vue'
 
 import transformationMixin from '../mixins/transformationMixin'
 
-import { updatePos, fetchStages, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage } from '../api/api.drawflow'
+import { updatePos, fetchStages, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 
 export default {
   name: 'App',
