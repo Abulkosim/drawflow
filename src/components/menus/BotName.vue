@@ -43,6 +43,7 @@ export default {
   justify-content: center;
   gap: 5px;
   font-size: 18px;
+  z-index: 10;
 }
 
 .info-bar a {
