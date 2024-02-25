@@ -212,59 +212,6 @@ export default {
   },
 
   methods: {
-    closeModal() {
-      this.showModal = false;
-    },
-
-    closeTipMenu() {
-      this.showTipMenu = false;
-    },
-
-    closeTipDrag() {
-      this.showTipDrag = false;
-    },
-
-    closeTipEdit() {
-      this.showTipEdit = false;
-    },
-
-    handleRightClick(event) {
-      event.preventDefault();
-
-      if (event.target.closest('.drawflow-node')) {
-        this.showContextMenu = true;
-        this.contextMenuPosition = { x: event.pageX, y: event.pageY };
-      }
-    },
-
-    async rerender() {
-
-      if (!this.data.length) {
-        await this.getStages()
-      }
-
-      this.editor.import(this.data);
-    },
-
-    drag(ev) {
-      ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
-
-      const rect = ev.target.getBoundingClientRect();
-      this.dragOffset.x = ev.clientX - rect.left;
-      this.dragOffset.y = ev.clientY - rect.top;
-    },
-
-    drop(ev) {
-      ev.preventDefault();
-      this.x_ = ev.clientX - this.dragOffset.x;
-      this.y_ = ev.clientY - this.dragOffset.y;
-      this.openInputModal('adding')
-    },
-
-    allowDrop(ev) {
-      ev.preventDefault();
-    },
-
     async openStageButtonModal(id) {
       this.stageButtonId = id;
       this.showStageButtonModal = true;
@@ -309,11 +256,6 @@ export default {
     },
 
     save(nodeData) {
-      const otherData = {
-        urls: nodeData.urls,
-        callback_url: nodeData.callback_url
-      }
-
       if (this.addMode) {
         const createData = {
           alias: nodeData.alias,
@@ -333,9 +275,9 @@ export default {
           url_id: nodeData.url_id
         }
 
-        const data = {}
         this.create(createData)
           .then(() => {
+            console.log(this.x_, this.y_)
             this.showSuccessToast()
           })
           .catch((error) => {
@@ -405,29 +347,10 @@ export default {
       }
     },
 
-    async updateNode(nodeData, otherData) {
-      try {
-        let nodeId = this.selectedNode;
-        let node = this.editor.getNodeFromId(nodeId);
-
-
-        await updateStage(nodeData)
-        await updateCallback({ stage_id: nodeData.id, url_id: nodeData.url_id })
-
-
-        let contentElement = document.querySelector(`#node-${nodeId} .card-devices`);
-        if (node && contentElement) {
-          let newHtml = `<span class="content">${nodeData.alias}</span>`;
-          this.editor.drawflow.drawflow.Home.data[nodeId].html = newHtml;
-          contentElement.innerHTML = newHtml;
-        }
-
-        await this.rerender()
-
-      } catch (error) {
-        console.error(`Error updating node: ${error}`);
-        throw error;
-      }
+    async updateNode(nodeData) {
+      await updateStage(nodeData)
+      await updateCallback({ stage_id: nodeData.id, url_id: nodeData.url_id })
+      await this.rerender()
     },
 
     confirmDeletion() {
@@ -446,16 +369,9 @@ export default {
     },
 
     async deleteNode(id) {
-      try {
-        await deleteStage(id)
-        this.editor.removeNodeId(`node-${id}`)
-        await this.rerender()
-      } catch (error) {
-        console.error(`Error deleting node: ${error}`);
-        throw error;
-      } finally {
-        this.selectedNode = null
-      }
+      await deleteStage(id)
+      await this.rerender()
+      this.selectedNode = null
     },
 
     async openInputModal(info) {
@@ -463,14 +379,7 @@ export default {
       this.addMode = info === 'adding';
 
       if (!this.addMode && this.selectedNode) {
-        let node = this.editor.getNodeFromId(this.selectedNode);
-        const html = this.editor.drawflow.drawflow.Home.data[this.selectedNode].html
-
-        const text = html.replace(/<[^>]*>?/gm, '');
-
-        if (node) {
-          await this.getNode(this.selectedNode)
-        }
+        await this.getNode(this.selectedNode)
       } else {
         this.inputValues = {};
       }
@@ -514,6 +423,58 @@ export default {
 
     closeConfirmationModal() {
       this.showModal = false;
+    },
+
+    closeModal() {
+      this.showModal = false;
+    },
+
+    closeTipMenu() {
+      this.showTipMenu = false;
+    },
+
+    closeTipDrag() {
+      this.showTipDrag = false;
+    },
+
+    closeTipEdit() {
+      this.showTipEdit = false;
+    },
+
+    handleRightClick(event) {
+      event.preventDefault();
+
+      if (event.target.closest('.drawflow-node')) {
+        this.showContextMenu = true;
+        this.contextMenuPosition = { x: event.pageX, y: event.pageY };
+      }
+    },
+
+    async rerender() {
+      if (!this.data.length) {
+        await this.getStages()
+      }
+
+      this.editor.import(this.data);
+    },
+
+    drag(ev) {
+      ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
+
+      const rect = ev.target.getBoundingClientRect();
+      this.dragOffset.x = ev.clientX - rect.left;
+      this.dragOffset.y = ev.clientY - rect.top;
+    },
+
+    drop(ev) {
+      ev.preventDefault();
+      this.x_ = ev.clientX - this.dragOffset.x;
+      this.y_ = ev.clientY - this.dragOffset.y;
+      this.openInputModal('adding')
+    },
+
+    allowDrop(ev) {
+      ev.preventDefault();
     },
 
     showSuccessToast() {
