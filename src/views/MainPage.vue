@@ -83,13 +83,14 @@ import TipOverlay from '../components/elements/TipOverlay.vue';
 
 import transformationMixin from '../mixins/transformationMixin'
 import dragDropMixin from '../mixins/dragDropMixin';
+import mainPageMixin from '../mixins/mainPageMixin';
 
 
 import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 
 export default {
   name: 'App',
-  mixins: [transformationMixin, dragDropMixin],
+  mixins: [transformationMixin, dragDropMixin, mainPageMixin],
   components: {
     ContextMenu,
     ConfirmationModal,
@@ -107,44 +108,6 @@ export default {
     BotName,
     PlusIcon,
     TipOverlay
-  },
-  data() {
-    return {
-      showButtons: false,
-      editor: null,
-      showContextMenu: false,
-      x: {
-        showModal: false,
-        showInputModal: false,
-        showAddButtonModal: false,
-        showAddTextModal: false,
-        showStageButtonModal: false,
-        showLocalesModal: false,
-        showURLModal: false,
-        showTipMenu: true,
-        showTipDrag: true,
-        showTipEdit: true
-      },
-      contextMenuPosition: { x: 0, y: 0 },
-      selectedNode: null,
-      showToast: false,
-      isSuccessful: false,
-      toastMessage: '',
-      addMode: true,
-      updateTable: false,
-      data: [],
-      inputValues: {},
-      x_: null,
-      y_: null,
-      stageButtonId: null,
-      getTexts: true,
-      getCallbacks: true,
-      buttons: true,
-      bot_id: null,
-      user_id: null,
-      bot_name: null,
-      link: null
-    }
   },
 
   async mounted() {
@@ -400,28 +363,6 @@ export default {
       this.x.showLocalesModal = true;
     },
 
-    openModal(modalName) {
-      this.x[modalName] = true;
-    },
-
-    closeModal(modalName) {
-      this.x[modalName] = false;
-    },
-
-    openConfirmationModal() {
-      this.x.showModal = true;
-      this.x.showContextMenu = false
-    },
-
-    handleRightClick(event) {
-      event.preventDefault();
-
-      if (event.target.closest('.drawflow-node')) {
-        this.showContextMenu = true;
-        this.contextMenuPosition = { x: event.pageX, y: event.pageY };
-      }
-    },
-
     async rerender() {
       if (!this.data.length) {
         await this.getStages()
@@ -429,26 +370,6 @@ export default {
 
       this.editor.import(this.data);
     },
-
-    showSuccessToast() {
-      this.toastMessage = 'Operation suceeded!';
-      this.isSuccessful = true;
-      this.showToast = true;
-
-      setTimeout(() => {
-        this.showToast = false;
-      }, 2000);
-    },
-
-    showFailedToast(error) {
-      this.toastMessage = 'Oops! Something went wrong.';
-      this.isSuccessful = false;
-      this.showToast = true;
-
-      setTimeout(() => {
-        this.showToast = false;
-      }, 2000);
-    }
   },
 }
 </script>
