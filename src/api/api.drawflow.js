@@ -19,6 +19,16 @@ export async function fetchStages(bot_id) {
   }
 }
 
+export async function fetchBotInfo(bot_id) {
+  try {
+    const response = await http.get(`tg/bot/info?bot=${bot_id}`)
+    return response.data.data
+  } catch (error) {
+    console.error('Failed to fetch bot info:', error)
+    throw error
+  }
+}
+
 export async function createStage(data) {
   try {
     return http.post('tg/bot/stage/create', data)

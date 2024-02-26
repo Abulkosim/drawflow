@@ -7,7 +7,8 @@
         <span>Create</span>
       </div>
 
-      <TipOverlay :showTipMenu="x.showTipMenu" :showTipDrag="x.showTipDrag" :showTipEdit="x.showTipEdit" @close="closeModal" />
+      <TipOverlay :showTipMenu="x.showTipMenu" :showTipDrag="x.showTipDrag" :showTipEdit="x.showTipEdit"
+        @close="closeModal" />
     </div>
 
     <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
@@ -82,7 +83,7 @@ import TipOverlay from '../components/elements/TipOverlay.vue';
 
 import transformationMixin from '../mixins/transformationMixin'
 
-import { updatePos, fetchStages, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
+import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 
 export default {
   name: 'App',
@@ -223,8 +224,10 @@ export default {
 
     async getStages() {
       const apiData = await fetchStages(this.bot_id);
-      this.bot_name = apiData[0].bot_name;
-      this.link = apiData[0].link;
+      const botInfo = await fetchBotInfo(this.bot_id);
+      console.log(botInfo)
+      this.bot_name = botInfo.name;
+      this.link = botInfo.link;
 
       const [locales, nodeConnections] = await Promise.all([
         fetchBotLocales(this.bot_id),

@@ -1,5 +1,5 @@
 <template>
-  <div class="info-bar">
+  <div class="info-bar" v-if="bot_name">
     <TelegramIcon />
     <a :href="link" target="_blank">
       <p>{{ bot_name }}</p>
@@ -14,12 +14,10 @@ export default {
   name: "BotName",
   props: {
     bot_name: {
-      type: String,
-      required: true,
+      type: String
     },
     link: {
-      type: String,
-      required: true,
+      type: String
     },
   },
   components: { TelegramIcon }
