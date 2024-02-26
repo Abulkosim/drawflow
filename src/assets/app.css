@@ -196,3 +196,13 @@ div .node-drag:hover svg {
   background: white;
   color: #8e4fcb;
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}

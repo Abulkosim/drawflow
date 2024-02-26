@@ -8,13 +8,14 @@
       </div>
 
       <transition name="fade">
-        <TipMenu @close="closeTipMenu" v-if="showTipMenu" />
+        <TipMenu @close="closeModal('showTipMenu')" v-if="x.showTipMenu" />
       </transition>
       <transition name="fade">
-        <TipDrag @close="closeTipDrag" v-if="showTipDrag" :showTipMenu="showTipMenu" />
+        <TipDrag @close="closeModal('showTipDrag')" v-if="x.showTipDrag" :showTipMenu="x.showTipMenu" />
       </transition>
       <transition name="fade">
-        <TipEdit @close="closeTipEdit" v-if="showTipEdit" :showTipMenu="showTipMenu" :showTipDrag="showTipDrag" />
+        <TipEdit @close="closeModal('showTipEdit')" v-if="x.showTipEdit" :showTipMenu="x.showTipMenu"
+          :showTipDrag="x.showTipDrag" />
       </transition>
     </div>
 
@@ -24,42 +25,45 @@
     <LocalesContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @editNode="openLocaleModal"
       :node="selectedNode" />
 
-    <div v-if="showModal" class="overlay"></div>
+    <div v-if="x.showModal" class="overlay"></div>
 
-    <ConfirmationModal :showModal="showModal" @close="closeConfirmationModal" @confirm="confirmDeletion" />
+    <ConfirmationModal :showModal="x.showModal" @close="closeModal('showModal')" @confirm="confirmDeletion" />
 
     <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
 
-    <div v-if="showInputModal && !showStageButtonModal && !showAddButtonModal && !showAddTextModal" class="overlay"></div>
+    <div v-if="x.showInputModal && !x.showStageButtonModal && !x.showAddButtonModal && !x.showAddTextModal"
+      class="overlay"></div>
 
-    <InputModal v-if="showInputModal" :showModal="showInputModal" :addMode="addMode" :inputValues="inputValues"
+    <InputModal v-if="x.showInputModal" :showModal="x.showInputModal" :addMode="addMode" :inputValues="inputValues"
       :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :getCallbacks="getCallbacks" :updateTable="updateTable"
-      :showStageButtonModal="showStageButtonModal" @close="closeInputModal" @save="save"
-      @openStageButtonModal="openStageButtonModal" @create="showAddTextModal = true" @createURL="showURLModal = true" />
+      :showStageButtonModal="x.showStageButtonModal" @close="closeModal('showInputModal')" @save="save"
+      @openStageButtonModal="openStageButtonModal" @create="x.showAddTextModal = true"
+      @createURL="x.showURLModal = true" />
 
-    <div v-if="showStageButtonModal && !showAddButtonModal" class="overlay"></div>
+    <div v-if="x.showStageButtonModal && !x.showAddButtonModal" class="overlay"></div>
 
-    <StageButtonModal v-if="showStageButtonModal" :showStageButtonModal="showStageButtonModal" :inputValues="inputValues"
-      :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId" @close="closeStageButtonModal"
-      @updateTable="updateTable = !updateTable" @create="showAddButtonModal = true" />
+    <StageButtonModal v-if="x.showStageButtonModal" :showStageButtonModal="x.showStageButtonModal"
+      :inputValues="inputValues" :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId"
+      @close="closeModal('showStageButtonModal')" @updateTable="updateTable = !updateTable"
+      @create="x.showAddButtonModal = true" />
 
-    <div v-if="showAddButtonModal" class="overlay high-index"></div>
+    <div v-if="x.showAddButtonModal" class="overlay high-index"></div>
 
-    <AddButtonModal v-if="showAddButtonModal" :showAddButtonModal="showAddButtonModal" @close="closeAddButtonModal"
-      :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
+    <AddButtonModal v-if="x.showAddButtonModal" :showAddButtonModal="x.showAddButtonModal"
+      @close="closeModal('showAddButtonModal')" :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
 
-    <div v-if="showAddTextModal || showURLModal" class="overlay high-index"></div>
+    <div v-if="x.showAddTextModal || x.showURLModal" class="overlay high-index"></div>
 
-    <URLModal v-if="showURLModal" :showURLModal="showURLModal" @close="closeURLModal"
+    <URLModal v-if="x.showURLModal" :showURLModal="x.showURLModal" @close="closeModal('showURLModal')"
       @closed="getCallbacks = !getCallbacks" :bot_id="bot_id" :user_id="user_id" />
 
 
-    <AddTextModal v-if="showAddTextModal" :showAddTextModal="showAddTextModal" @close="closeTextModal"
+    <AddTextModal v-if="x.showAddTextModal" :showAddTextModal="x.showAddTextModal" @close="closeModal('showAddTextModal')"
       @closed="getTexts = !getTexts" :bot_id="bot_id" :user_id="user_id" />
 
-    <div v-if="showLocalesModal" class="overlay"></div>
+    <div v-if="x.showLocalesModal" class="overlay"></div>
 
-    <LocalesModal v-if="showLocalesModal" @close="closeLocaleModal" @closed="rerender" :bot_id="bot_id"
+    <LocalesModal v-if="x.showLocalesModal" @close="closeModal('showLocalesModal')" @closed="rerender" :bot_id="bot_id"
       :user_id="user_id" />
   </div>
 </template>
@@ -113,16 +117,18 @@ export default {
       showButtons: false,
       editor: null,
       showContextMenu: false,
-      showModal: false,
-      showInputModal: false,
-      showAddButtonModal: false,
-      showAddTextModal: false,
-      showStageButtonModal: false,
-      showLocalesModal: false,
-      showURLModal: false,
-      showTipMenu: true,
-      showTipDrag: true,
-      showTipEdit: true,
+      x: {
+        showModal: false,
+        showInputModal: false,
+        showAddButtonModal: false,
+        showAddTextModal: false,
+        showStageButtonModal: false,
+        showLocalesModal: false,
+        showURLModal: false,
+        showTipMenu: true,
+        showTipDrag: true,
+        showTipEdit: true
+      },
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
       showToast: false,
@@ -188,20 +194,20 @@ export default {
       if (event.key === 'Escape') {
         if (this.showContextMenu) {
           this.showContextMenu = false;
-        } else if (this.showLocalesModal) {
-          this.showLocalesModal = false;
-        } else if (this.showAddButtonModal) {
-          this.showAddButtonModal = false;
-        } else if (this.showAddTextModal) {
-          this.showAddTextModal = false;
-        } else if (this.showURLModal) {
-          this.showURLModal = false;
-        } else if (this.showStageButtonModal) {
-          this.showStageButtonModal = false;
-        } else if (this.showInputModal) {
-          this.showInputModal = false;
-        } else if (this.showModal) {
-          this.showModal = false;
+        } else if (this.x.showLocalesModal) {
+          this.x.showLocalesModal = false;
+        } else if (this.x.showAddButtonModal) {
+          this.x.showAddButtonModal = false;
+        } else if (this.x.showAddTextModal) {
+          this.x.showAddTextModal = false;
+        } else if (this.x.showURLModal) {
+          this.x.showURLModal = false;
+        } else if (this.x.showStageButtonModal) {
+          this.x.showStageButtonModal = false;
+        } else if (this.x.showInputModal) {
+          this.x.showInputModal = false;
+        } else if (this.x.showModal) {
+          this.x.showModal = false;
         }
       }
     });
@@ -214,7 +220,7 @@ export default {
   methods: {
     async openStageButtonModal(id) {
       this.stageButtonId = id;
-      this.showStageButtonModal = true;
+      this.x.showStageButtonModal = true;
     },
 
     async updatePosition(nodeData) {
@@ -284,7 +290,7 @@ export default {
             this.showFailedToast(error)
           })
           .finally(() => {
-            this.closeInputModal();
+            this.closeModal('showInputModal');
           });
       } else {
         const editData = {
@@ -309,7 +315,7 @@ export default {
             this.showFailedToast(error)
           })
           .finally(() => {
-            this.closeInputModal();
+            this.closeModal('showInputModal');
           });
       }
     },
@@ -363,7 +369,7 @@ export default {
             this.showFailedToast(error)
           })
           .finally(() => {
-            this.closeConfirmationModal();
+            this.closeModal('showModal');
           });
       }
     },
@@ -384,61 +390,25 @@ export default {
         this.inputValues = {};
       }
 
-      this.showInputModal = true;
+      this.x.showInputModal = true;
     },
 
     async openLocaleModal() {
       this.showContextMenu = false;
-      this.showLocalesModal = true;
+      this.x.showLocalesModal = true;
     },
 
-    closeInputModal() {
-      this.showInputModal = false;
+    openModal(modalName) {
+      this.x[modalName] = true;
     },
 
-    closeAddButtonModal() {
-      this.showAddButtonModal = false;
-    },
-
-    closeTextModal() {
-      this.showAddTextModal = false;
-    },
-
-    closeURLModal() {
-      this.showURLModal = false;
-    },
-
-    closeLocaleModal() {
-      this.showLocalesModal = false;
-    },
-
-    closeStageButtonModal() {
-      this.showStageButtonModal = false;
+    closeModal(modalName) {
+      this.x[modalName] = false;
     },
 
     openConfirmationModal() {
-      this.showModal = true;
-      this.showContextMenu = false
-    },
-
-    closeConfirmationModal() {
-      this.showModal = false;
-    },
-
-    closeModal() {
-      this.showModal = false;
-    },
-
-    closeTipMenu() {
-      this.showTipMenu = false;
-    },
-
-    closeTipDrag() {
-      this.showTipDrag = false;
-    },
-
-    closeTipEdit() {
-      this.showTipEdit = false;
+      this.x.showModal = true;
+      this.x.showContextMenu = false
     },
 
     handleRightClick(event) {
@@ -502,14 +472,4 @@ export default {
 
 <style>
 @import '../assets/app.css';
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
 </style>
