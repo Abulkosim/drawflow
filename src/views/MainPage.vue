@@ -7,16 +7,7 @@
         <span>Create</span>
       </div>
 
-      <transition name="fade">
-        <TipMenu @close="closeModal('showTipMenu')" v-if="x.showTipMenu" />
-      </transition>
-      <transition name="fade">
-        <TipDrag @close="closeModal('showTipDrag')" v-if="x.showTipDrag" :showTipMenu="x.showTipMenu" />
-      </transition>
-      <transition name="fade">
-        <TipEdit @close="closeModal('showTipEdit')" v-if="x.showTipEdit" :showTipMenu="x.showTipMenu"
-          :showTipDrag="x.showTipDrag" />
-      </transition>
+      <TipOverlay :showTipMenu="x.showTipMenu" :showTipDrag="x.showTipDrag" :showTipEdit="x.showTipEdit" @close="closeModal" />
     </div>
 
     <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
@@ -87,6 +78,7 @@ import TipDrag from '../components/menus/TipDrag.vue'
 import TipEdit from '../components/menus/TipEdit.vue'
 import BotName from '../components/menus/BotName.vue'
 import PlusIcon from '../components/icons/PlusIcon.vue'
+import TipOverlay from '../components/elements/TipOverlay.vue';
 
 import transformationMixin from '../mixins/transformationMixin'
 
@@ -110,7 +102,8 @@ export default {
     TipEdit,
     URLModal,
     BotName,
-    PlusIcon
+    PlusIcon,
+    TipOverlay
   },
   data() {
     return {
