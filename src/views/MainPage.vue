@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="drawflow" @drop="drop($event)" @dragover="allowDrop($event)">
+    <div id="drawflow" @drop="dropped" @dragover="allowDrop($event)">
       <BotName v-if="bot_name" :bot_name="bot_name" :link="link" />
       <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
         <PlusIcon />
@@ -82,12 +82,14 @@ import PlusIcon from '../components/icons/PlusIcon.vue'
 import TipOverlay from '../components/elements/TipOverlay.vue';
 
 import transformationMixin from '../mixins/transformationMixin'
+import dragDropMixin from '../mixins/dragDropMixin';
+
 
 import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 
 export default {
   name: 'App',
-  mixins: [transformationMixin],
+  mixins: [transformationMixin, dragDropMixin],
   components: {
     ContextMenu,
     ConfirmationModal,
@@ -134,7 +136,6 @@ export default {
       inputValues: {},
       x_: null,
       y_: null,
-      dragOffset: { x: 0, y: 0 },
       stageButtonId: null,
       getTexts: true,
       getCallbacks: true,
@@ -205,6 +206,7 @@ export default {
         }
       }
     });
+
   },
 
   beforeDestroy() {
@@ -212,6 +214,13 @@ export default {
   },
 
   methods: {
+    dropped(event) {
+      event.preventDefault();
+      this.x_ = event.clientX - this.dragOffset.x;
+      this.y_ = event.clientY - this.dragOffset.y;
+      this.openInputModal('adding')
+    },
+
     async openStageButtonModal(id) {
       this.stageButtonId = id;
       this.x.showStageButtonModal = true;
@@ -225,7 +234,6 @@ export default {
     async getStages() {
       const apiData = await fetchStages(this.bot_id);
       const botInfo = await fetchBotInfo(this.bot_id);
-      console.log(botInfo)
       this.bot_name = botInfo.name;
       this.link = botInfo.link;
 
@@ -276,10 +284,8 @@ export default {
           stage_id: nodeData.stage_id,
           url_id: nodeData.url_id
         }
-
         this.create(createData)
           .then(() => {
-            console.log(this.x_, this.y_)
             this.showSuccessToast()
           })
           .catch((error) => {
@@ -422,25 +428,6 @@ export default {
       }
 
       this.editor.import(this.data);
-    },
-
-    drag(ev) {
-      ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
-
-      const rect = ev.target.getBoundingClientRect();
-      this.dragOffset.x = ev.clientX - rect.left;
-      this.dragOffset.y = ev.clientY - rect.top;
-    },
-
-    drop(ev) {
-      ev.preventDefault();
-      this.x_ = ev.clientX - this.dragOffset.x;
-      this.y_ = ev.clientY - this.dragOffset.y;
-      this.openInputModal('adding')
-    },
-
-    allowDrop(ev) {
-      ev.preventDefault();
     },
 
     showSuccessToast() {
