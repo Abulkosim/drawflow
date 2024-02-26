@@ -6,7 +6,6 @@
           {{ heading }}
           <span v-if="!addMode" class="corner">{{ this.id }}</span>
         </h3>
-
         <CloseButton @close="close" />
 
         <div class="loading" v-if="loading">
@@ -206,10 +205,6 @@
   </div>
 </template>
 <script>
-import ace from 'ace-builds/src-noconflict/ace';
-import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/theme-dawn';
-
 import ButtonsTable from '../lists/ButtonsTable.vue';
 import Toast from '../notifications/Toast.vue';
 
@@ -217,8 +212,13 @@ import { fetchNum, fetchBackhands, fetchAliases, fetchStages, fetchURLs, checkCo
 import SaveIcon from "../icons/SaveIcon.vue";
 import CloseButton from '../buttons/CloseButton.vue';
 
+import userStateMixin from '../../mixins/userStateMixin';
+import aceEditorMixin from '../../mixins/aceEditorMixin';
+import inputFormStateMixin from '../../mixins/inputFormStateMixin';
+
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
+  mixins: [userStateMixin, aceEditorMixin, inputFormStateMixin],
   components: {
     ButtonsTable,
     Toast,
@@ -226,67 +226,9 @@ export default {
     CloseButton
   },
   data() {
-    return {
-      heading: 'Add stage',
-      alias: '',
-      stage_order: '',
-      selected: 'STAGE',
-      url_id: null,
-      callback_url: null,
-      stateType: '',
-      stateString: '',
-      btn_type: 'INLINE',
-      conditionType: '',
-      isDisabled: false,
-      btn_sizes: '3',
-      error: false,
-      editor: null,
-      editorVisible: true,
-      output: '',
-      loading: false,
-      text_alias: '',
-      text_id: '',
-      id: '',
-      condition: null,
-      aliases: [],
-      urls: [],
-      stages: [],
-      num: '',
-      backhands: [],
-      stage: '',
-      backhand: ''
-    }
+    return {}
   },
   computed: {
-    user_state: {
-      get() {
-        if (this.stateType != 'other') {
-          if (this.stateType == 'next.' && this.stateString != '') {
-            return this.stateType + this.stages.find(item => item.alias == this.stateString)?.id
-          } else {
-            return this.stateType + this.stateString
-          }
-        } else {
-          return this.stateString
-        }
-      },
-
-      set(newValue) {
-        if (newValue) {
-          if (newValue.startsWith('next.')) {
-            this.stateType = 'next.'
-            this.stateString = this.stages.find(item => item.id == newValue.slice(5))?.alias ?? ''
-          } else if (newValue.startsWith('url.')) {
-            this.stateType = 'url.'
-            this.stateString = newValue.slice(4)
-          } else {
-            this.stateType = 'other'
-            this.stateString = newValue
-          }
-        }
-      }
-    },
-
     stageSelected: function () {
       return this.selected == 'STAGE'
     }
@@ -319,11 +261,6 @@ export default {
 
     clearTextAlias() {
       this.text_alias = ''
-    },
-
-    clearStateType() {
-      this.stateType = ''
-      this.stateString = ''
     },
 
     create() {
@@ -387,19 +324,6 @@ export default {
       }
     },
 
-    initializeAceEditor() {
-      this.$nextTick(() => {
-        if (this.editor) {
-          this.editor.destroy();
-        }
-        this.editor = ace.edit(this.$refs.editor);
-        this.editor.session.setMode('ace/mode/python');
-        this.editor.setTheme('ace/theme/dawn');
-        this.editor.renderer.setPadding(10);
-        this.editor.session.setUseWrapMode(true);
-      });
-    },
-
     save() {
       this.$emit('save', {
         id: this.id,
@@ -432,7 +356,7 @@ export default {
 
         setTimeout(() => {
           this.editor.setValue(this.condition)
-        }, 0); 
+        }, 0);
 
         this.id = this.inputValues.id;
         this.stage_order = this.inputValues.stage_order;
