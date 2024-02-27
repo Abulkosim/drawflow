@@ -45,10 +45,8 @@ export default {
     }
     this.user_id = url.get('user_id');
     
-    
-    
     window.addEventListener('keydown', this.closeModalsOnEscape);
-
+    
     window.addEventListener('click', () => {
       this.showContextMenu = false;
     });
@@ -86,7 +84,6 @@ export default {
 
     handleRightClick(event) {
       event.preventDefault();
-
       if (event.target.closest('.drawflow-node')) {
         this.showContextMenu = true;
         this.contextMenuPosition = { x: event.pageX, y: event.pageY };
