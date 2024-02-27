@@ -40,7 +40,7 @@
                 </div>
               </div>
               <span v-if="errors[0]" class="output">Required field!</span>
-            </div>
+            </div>  
 
             <div class="state">
               <div class="state-type">
