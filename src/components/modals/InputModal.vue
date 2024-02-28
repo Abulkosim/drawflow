@@ -139,16 +139,19 @@ export default {
       },
       immediate: true
     },
+
     showInputModal(newValue) {
       if (newValue && !this.addMode) {
         this.editData();
       }
     },
+
     inputValues(newData) {
       if (newData) {
         this.editData();
       }
     },
+
     btn_type(current) {
       if (current == 'LOCATION' || current == 'CONTACT') {
         this.stateType = 'next.'
@@ -159,6 +162,7 @@ export default {
         this.stateString = 'reply'
       }
     },
+
     conditionType(current) {
       if (this.editor) {
         if (current == 'input') {
@@ -168,17 +172,21 @@ export default {
         }
       }
     },
+
     condition(current) {
       if (this.editor) {
         this.editor.setValue(current)
       }
     },
+
     stage(current) {
       this.getBackhands()
     },
+
     getTexts(current) {
       this.getAliases()
     },
+
     getCallbacks(current) {
       this.getUrls()
     }
