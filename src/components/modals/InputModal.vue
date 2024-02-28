@@ -1,3 +1,192 @@
+
+<script>
+import ButtonsTable from '../lists/ButtonsTable.vue';
+import Toast from '../notifications/Toast.vue';
+import { fetchNum, fetchBackhands, fetchAliases, fetchStages, fetchURLs, checkCode } from '../../api/api.stage';
+import SaveIcon from "../icons/SaveIcon.vue";
+import CloseButton from '../buttons/CloseButton.vue';
+import userStateMixin from '../../mixins/userStateMixin';
+import aceEditorMixin from '../../mixins/aceEditorMixin';
+import inputFormStateMixin from '../../mixins/inputFormStateMixin';
+import toggleEditorMixin from '../../mixins/toggleEditorMixin';
+
+export default {
+  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
+  mixins: [userStateMixin, aceEditorMixin, inputFormStateMixin, toggleEditorMixin],
+  components: {
+    ButtonsTable,
+    Toast,
+    SaveIcon,
+    CloseButton
+  },
+  data() {
+    return {}
+  },
+  computed: {
+    stageSelected: function () {
+      return this.selected == 'STAGE'
+    }
+  },
+
+  async created() {
+    await this.getAliases()
+    await this.getUrls()
+    await this.getStages()
+    await this.getNum()
+    await this.getBackhands()
+
+    if (this.addMode) {
+      this.heading = 'Add stage'
+    } else {
+      this.heading = 'Edit stage'
+      this.editData()
+    }
+  },
+
+  async mounted() {
+    this.initializeAceEditor()
+  },
+
+  methods: {
+    openStageButtonModal(id) {
+      this.$emit('openStageButtonModal', id)
+    },
+
+    clearTextAlias() {
+      this.text_alias = ''
+    },
+
+    create() {
+      this.$emit('create')
+    },
+
+    createURL() {
+      this.$emit('createURL')
+    },
+
+    async getNum() {
+      this.num = await fetchNum(this.bot_id)
+      if (!this.alias) {
+        this.alias = `stage ${this.num}`
+      }
+
+      if (!this.stage_order) {
+        this.stage_order = this.num * 10
+      }
+    },
+
+    async getBackhands() {
+      if (this.stage) {
+        const id = this.stages.find(item => item.alias == this.stage)?.id
+        const response = await fetchBackhands(id)
+        this.backhands = response.data.data.buttons
+        if (response.data.data.user_state) {
+          this.backhands.push({ id: response.data.data.user_state, alias: response.data.data.user_state ? 'user_state' : '' })
+        }
+      }
+    },
+
+    async getAliases() {
+      this.aliases = await fetchAliases(this.user_id)
+      if (this.inputValues) {
+        this.text_alias = this.aliases.find(item => item.id == this.inputValues.text_id)
+      }
+    },
+
+    async getStages() {
+      this.stages = await fetchStages(this.bot_id)
+    },
+
+    async getUrls() {
+      this.urls = await fetchURLs(this.user_id)
+    },
+
+    validateSize() {
+      const regex = /^\d+(\:\d+)?(\:\d+)?$/;
+      this.error = !regex.test(this.btn_sizes);
+    },
+
+
+    async submit() {
+      this.loading = true
+
+      const data = {
+        code: this.editor.getValue()
+      }
+
+      const response = await checkCode(data)
+      if (response.data.success) {
+        this.output = ''
+        this.loading = false
+      } else {
+        this.output = response.data.message
+        this.loading = false
+        return
+      }
+
+      this.save();
+      this.close();
+    },
+
+    close() {
+      this.$emit('close')
+    },
+  },
+  watch: {
+    inputValues: {
+      handler(newValue) {
+        this.inputValues = { ...newValue }
+      },
+      immediate: true
+    },
+    showInputModal(newValue) {
+      if (newValue && !this.addMode) {
+        this.editData();
+      }
+    },
+    inputValues(newData) {
+      if (newData) {
+        this.editData();
+      }
+    },
+    btn_type(current) {
+      if (current == 'LOCATION' || current == 'CONTACT') {
+        this.stateType = 'next.'
+        this.isDisabled = true
+      } else if (current == 'REPLY') {
+        this.stateType = 'other'
+        this.isDisabled = true
+        this.stateString = 'reply'
+      }
+    },
+    conditionType(current) {
+      if (this.editor) {
+        if (current == 'input') {
+          this.editor.setValue('user["attributes"]["full_name"] = msg_data\nupdate_user(id=user["id"], attributes=user["attributes"])')
+        } else if (current == 'update') {
+          this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
+        }
+      }
+    },
+    condition(current) {
+      if (this.editor) {
+        this.editor.setValue(current)
+      }
+    },
+    stage(current) {
+      this.getBackhands()
+    },
+    getTexts(current) {
+      this.getAliases()
+    },
+    getCallbacks(current) {
+      this.getUrls()
+    }
+  }
+}
+
+</script>
+
 <template>
   <div class="modal">
     <div class="modal-content">
@@ -204,195 +393,7 @@
     </div>
   </div>
 </template>
-<script>
-import ButtonsTable from '../lists/ButtonsTable.vue';
-import Toast from '../notifications/Toast.vue';
 
-import { fetchNum, fetchBackhands, fetchAliases, fetchStages, fetchURLs, checkCode } from '../../api/api.stage';
-import SaveIcon from "../icons/SaveIcon.vue";
-import CloseButton from '../buttons/CloseButton.vue';
-
-import userStateMixin from '../../mixins/userStateMixin';
-import aceEditorMixin from '../../mixins/aceEditorMixin';
-import inputFormStateMixin from '../../mixins/inputFormStateMixin';
-import toggleEditorMixin from '../../mixins/toggleEditorMixin';
-
-export default {
-  props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
-  mixins: [userStateMixin, aceEditorMixin, inputFormStateMixin, toggleEditorMixin],
-  components: {
-    ButtonsTable,
-    Toast,
-    SaveIcon,
-    CloseButton
-  },
-  data() {
-    return {}
-  },
-  computed: {
-    stageSelected: function () {
-      return this.selected == 'STAGE'
-    }
-  },
-
-  async created() {
-    await this.getAliases()
-    await this.getUrls()
-    await this.getStages()
-    await this.getNum()
-    await this.getBackhands()
-
-    if (this.addMode) {
-      this.heading = 'Add stage'
-    } else {
-      this.heading = 'Edit stage'
-      this.editData()
-    }
-  },
-
-  async mounted() {
-    this.initializeAceEditor()
-  },
-
-  methods: {
-    openStageButtonModal(id) {
-      this.$emit('openStageButtonModal', id)
-    },
-
-    clearTextAlias() {
-      this.text_alias = ''
-    },
-
-    create() {
-      this.$emit('create')
-    },
-
-    createURL() {
-      this.$emit('createURL')
-    },
-
-    async getNum() {
-      this.num = await fetchNum(this.bot_id)
-      if (!this.alias) {
-        this.alias = `stage ${this.num}`
-      }
-
-      if (!this.stage_order) {
-        this.stage_order = this.num * 10
-      }
-    },
-
-    async getBackhands() {
-      if (this.stage) {
-        const id = this.stages.find(item => item.alias == this.stage)?.id
-        const response = await fetchBackhands(id)
-        this.backhands = response.data.data.buttons
-        if (response.data.data.user_state) {
-          this.backhands.push({ id: response.data.data.user_state, alias: response.data.data.user_state ? 'user_state' : '' })
-        }
-      }
-    },
-
-    async getAliases() {
-      this.aliases = await fetchAliases(this.user_id)
-      if (this.inputValues) {
-        this.text_alias = this.aliases.find(item => item.id == this.inputValues.text_id)
-      }
-    },
-
-    async getStages() {
-      this.stages = await fetchStages(this.bot_id)
-    },
-
-    async getUrls() {
-      this.urls = await fetchURLs(this.user_id)
-    },
-
-    validateSize() {
-      const regex = /^\d+(\:\d+)?(\:\d+)?$/;
-      this.error = !regex.test(this.btn_sizes);
-    },
-
-
-    async submit() {
-      this.loading = true
-
-      const data = {
-        code: this.editor.getValue()
-      }
-
-      const response = await checkCode(data)
-      if (response.data.success) {
-        this.output = ''
-        this.loading = false
-      } else {
-        this.output = response.data.message
-        this.loading = false
-        return
-      }
-
-      this.save();
-      this.close();
-    },
-
-    close() {
-      this.$emit('close')
-    },
-  },
-  watch: {
-    inputValues: {
-      handler(newValue) {
-        this.inputValues = { ...newValue }
-      },
-      immediate: true
-    },
-    showInputModal(newValue) {
-      if (newValue && !this.addMode) {
-        this.editData();
-      }
-    },
-    inputValues(newData) {
-      if (newData) {
-        this.editData();
-      }
-    },
-    btn_type(current) {
-      if (current == 'LOCATION' || current == 'CONTACT') {
-        this.stateType = 'next.'
-        this.isDisabled = true
-      } else if (current == 'REPLY') {
-        this.stateType = 'other'
-        this.isDisabled = true
-        this.stateString = 'reply'
-      }
-    },
-    conditionType(current) {
-      if (this.editor) {
-        if (current == 'input') {
-          this.editor.setValue('user["attributes"]["full_name"] = msg_data\nupdate_user(id=user["id"], attributes=user["attributes"])')
-        } else if (current == 'update') {
-          this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
-        }
-      }
-    },
-    condition(current) {
-      if (this.editor) {
-        this.editor.setValue(current)
-      }
-    },
-    stage(current) {
-      this.getBackhands()
-    },
-    getTexts(current) {
-      this.getAliases()
-    },
-    getCallbacks(current) {
-      this.getUrls()
-    }
-  }
-}
-
-</script>
 <style scoped>
 @import '../../assets/modal.css';
 
