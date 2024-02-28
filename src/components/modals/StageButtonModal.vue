@@ -21,6 +21,7 @@
                     <option v-for="button in btns" :key="button.id" :value="button.id">{{ button.name }}</option>
                   </select>
                 </div>
+
                 <button class="create-button" @click.stop.prevent="create" title="Create button">
                   <span>+</span>
                 </button>
@@ -127,8 +128,7 @@ export default {
       this.btn_order = this.info.btn_order;
       this.is_web_app = this.info.is_web_app;
       this.back = this.info.back;
-    }
-    else {
+    } else {
       this.heading = 'Add button to the stage';
     }
   },

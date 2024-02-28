@@ -1,65 +1,3 @@
-<template>
-  <div>
-    <div id="drawflow" @drop="dropped" @dragover="allowDrop($event)">
-      <BotName v-if="bot_name" :bot_name="bot_name" :link="link" />
-      <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
-        <PlusIcon />
-        <span>Create</span>
-      </div>
-
-      <TipOverlay :showTipMenu="x.showTipMenu" :showTipDrag="x.showTipDrag" :showTipEdit="x.showTipEdit"
-        @close="closeModal" />
-    </div>
-
-    <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
-      @editNode="openInputModal" :node="selectedNode" />
-
-    <LocalesContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @editNode="openLocaleModal"
-      :node="selectedNode" />
-
-    <div v-if="x.showModal" class="overlay"></div>
-
-    <ConfirmationModal :showModal="x.showModal" @close="closeModal('showModal')" @confirm="confirmDeletion" />
-
-    <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
-
-    <div v-if="x.showInputModal && !x.showStageButtonModal && !x.showAddButtonModal && !x.showAddTextModal"
-      class="overlay"></div>
-
-    <InputModal v-if="x.showInputModal" :showModal="x.showInputModal" :addMode="addMode" :inputValues="inputValues"
-      :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :getCallbacks="getCallbacks" :updateTable="updateTable"
-      :showStageButtonModal="x.showStageButtonModal" @close="closeModal('showInputModal')" @save="save"
-      @openStageButtonModal="openStageButtonModal" @create="x.showAddTextModal = true"
-      @createURL="x.showURLModal = true" />
-
-    <div v-if="x.showStageButtonModal && !x.showAddButtonModal" class="overlay"></div>
-
-    <StageButtonModal v-if="x.showStageButtonModal" :showStageButtonModal="x.showStageButtonModal"
-      :inputValues="inputValues" :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId"
-      @close="closeModal('showStageButtonModal')" @updateTable="updateTable = !updateTable"
-      @create="x.showAddButtonModal = true" />
-
-    <div v-if="x.showAddButtonModal" class="overlay high-index"></div>
-
-    <AddButtonModal v-if="x.showAddButtonModal" :showAddButtonModal="x.showAddButtonModal"
-      @close="closeModal('showAddButtonModal')" :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
-
-    <div v-if="x.showAddTextModal || x.showURLModal" class="overlay high-index"></div>
-
-    <URLModal v-if="x.showURLModal" :showURLModal="x.showURLModal" @close="closeModal('showURLModal')"
-      @closed="getCallbacks = !getCallbacks" :bot_id="bot_id" :user_id="user_id" />
-
-
-    <AddTextModal v-if="x.showAddTextModal" :showAddTextModal="x.showAddTextModal" @close="closeModal('showAddTextModal')"
-      @closed="getTexts = !getTexts" :bot_id="bot_id" :user_id="user_id" />
-
-    <div v-if="x.showLocalesModal" class="overlay"></div>
-
-    <LocalesModal v-if="x.showLocalesModal" @close="closeModal('showLocalesModal')" @closed="rerender" :bot_id="bot_id"
-      :user_id="user_id" />
-  </div>
-</template>
-
 <script>
 import Vue from 'vue'
 import Drawflow from 'drawflow'
@@ -328,6 +266,69 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <div id="drawflow" @drop="dropped" @dragover="allowDrop($event)">
+      <BotName v-if="bot_name" :bot_name="bot_name" :link="link" />
+      <div class="card-devices node-drag" draggable="true" @dragstart="drag($event)">
+        <PlusIcon />
+        <span>Create</span>
+      </div>
+
+      <TipOverlay :showTipMenu="x.showTipMenu" :showTipDrag="x.showTipDrag" :showTipEdit="x.showTipEdit"
+        @close="closeModal" />
+    </div>
+
+    <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
+      @editNode="openInputModal" :node="selectedNode" />
+
+    <LocalesContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @editNode="openLocaleModal"
+      :node="selectedNode" />
+
+    <div v-if="x.showModal" class="overlay"></div>
+
+    <ConfirmationModal :showModal="x.showModal" @close="closeModal('showModal')" @confirm="confirmDeletion" />
+
+    <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
+
+    <div v-if="x.showInputModal && !x.showStageButtonModal && !x.showAddButtonModal && !x.showAddTextModal"
+      class="overlay"></div>
+
+    <InputModal v-if="x.showInputModal" :showModal="x.showInputModal" :addMode="addMode" :inputValues="inputValues"
+      :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :getCallbacks="getCallbacks" :updateTable="updateTable"
+      :showStageButtonModal="x.showStageButtonModal" @close="closeModal('showInputModal')" @save="save"
+      @openStageButtonModal="openStageButtonModal" @create="x.showAddTextModal = true"
+      @createURL="x.showURLModal = true" />
+
+    <div v-if="x.showStageButtonModal && !x.showAddButtonModal" class="overlay"></div>
+
+    <StageButtonModal v-if="x.showStageButtonModal" :showStageButtonModal="x.showStageButtonModal"
+      :inputValues="inputValues" :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId"
+      @close="closeModal('showStageButtonModal')" @updateTable="updateTable = !updateTable"
+      @create="x.showAddButtonModal = true" />
+
+    <div v-if="x.showAddButtonModal" class="overlay high-index"></div>
+
+    <AddButtonModal v-if="x.showAddButtonModal" :showAddButtonModal="x.showAddButtonModal"
+      @close="closeModal('showAddButtonModal')" :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
+
+    <div v-if="x.showAddTextModal || x.showURLModal" class="overlay high-index"></div>
+
+    <URLModal v-if="x.showURLModal" :showURLModal="x.showURLModal" @close="closeModal('showURLModal')"
+      @closed="getCallbacks = !getCallbacks" :bot_id="bot_id" :user_id="user_id" />
+
+
+    <AddTextModal v-if="x.showAddTextModal" :showAddTextModal="x.showAddTextModal" @close="closeModal('showAddTextModal')"
+      @closed="getTexts = !getTexts" :bot_id="bot_id" :user_id="user_id" />
+
+    <div v-if="x.showLocalesModal" class="overlay"></div>
+
+    <LocalesModal v-if="x.showLocalesModal" @close="closeModal('showLocalesModal')" @closed="rerender" :bot_id="bot_id"
+      :user_id="user_id" />
+  </div>
+</template>
+
 
 <style>
 @import '../assets/app.css';
