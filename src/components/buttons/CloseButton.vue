@@ -7,7 +7,6 @@
   </button>
 </template>
 <script>
-import '../../assets/modal.css';
 export default {
   methods: {
     close() {
@@ -16,3 +15,6 @@ export default {
   }
 }
 </script>
+<style>
+@import '../../assets/modal.css';
+</style>

@@ -121,7 +121,6 @@ export default {
 
 <style scoped>
 @import '../../assets/table.css';
-
 table .options span {
   font-weight: 500;
 }

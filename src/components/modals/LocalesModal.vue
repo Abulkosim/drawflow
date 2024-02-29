@@ -1,14 +1,14 @@
 <template>
   <div class="modal">
     <div class="modal-content">
+     
       <div class="modal-header">
         <h3 class="modal-heading">
           {{ heading }}
         </h3>
-
         <CloseButton @close="close" />
-
       </div>
+
       <ValidationObserver ref="observer" rules="required" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
@@ -18,7 +18,6 @@
                 v-model="checked" :value="locale">
               <label :for="locale.id" class="label">{{ locale.name }}</label>
             </div>
-
 
           </div>
           <div class="modal-save">
@@ -36,8 +35,6 @@
 import { fetchLocales, fetchBotLocales, updateBotLocale } from "../../api/api.locales";
 import SaveIcon from "../icons/SaveIcon.vue";
 import CloseButton from "../buttons/CloseButton.vue";
-import '../../assets/modal.css';
-import '../../assets/locales.modal.css'
 
 export default {
   props: ['bot_id', 'user_id'],
@@ -87,3 +84,8 @@ export default {
   components: { SaveIcon, CloseButton }
 }
 </script>
+
+<style scoped>
+@import '../../assets/modal.css';
+@import '../../assets/locales.modal.css'
+</style>

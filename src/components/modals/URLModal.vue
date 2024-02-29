@@ -1,14 +1,14 @@
 <template>
   <div class="modal">
     <div class="modal-content">
+      
       <div class="modal-header">
         <h3 class="modal-heading">
           {{ heading }}
         </h3>
-
         <CloseButton @close="close" />
-
       </div>
+
       <ValidationObserver ref="observer" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">

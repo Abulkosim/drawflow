@@ -177,23 +177,19 @@ export default {
 
         await updateCallback({ stage_id: response.data.data.insert.id, url_id: createData.url_id })
 
+        const sendData = {
+          stage_id: response.data.data.insert.id,
+          type: '',
+          id: ''
+        };
+
         if (createData.backhand) {
-          if (createData.backhand == 'user_state') {
-            const sendData = {
-              id: createData.stage_id,
-              stage_id: response.data.data.insert.id,
-              type: 's'
-            };
-            await createBack(sendData)
-          } else {
-            const sendData = {
-              id: createData.backhand_id,
-              stage_id: response.data.data.insert.id,
-              type: 'b'
-            };
-            await createBack(sendData)
-          }
+          sendData.type = createData.backhand == 'user_state' ? 's' : 'b';
+          sendData.id = createData.backhand == 'user_state' ? createData.stage_id : createData.backhand_id;
+
+          await createBack(sendData)
         }
+        
         await this.rerender()
       } catch (error) {
         console.error(`Error creating node: ${error}`);

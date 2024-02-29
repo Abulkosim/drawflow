@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-import '../../assets/confirmation.css'
 export default {
   props: ['showModal'],
   data() {
@@ -35,3 +34,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@import '../../assets/confirmation.css'
+</style>
