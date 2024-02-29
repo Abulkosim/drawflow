@@ -6,6 +6,7 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   z-index: 10;
+  user-select: none;
   align-items: center;
   border-radius: 0.75rem;
   background-color: #ffffff;

@@ -18,13 +18,11 @@ import TipEdit from '../components/menus/TipEdit.vue'
 import BotName from '../components/menus/BotName.vue'
 import PlusIcon from '../components/icons/PlusIcon.vue'
 import TipOverlay from '../components/elements/TipOverlay.vue';
-
 import transformationMixin from '../mixins/transformationMixin'
 import dragDropMixin from '../mixins/dragDropMixin';
 import mainPageMixin from '../mixins/mainPageMixin';
-
-
 import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
+import '../assets/app.css';
 
 export default {
   name: 'App',
@@ -140,16 +138,14 @@ export default {
           stage_id: nodeData.stage_id,
           url_id: nodeData.url_id
         }
-        this.create(createData)
-          .then(() => {
-            this.showSuccessToast()
-          })
-          .catch((error) => {
-            this.showFailedToast(error)
-          })
-          .finally(() => {
-            this.closeModal('showInputModal');
-          });
+        try {
+          this.create(createData);
+          this.showSuccessToast();
+        } catch (error) {
+          this.showFailedToast(error);
+        } finally {
+          this.closeModal('showInputModal');
+        }
       } else {
         const editData = {
           id: nodeData.id,
@@ -164,17 +160,14 @@ export default {
           state: nodeData.state,
           url_id: nodeData.url_id
         }
-
-        this.updateNode(editData)
-          .then(() => {
-            this.showSuccessToast()
-          })
-          .catch((error) => {
-            this.showFailedToast(error)
-          })
-          .finally(() => {
-            this.closeModal('showInputModal');
-          });
+        try {
+          this.updateNode(editData)
+          this.showSuccessToast();
+        } catch (error) {
+          this.showFailedToast(error);
+        } finally {
+          this.closeModal('showInputModal');
+        }
       }
     },
 
@@ -201,11 +194,9 @@ export default {
             await createBack(sendData)
           }
         }
-
         await this.rerender()
       } catch (error) {
         console.error(`Error creating node: ${error}`);
-        throw error;
       } finally {
         this.addMode = false;
       }
@@ -219,16 +210,14 @@ export default {
 
     confirmDeletion() {
       if (this.selectedNode) {
-        this.deleteNode(this.selectedNode)
-          .then(() => {
-            this.showSuccessToast()
-          })
-          .catch((error) => {
-            this.showFailedToast(error)
-          })
-          .finally(() => {
-            this.closeModal('showModal');
-          });
+        try {
+          this.deleteNode(this.selectedNode)
+          this.showSuccessToast();
+        } catch (error) {
+          this.showFailedToast(error);
+        } finally {
+          this.closeModal('showModal');
+        }
       }
     },
 
@@ -241,13 +230,11 @@ export default {
     async openInputModal(info) {
       this.showContextMenu = false;
       this.addMode = info === 'adding';
-
       if (!this.addMode && this.selectedNode) {
         await this.getNode(this.selectedNode)
       } else {
         this.inputValues = {};
       }
-
       this.x.showInputModal = true;
     },
 
@@ -260,7 +247,6 @@ export default {
       if (!this.data.length) {
         await this.getStages()
       }
-
       this.editor.import(this.data);
     },
   },
@@ -328,8 +314,3 @@ export default {
       :user_id="user_id" />
   </div>
 </template>
-
-
-<style>
-@import '../assets/app.css';
-</style>

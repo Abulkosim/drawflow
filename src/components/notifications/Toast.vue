@@ -13,13 +13,10 @@
 <script>
 import SuccessIcon from '../icons/SuccessIcon.vue';
 import FailIcon from '../icons/FailIcon.vue';
+import '../../assets/toast.css'
 
 export default {
   props: ['show', 'success', 'msg'],
   components: { SuccessIcon, FailIcon }
 }
 </script>
-
-<style>
-@import '../../assets/toast.css'
-</style>

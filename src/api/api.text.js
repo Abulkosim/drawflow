@@ -6,7 +6,6 @@ export async function fetchLocales(bot_id) {
     return response.data.data;
   } catch (error) {
     console.error("Failed to get locales:", error);
-    throw error;
   }
 }
 
@@ -16,6 +15,5 @@ export async function create(data) {
     return response.data.data;
   } catch (error) {
     console.error("Failed to create locale:", error);
-    throw error;
   }
 }

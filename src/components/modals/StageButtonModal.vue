@@ -97,6 +97,8 @@
 import { fetchStages, fetchURLs, fetchButtons, fetchInfo, fetchOrder, create, update } from '../../api/api.stagebutton'
 import SaveIcon from "../icons/SaveIcon.vue";
 import CloseButton from '../buttons/CloseButton.vue';
+import '../../assets/modal.css';
+import '../../assets/stage.button.css'
 
 export default {
   props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons', 'bot_id', 'user_id'],
@@ -233,7 +235,3 @@ export default {
   components: { SaveIcon, CloseButton }
 }
 </script>
-<style scoped>
-@import '../../assets/modal.css';
-@import '../../assets/stage.button.css'
-</style>

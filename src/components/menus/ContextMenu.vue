@@ -16,6 +16,7 @@
 <script>
 import EditIcon from '../icons/EditIcon.vue';
 import DeleteIcon from '../icons/DeleteIcon.vue';
+import '../../assets/context.menu.css';
 
 export default {
   props: ['showMenu', 'position', 'node'],
@@ -41,7 +42,3 @@ export default {
   components: { EditIcon, DeleteIcon }
 }
 </script>
-
-<style scoped>
-@import '../../assets/context.menu.css';
-</style>

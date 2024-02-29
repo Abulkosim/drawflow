@@ -9,6 +9,7 @@
 
 <script>
 import NotFoundIcon from '../components/icons/NotFoundIcon.vue';
+import '../assets/error.page.css'
 
 export default {
   mounted() {
@@ -30,6 +31,3 @@ export default {
   components: { NotFoundIcon }
 }
 </script>
-<style scoped>
-@import '../assets/error.page.css'
-</style>

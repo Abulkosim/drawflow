@@ -31,8 +31,8 @@ export default {
 <style scoped>
 div .tip {
   position: absolute;
-  top: 240px;
-  right: 10px;
+  top: 237px;
+  right: 7px;
   font-size: 20px;
   border-radius: 8px;
   color: #434b53;
@@ -47,15 +47,15 @@ div .tip {
 }
 
 div .closedMenu {
-  top: 72px;
+  top: 69px;
 }
 
 div .closedDrag {
-  top: 178px;
+  top: 175px;
 }
 
 div .closedBoth {
-  top: 10px;
+  top: 7px;
 }
 
 .drag-tip {

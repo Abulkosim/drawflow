@@ -30,8 +30,8 @@ export default {
 <style scoped>
 div .tip {
   position: absolute;
-  top: 178px;
-  right: 10px;
+  top: 175px;
+  right: 7px;
   font-size: 20px;
   border-radius: 8px;
   color: #434b53;
@@ -46,7 +46,7 @@ div .tip {
 }
 
 div .onTop {
-  top: 10px;
+  top: 7px;
 }
 
 .drag-tip {

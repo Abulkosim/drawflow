@@ -36,6 +36,8 @@
 import { fetchLocales, fetchBotLocales, updateBotLocale } from "../../api/api.locales";
 import SaveIcon from "../icons/SaveIcon.vue";
 import CloseButton from "../buttons/CloseButton.vue";
+import '../../assets/modal.css';
+import '../../assets/locales.modal.css'
 
 export default {
   props: ['bot_id', 'user_id'],
@@ -85,7 +87,3 @@ export default {
   components: { SaveIcon, CloseButton }
 }
 </script>
-<style scoped>
-@import '../../assets/modal.css';
-@import '../../assets/locales.modal.css'
-</style>

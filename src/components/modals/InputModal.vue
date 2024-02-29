@@ -1,14 +1,14 @@
 
 <script>
 import ButtonsTable from '../lists/ButtonsTable.vue';
+import CloseButton from '../buttons/CloseButton.vue';
+import SaveIcon from "../icons/SaveIcon.vue";
 import Toast from '../notifications/Toast.vue';
 import { fetchNum, fetchBackhands, fetchAliases, fetchStages, fetchURLs, checkCode } from '../../api/api.stage';
-import SaveIcon from "../icons/SaveIcon.vue";
-import CloseButton from '../buttons/CloseButton.vue';
-import userStateMixin from '../../mixins/userStateMixin';
 import aceEditorMixin from '../../mixins/aceEditorMixin';
 import inputFormStateMixin from '../../mixins/inputFormStateMixin';
 import toggleEditorMixin from '../../mixins/toggleEditorMixin';
+import userStateMixin from '../../mixins/userStateMixin';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
@@ -19,11 +19,8 @@ export default {
     SaveIcon,
     CloseButton
   },
-  data() {
-    return {}
-  },
   computed: {
-    stageSelected: function () {
+    stageSelected() {
       return this.selected == 'STAGE'
     }
   },

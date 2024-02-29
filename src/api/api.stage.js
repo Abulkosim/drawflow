@@ -6,7 +6,6 @@ export async function fetchNum(bot_id) {
     return response.data.data;
   } catch (error) {
     console.error("Failed to get number:", error);
-    throw error;
   }
 }
 
@@ -16,7 +15,6 @@ export async function fetchBackhands(id) {
     return response;
   } catch (error) {
     console.error("Failed to get backhands:", error);
-    throw error;
   }
 }
 
@@ -26,7 +24,6 @@ export async function fetchAliases(user_id) {
     return response.data.data;
   } catch (error) {
     console.error("Failed to get aliases:", error);
-    throw error;
   }
 }
 
@@ -36,7 +33,6 @@ export async function fetchStages(bot_id) {
     return response.data.data;
   } catch (error) {
     console.error("Failed to get stages:", error);
-    throw error;
   }
 }
 
@@ -46,7 +42,6 @@ export async function fetchURLs(user_id) {
     return response.data.data;
   } catch (error) {
     console.error("Failed to get urls:", error);
-    throw error;
   }
 }
 
@@ -56,6 +51,5 @@ export async function checkCode(data) {
     return response;
   } catch (error) {
     console.error("Failed to check:", error);
-    throw error;
   }
 }

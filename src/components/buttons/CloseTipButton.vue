@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import '../../assets/tip.css';
 export default {
   methods: {
     close() {
@@ -17,7 +18,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@import '../../assets/tip.css';
-</style>

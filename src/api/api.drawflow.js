@@ -5,7 +5,6 @@ export async function updatePos(data) {
     return http.put(`tg/bot/stage/position/update`, data)
   } catch (error) {
     console.error('Failed to update position:', error)
-    throw error
   }
 }
 
@@ -15,7 +14,6 @@ export async function fetchStages(bot_id) {
     return response.data.data
   } catch (error) {
     console.error('Failed to fetch stages:', error)
-    throw error
   }
 }
 
@@ -25,7 +23,6 @@ export async function fetchBotInfo(bot_id) {
     return response.data.data
   } catch (error) {
     console.error('Failed to fetch bot info:', error)
-    throw error
   }
 }
 
@@ -34,7 +31,6 @@ export async function createStage(data) {
     return http.post('tg/bot/stage/create', data)
   } catch (error) {
     console.error('Failed to create stage:', error)
-    throw error
   }
 }
 
@@ -43,7 +39,6 @@ export async function deleteStage(id) {
     return http.put(`tg/bot/stage/delete?id=${id}`)
   } catch (error) {
     console.error('Failed to delete node:', error)
-    throw error
   }
 }
 
@@ -52,7 +47,6 @@ export async function updateStage(data) {
     return http.put('tg/bot/stage/update', data)
   } catch (error) {
     console.error('Failed to update node:', error)
-    throw error
   }
 }
 
@@ -61,7 +55,6 @@ export async function updateCallback(data) {
     return http.put('tg/bot/stage/update/callback_url', data)
   } catch (error) {
     console.error('Failed to update callback:', error)
-    throw error
   }
 }
 
@@ -71,7 +64,6 @@ export async function fetchStage(id) {
     return response.data.data.stage
   } catch (error) {
     console.error('Failed to fetch stage:', error)
-    throw error
   }
 }
 
@@ -80,7 +72,6 @@ export async function fetchConnections(bot_id) {
     return http.get(`tg/bot/stage/connections?bot_id=${bot_id}`)
   } catch (error) {
     console.error('Failed to fetch connections:', error)
-    throw error
   }
 }
 
@@ -90,7 +81,6 @@ export async function fetchBotLocales(bot_id) {
     return response;
   } catch (error) {
     console.error("Failed to get bot locales:", error);
-    throw error;
   }
 }
 
@@ -99,6 +89,5 @@ export async function createBack(data) {
     return http.post('tg/bot/stage/back/hand/create', data)
   } catch (error) {
     console.error('Failed to create back:', error)
-    throw error
   }
 }
