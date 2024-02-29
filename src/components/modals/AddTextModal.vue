@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <div class="modal-content">
-      
+
       <div class="modal-header">
         <h3 class="modal-heading">
           {{ heading }}
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       heading: 'Create text',
-      alias: '',
+      alias: null,
       names: {
         en: null,
         uz: null,
@@ -72,19 +72,29 @@ export default {
       this.locales = await fetchLocales(this.bot_id);
     },
     async submit() {
+      const isValid = await this.$refs.observer.validate();
+      if (!isValid) {
+        return;
+      }
+
       const data = {
         alias: this.alias,
         names: this.names,
         user_id: this.user_id
       };
+      
       for (let key in data.names) {
         if (data.names[key] === null) {
           delete data.names[key];
         }
       }
-      await create(data);
-      this.$emit('closed');
-      this.close();
+      try {
+        await create(data);
+        this.$emit('closed');
+        this.close();
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   components: { SaveIcon, CloseButton }

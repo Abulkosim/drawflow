@@ -33,8 +33,8 @@ export default {
     }
   }
 }
-</script>
 
+</script>
 <style scoped>
 @import '../../assets/confirmation.css'
 </style>

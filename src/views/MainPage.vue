@@ -138,14 +138,16 @@ export default {
           stage_id: nodeData.stage_id,
           url_id: nodeData.url_id
         }
-        try {
-          this.create(createData);
-          this.showSuccessToast();
-        } catch (error) {
-          this.showFailedToast(error);
-        } finally {
-          this.closeModal('showInputModal');
-        }
+        this.create(createData)
+          .then(() => {
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeModal('showInputModal');
+          });
       } else {
         const editData = {
           id: nodeData.id,
@@ -160,14 +162,16 @@ export default {
           state: nodeData.state,
           url_id: nodeData.url_id
         }
-        try {
-          this.updateNode(editData)
-          this.showSuccessToast();
-        } catch (error) {
-          this.showFailedToast(error);
-        } finally {
-          this.closeModal('showInputModal');
-        }
+        this.updateNode(editData)
+          .then(() => {
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeModal('showInputModal');
+          });
       }
     },
 
@@ -189,7 +193,7 @@ export default {
 
           await createBack(sendData)
         }
-        
+
         await this.rerender()
       } catch (error) {
         console.error(`Error creating node: ${error}`);
@@ -206,19 +210,25 @@ export default {
 
     confirmDeletion() {
       if (this.selectedNode) {
-        try {
-          this.deleteNode(this.selectedNode)
-          this.showSuccessToast();
-        } catch (error) {
-          this.showFailedToast(error);
-        } finally {
-          this.closeModal('showModal');
-        }
+        this.deleteNode(this.selectedNode)
+          .then(() => {
+            this.showSuccessToast()
+          })
+          .catch((error) => {
+            this.showFailedToast(error)
+          })
+          .finally(() => {
+            this.closeModal('showModal');
+          });
       }
     },
 
     async deleteNode(id) {
-      await deleteStage(id)
+      try {
+        await deleteStage(id)
+      } catch (error) {
+        console.error(`Error deleting node: ${error}`);
+      }
       await this.rerender()
       this.selectedNode = null
     },
@@ -270,43 +280,68 @@ export default {
 
     <div v-if="x.showModal" class="overlay"></div>
 
-    <ConfirmationModal :showModal="x.showModal" @close="closeModal('showModal')" @confirm="confirmDeletion" />
+    <transition name="fade">
+      <ConfirmationModal :showModal="x.showModal" @close="closeModal('showModal')" @confirm="confirmDeletion" />
+    </transition>
 
     <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
 
     <div v-if="x.showInputModal && !x.showStageButtonModal && !x.showAddButtonModal && !x.showAddTextModal"
       class="overlay"></div>
 
-    <InputModal v-if="x.showInputModal" :showModal="x.showInputModal" :addMode="addMode" :inputValues="inputValues"
-      :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :getCallbacks="getCallbacks" :updateTable="updateTable"
-      :showStageButtonModal="x.showStageButtonModal" @close="closeModal('showInputModal')" @save="save"
-      @openStageButtonModal="openStageButtonModal" @create="x.showAddTextModal = true"
-      @createURL="x.showURLModal = true" />
+    <transition name="fade">
+      <InputModal v-if="x.showInputModal" :showModal="x.showInputModal" :addMode="addMode" :inputValues="inputValues"
+        :bot_id="bot_id" :user_id="user_id" :getTexts="getTexts" :getCallbacks="getCallbacks" :updateTable="updateTable"
+        :showStageButtonModal="x.showStageButtonModal" @close="closeModal('showInputModal')" @save="save"
+        @openStageButtonModal="openStageButtonModal" @create="x.showAddTextModal = true"
+        @createURL="x.showURLModal = true" />
+    </transition>
 
     <div v-if="x.showStageButtonModal && !x.showAddButtonModal" class="overlay"></div>
 
-    <StageButtonModal v-if="x.showStageButtonModal" :showStageButtonModal="x.showStageButtonModal"
-      :inputValues="inputValues" :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId"
-      @close="closeModal('showStageButtonModal')" @updateTable="updateTable = !updateTable"
-      @create="x.showAddButtonModal = true" />
+    <transition name="fade">
+      <StageButtonModal v-if="x.showStageButtonModal" :showStageButtonModal="x.showStageButtonModal"
+        :inputValues="inputValues" :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId"
+        @close="closeModal('showStageButtonModal')" @updateTable="updateTable = !updateTable"
+        @create="x.showAddButtonModal = true" />
+    </transition>
 
     <div v-if="x.showAddButtonModal" class="overlay high-index"></div>
 
-    <AddButtonModal v-if="x.showAddButtonModal" :showAddButtonModal="x.showAddButtonModal"
-      @close="closeModal('showAddButtonModal')" :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
+    <transition name="fade">
+      <AddButtonModal v-if="x.showAddButtonModal" :showAddButtonModal="x.showAddButtonModal"
+        @close="closeModal('showAddButtonModal')" :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
+    </transition>
 
     <div v-if="x.showAddTextModal || x.showURLModal" class="overlay high-index"></div>
 
-    <URLModal v-if="x.showURLModal" :showURLModal="x.showURLModal" @close="closeModal('showURLModal')"
-      @closed="getCallbacks = !getCallbacks" :bot_id="bot_id" :user_id="user_id" />
+    <transition name="fade">
+      <URLModal v-if="x.showURLModal" :showURLModal="x.showURLModal" @close="closeModal('showURLModal')"
+        @closed="getCallbacks = !getCallbacks" :bot_id="bot_id" :user_id="user_id" />
+    </transition>
 
 
-    <AddTextModal v-if="x.showAddTextModal" :showAddTextModal="x.showAddTextModal" @close="closeModal('showAddTextModal')"
-      @closed="getTexts = !getTexts" :bot_id="bot_id" :user_id="user_id" />
+    <transition name="fade">
+      <AddTextModal v-if="x.showAddTextModal" :showAddTextModal="x.showAddTextModal"
+        @close="closeModal('showAddTextModal')" @closed="getTexts = !getTexts" :bot_id="bot_id" :user_id="user_id" />
+    </transition>
 
     <div v-if="x.showLocalesModal" class="overlay"></div>
 
-    <LocalesModal v-if="x.showLocalesModal" @close="closeModal('showLocalesModal')" @closed="rerender" :bot_id="bot_id"
-      :user_id="user_id" />
+    <transition name="fade">
+      <LocalesModal v-if="x.showLocalesModal" @close="closeModal('showLocalesModal')" @closed="rerender" :bot_id="bot_id"
+        :user_id="user_id" />
+    </transition>
   </div>
 </template>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
