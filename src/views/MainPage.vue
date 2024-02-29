@@ -284,7 +284,9 @@ export default {
       <ConfirmationModal :showModal="x.showModal" @close="closeModal('showModal')" @confirm="confirmDeletion" />
     </transition>
 
-    <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
+    <transition name="fade">
+      <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
+    </transition>
 
     <div v-if="x.showInputModal && !x.showStageButtonModal && !x.showAddButtonModal && !x.showAddTextModal"
       class="overlay"></div>
@@ -337,7 +339,7 @@ export default {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
 }
 
 .fade-enter-from,
