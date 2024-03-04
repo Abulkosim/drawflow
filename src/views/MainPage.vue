@@ -258,7 +258,6 @@ export default {
   },
 }
 </script>
-
 <template>
   <div>
     <div id="drawflow" @drop="dropped" @dragover="allowDrop($event)">
@@ -322,7 +321,6 @@ export default {
         @closed="getCallbacks = !getCallbacks" :bot_id="bot_id" :user_id="user_id" />
     </transition>
 
-
     <transition name="fade">
       <AddTextModal v-if="x.showAddTextModal" :showAddTextModal="x.showAddTextModal"
         @close="closeModal('showAddTextModal')" @closed="getTexts = !getTexts" :bot_id="bot_id" :user_id="user_id" />
@@ -336,14 +334,3 @@ export default {
     </transition>
   </div>
 </template>
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

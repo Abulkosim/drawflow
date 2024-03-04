@@ -141,11 +141,11 @@
   border-radius: 50%;
   cursor: pointer;
 }
-/* .drawflow > .drawflow-delete {
-  margin-left: -15px;
-  margin-top: 15px;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
 }
-.parent-node .drawflow-delete {
-  right: -12px;
-  top: -12px;
-} */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

@@ -189,9 +189,7 @@ export default {
     }
   }
 }
-
 </script>
-
 <template>
   <div class="modal">
     <div class="modal-content">
@@ -201,7 +199,6 @@ export default {
           <span v-if="!addMode" class="corner">{{ this.id }}</span>
         </h3>
         <CloseButton @close="close" />
-
         <div class="loading" v-if="loading">
         </div>
       </div>
@@ -228,7 +225,6 @@ export default {
                     <span v-if="errors[0]" class="output">Required field!</span>
                   </div>
                 </ValidationProvider>
-
               </div>
               <div>
                 <label for="action" class="label">Type</label>
@@ -277,7 +273,6 @@ export default {
 
             <div v-if="!stageSelected">
               <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
-
               <div class="buttons">
                 <div class="select-wrapper">
                   <select id="url" class="input" v-model="callback_url" :required="!stageSelected">
