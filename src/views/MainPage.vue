@@ -69,7 +69,6 @@ export default {
         x_: nodeData.pos_x,
         y_: nodeData.pos_y,
       }
-
       this.updatePosition(editData)
     });
   },
