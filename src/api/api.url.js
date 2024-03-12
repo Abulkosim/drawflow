@@ -7,3 +7,11 @@ export async function createURL(data) {
     console.error("Failed to create URL:", error);
   }
 }
+
+export async function createTemplate(alias) {
+  try {
+    return http.post(`dont/create/api`, alias)
+  } catch (error) {
+    console.error("Failed to create template:", error);
+  }
+}

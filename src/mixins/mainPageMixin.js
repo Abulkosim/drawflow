@@ -11,10 +11,11 @@ export default {
         showAddTextModal: false,
         showStageButtonModal: false,
         showLocalesModal: false,
+        showAPIModal: false,
         showURLModal: false,
         showTipMenu: true,
         showTipDrag: true,
-        showTipEdit: true
+        showTipEdit: true,
       },
       contextMenuPosition: { x: 0, y: 0 },
       selectedNode: null,
@@ -34,7 +35,8 @@ export default {
       bot_id: null,
       user_id: null,
       bot_name: null,
-      link: null
+      link: null,
+      apiLink: ''
     };
   },
   mounted() {
@@ -44,9 +46,9 @@ export default {
       this.$router.push('/error');
     }
     this.user_id = url.get('user_id');
-    
+
     window.addEventListener('keydown', this.closeModalsOnEscape);
-    
+
     window.addEventListener('click', () => {
       this.showContextMenu = false;
     });
@@ -72,6 +74,8 @@ export default {
           this.x.showAddTextModal = false;
         } else if (this.x.showURLModal) {
           this.x.showURLModal = false;
+        } else if (this.x.showAPIModal) {
+          this.x.showAPIModal = false;
         } else if (this.x.showStageButtonModal) {
           this.x.showStageButtonModal = false;
         } else if (this.x.showInputModal) {

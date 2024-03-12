@@ -11,6 +11,7 @@ import AddButtonModal from '../components/modals/AddButtonModal.vue'
 import StageButtonModal from '../components/modals/StageButtonModal.vue'
 import AddTextModal from '../components/modals/AddTextModal.vue'
 import URLModal from '../components/modals/URLModal.vue'
+import APIModal from '../components/modals/APIModal.vue'
 import LocalesModal from '../components/modals/LocalesModal.vue'
 import LocalesContextMenu from '../components/menus/LocalesContextMenu.vue'
 import TipDrag from '../components/menus/TipDrag.vue'
@@ -41,6 +42,7 @@ export default {
     TipDrag,
     TipEdit,
     URLModal,
+    APIModal,
     BotName,
     PlusIcon,
     TipOverlay
@@ -82,6 +84,10 @@ export default {
     async updatePosition(nodeData) {
       await updatePos(nodeData)
       await this.rerender()
+    },
+
+    getLink(link) {
+      this.apiLink = link;
     },
 
     async getStages() {
@@ -303,7 +309,7 @@ export default {
       <StageButtonModal v-if="x.showStageButtonModal" :showStageButtonModal="x.showStageButtonModal"
         :inputValues="inputValues" :bot_id="bot_id" :user_id="user_id" :buttons="buttons" :stageButtonId="stageButtonId"
         @close="closeModal('showStageButtonModal')" @updateTable="updateTable = !updateTable"
-        @create="x.showAddButtonModal = true" />
+        @create="x.showAddButtonModal = true" @createAPI="x.showAPIModal = true" :apiLink="apiLink" />
     </transition>
 
     <div v-if="x.showAddButtonModal" class="overlay high-index"></div>
@@ -313,11 +319,16 @@ export default {
         @close="closeModal('showAddButtonModal')" :bot_id="bot_id" :user_id="user_id" @closed="buttons = !buttons" />
     </transition>
 
-    <div v-if="x.showAddTextModal || x.showURLModal" class="overlay high-index"></div>
+    <div v-if="x.showAddTextModal || x.showURLModal || x.showAPIModal" class="overlay high-index"></div>
 
     <transition name="fade">
       <URLModal v-if="x.showURLModal" :showURLModal="x.showURLModal" @close="closeModal('showURLModal')"
         @closed="getCallbacks = !getCallbacks" :bot_id="bot_id" :user_id="user_id" />
+    </transition>
+
+    <transition name="fade">
+      <APIModal v-if="x.showAPIModal" :showAPIModal="x.showAPIModal" @close="closeModal('showAPIModal')"
+        :bot_id="bot_id" :user_id="user_id" @closed="getLink" />
     </transition>
 
     <transition name="fade">
@@ -328,8 +339,8 @@ export default {
     <div v-if="x.showLocalesModal" class="overlay"></div>
 
     <transition name="fade">
-      <LocalesModal v-if="x.showLocalesModal" @close="closeModal('showLocalesModal')" @closed="rerender" :bot_id="bot_id"
-        :user_id="user_id" />
+      <LocalesModal v-if="x.showLocalesModal" @close="closeModal('showLocalesModal')" @closed="rerender"
+        :bot_id="bot_id" :user_id="user_id" />
     </transition>
   </div>
 </template>

@@ -64,8 +64,16 @@
               </div>
               <div class="state-string" v-if="backType != 'next.'">
                 <label for="back-string" class="label">Back value</label>
-                <input list="datalist" type="text" name="back-string" id="back-string" class="input" autocomplete="off"
-                  v-model="backString" :disabled="backString == 'reply'">
+                <div class="buttons">
+                  <input list="datalist" type="text" name="back-string" id="back-string" class="input"
+                    :class="{ withButton: backType == 'other' }" autocomplete="off" v-model="backString"
+                    :disabled="backString == 'reply'">
+
+                  <button v-if="backType == 'other'" class="create-button" @click.stop.prevent="createAPI"
+                    title="Create API">
+                    <span>+</span>
+                  </button>
+                </div>
               </div>
 
               <div class="state-string" v-if="backType == 'next.'">
@@ -99,7 +107,7 @@ import SaveIcon from "../icons/SaveIcon.vue";
 import CloseButton from '../buttons/CloseButton.vue';
 
 export default {
-  props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons', 'bot_id', 'user_id'],
+  props: ['showStageButtonModal', 'inputValues', 'stageButtonId', 'buttons', 'bot_id', 'user_id', 'apiLink'],
   data() {
     return {
       heading: 'Add button to the stage',
@@ -142,6 +150,9 @@ export default {
     },
     create() {
       this.$emit('create');
+    },
+    createAPI() {
+      this.$emit('createAPI');
     },
     async getStages() {
       this.stages = await fetchStages(this.bot_id);
@@ -228,6 +239,9 @@ export default {
     },
     buttons(current) {
       this.getButtons();
+    },
+    apiLink() {
+      this.backString = this.apiLink;
     }
   },
   components: { SaveIcon, CloseButton }

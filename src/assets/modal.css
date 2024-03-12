@@ -134,7 +134,7 @@
 }
 
 .state-type {
-  width: 200px;
+  width: 160px;
 }
 
 .state-string {
@@ -226,7 +226,7 @@ form select {
   width: calc(100% - 46px);
 }
 
-.buttons .create-button {
+.create-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -330,4 +330,8 @@ input[type='number'] {
 .output {
   font-weight: 500;
   color: red;
+}
+
+.buttons .withButton {
+  width: calc(100% - 54px);
 }

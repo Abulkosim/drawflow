@@ -277,7 +277,7 @@ export default {
                 <div class="select-wrapper">
                   <select id="url" class="input" v-model="callback_url" :required="!stageSelected">
                     <option value="" disabled selected hidden></option>
-                    <option v-for="item in urls" :key="item.description" :value="item.url">
+                    <option v-for="item in urls" :key="item.url" :value="item.url">
                       <span v-if="item.url">{{ item.url }}</span>
                       <span v-if="item.description && item.url">&nbsp; &ndash; &nbsp;</span>
                       <span v-if="item.description">{{ item.description }}</span>
