@@ -119,3 +119,7 @@ input:checked + .slider:before {
 .tabs .active {
   background: #e2eeff;
 }
+
+.tabs button:focus {
+  outline: none; 
+}

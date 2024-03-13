@@ -1,8 +1,8 @@
-
 <script>
 import ButtonsTable from '../lists/ButtonsTable.vue';
 import CloseButton from '../buttons/CloseButton.vue';
 import SaveIcon from "../icons/SaveIcon.vue";
+import QuestionIcon from "../icons/QuestionIcon.vue";
 import Toast from '../notifications/Toast.vue';
 import { fetchNum, fetchBackhands, fetchAliases, fetchStages, fetchURLs, checkCode } from '../../api/api.stage';
 import aceEditorMixin from '../../mixins/aceEditorMixin';
@@ -17,7 +17,8 @@ export default {
     ButtonsTable,
     Toast,
     SaveIcon,
-    CloseButton
+    CloseButton,
+    QuestionIcon
   },
   computed: {
     stageSelected() {
@@ -197,6 +198,10 @@ export default {
         <h3 class="modal-heading">
           {{ heading }}
           <span v-if="!addMode" class="corner">{{ this.id }}</span>
+          <span class="question-icon" title="Stage - the steps of the bot, each step is cleared by the bot when moving to the next step and moves on to the next step.
+The number next to each stage represents its id.">
+            <QuestionIcon />
+          </span>
         </h3>
         <CloseButton @close="close" />
         <div class="loading" v-if="loading">
@@ -226,7 +231,7 @@ export default {
                   </div>
                 </ValidationProvider>
               </div>
-              <div>
+              <div title="Choose the step's type">
                 <label for="action" class="label">Type</label>
                 <div class="select-wrapper">
                   <select v-model="selected" @change="toggleEditor" id="action" class="input">
@@ -235,11 +240,11 @@ export default {
                   </select>
                 </div>
               </div>
-              <div>
+              <div title="Choose the type of visible buttons">
                 <label for="type" class="label" :class="{ required: stageSelected }">Button type</label>
                 <div class="select-wrapper">
-                  <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected" v-model="btn_type"
-                    @change="isDisabled = false; stateString = ''">
+                  <select id="type" class="input" :required="stageSelected" :disabled="!stageSelected"
+                    v-model="btn_type" @change="isDisabled = false; stateString = ''">
                     <option value="INLINE" selected>INLINE</option>
                     <option value="REPLY">REPLY</option>
                     <option value="CONTACT">CONTACT</option>
@@ -290,7 +295,7 @@ export default {
               </div>
             </div>
             <div class="state" v-if="stageSelected">
-              <div class="state-type">
+              <div class="state-type" title="Choose user state's type">
                 <label for="state-type" class="label">User state type</label>
                 <div class="select-wrapper">
                   <select id="state-type" class="input" v-model="stateType" @change="stateString = ''"
@@ -309,7 +314,7 @@ export default {
                   </button>
                 </div>
               </div>
-              <div class="state-string" v-if="stateType != 'next.'">
+              <div class="state-string" v-if="stateType != 'next.'" title="Set the value for user state">
                 <label for="state-string" class="label">User state value</label>
                 <input list="datalist" type="text" name="state-string" id="state-string" class="input"
                   v-model="stateString" :disabled="stateString == 'reply'" autocomplete="off">
@@ -317,7 +322,7 @@ export default {
                   <option v-for="item in urls" :key="item.alias" :value="item.alias">{{ item.alias }}</option>
                 </datalist>
               </div>
-              <div class="state-string" v-else-if="stateType == 'next.'">
+              <div class="state-string" v-else-if="stateType == 'next.'" title="Set the value for user state">
                 <label for="state-string" class="label">User state value</label>
                 <div class="select-wrapper">
                   <select id="state-string" class="input" v-model="stateString">
@@ -327,18 +332,19 @@ export default {
               </div>
             </div>
 
-            <div v-if="stageSelected">
+            <div v-if="stageSelected" title="The value for managing user states">
               <label for="user" class="label">User State</label>
               <input type="text" name="user" id="user" class="input" :value="user_state" autocomplete="off" disabled>
             </div>
 
-            <div class="condition" v-if="stageSelected && editorVisible">
+            <div class="condition" v-if="stageSelected && editorVisible"
+              title="Python code field for executing logical conditions, if necessary.">
               <label for="condition" class="label">Condition code area <span v-if="output" class="output">{{ output
-              }}</span></label>
+                  }}</span></label>
               <div id="condition" ref="editor" class="editor"></div>
             </div>
 
-            <div class="dist" v-if="stageSelected">
+            <div class="dist" v-if="stageSelected" title="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)">
               <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(\:\d+)?(\:\d+)?$/ }">
                 <div>
                   <label for="btn-sizes" class="label">Button sizes</label>
@@ -348,7 +354,7 @@ export default {
                 </div>
               </ValidationProvider>
 
-              <div>
+              <div title="Choose from the python code templates for the condition code area">
                 <label for="cond-type" class="label">Condition templates</label>
                 <div class="select-wrapper">
                   <select id="cond-type" class="input" v-model="conditionType">
@@ -360,7 +366,7 @@ export default {
               </div>
             </div>
 
-            <div v-if="stageSelected && addMode">
+            <div v-if="stageSelected && addMode" title="Connect to the previous stage">
               <label for="connection" class="label">Connection old stage</label>
               <div class="input-container">
                 <div class="select-wrapper">
@@ -379,8 +385,12 @@ export default {
             </div>
           </div>
 
-          <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues" :updateTable="updateTable"
-            @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
+          <div class="table-container" v-if="!addMode && stageSelected"
+            title="Connect to the buttons or user_state of the selected stage">
+            <label class="label">Stage buttons</label>
+            <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues" :updateTable="updateTable"
+              @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
+          </div>
 
           <div class="modal-save">
             <button type="submit" class="submit-button">
@@ -423,5 +433,10 @@ export default {
 
 .clear-button:hover {
   color: #7a7d80;
+}
+
+.table-container label {
+  text-align: center;
+  font-size: 18px;
 }
 </style>
