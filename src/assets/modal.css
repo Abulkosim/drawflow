@@ -244,6 +244,24 @@ form select {
   font-size: 22px;
 }
 
+.template-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 84px;
+  height: 46px;
+  border: none;
+  border-radius: 10px;
+  background-color: #e4eeff;
+  color: #226ce6;
+  outline: none;
+}
+
+.template-button span {
+  font-size: 15px;
+}
+
 .form .input:focus {
   outline: 2px solid #226ce6;
 }

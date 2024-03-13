@@ -19,16 +19,6 @@
     padding: 0.6rem 1rem;
   }
 }
-.cont {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  user-select: none;
-}
-
-.cont input {
-  width: calc(100% - 43px);
-}
 
 .check {
   width: 43px;
@@ -99,4 +89,33 @@ input:checked + .slider:before {
   font-weight: 500;
   user-select: none;
   color: #2e363e;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.tabs button {
+  flex-basis: 50%;
+  padding: 12px 0;
+  font-size: 17px;
+  background: #f2f6fa;
+  border: none;
+  user-select: none;
+  color: #2e363e;
+  cursor: pointer;
+}
+
+.tabs .template {
+  border-radius: 8px 0 0 8px;
+}
+
+.tabs .another-url {
+  border-radius: 0 8px 8px 0;
+}
+
+.tabs .active {
+  background: #e2eeff;
 }

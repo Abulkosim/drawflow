@@ -69,9 +69,9 @@
                     :class="{ withButton: backType == 'other' }" autocomplete="off" v-model="backString"
                     :disabled="backString == 'reply'">
 
-                  <button v-if="backType == 'other'" class="create-button" @click.stop.prevent="createAPI"
-                    title="Create API">
-                    <span>+</span>
+                  <button v-if="backType == 'other'" class="template-button" @click.stop.prevent="createAPI"
+                    title="Create Callback URL">
+                    <span>Template</span>
                   </button>
                 </div>
               </div>

@@ -14,20 +14,20 @@
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
             <div>
+              <div class="tabs">
+                <button @click.stop.prevent="toggle = true" class="template"
+                  :class="{ active: toggle }">Template</button>
+                <button @click.stop.prevent="toggle = false" class="another-url" :class="{ active: !toggle }">Another
+                  URL</button>
+              </div>
               <div>
                 <label for="url" class="label required">
                   <span v-if="!toggle">Callback URL</span>
                   <span v-if="toggle">Alias</span>
                 </label>
-                <div class="cont">
+                <div>
                   <input type="text" name="url" id="url" class="input" v-model="url" autocomplete="off" required
                     :placeholder="placeholder">
-                  <div class="check" title="Create template API (group = template)">
-                    <label for="prep" class="label">
-                      <input type="checkbox" name="prep" id="prep" class="checkbox" v-model="toggle">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
                 </div>
 
                 <span v-if="errors[0]" class="output">Required field!</span>
@@ -66,7 +66,7 @@ export default {
       heading: 'Create URL',
       url: '',
       description: '',
-      toggle: false,
+      toggle: true,
       loading: false
     };
   },
