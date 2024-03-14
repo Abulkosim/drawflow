@@ -167,6 +167,12 @@ export default {
           this.editor.setValue('user["attributes"]["full_name"] = msg_data\nupdate_user(id=user["id"], attributes=user["attributes"])')
         } else if (current == 'update') {
           this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
+        } else if (current == 'next') {
+          this.editor.setValue('if user[\'phone\']: next = 10  # 10 id lik stage ga o’tish')
+        } else if (current == 'url') {
+          this.editor.setValue('if user[\'phone\']: url = "https://example.com/api/"  # callback url ishlatish')
+        } else if (current == 'request') {
+          this.editor.setValue('request.get("https://example.com/api").json()')
         }
       }
     },
@@ -362,6 +368,9 @@ The number next to each stage represents its id.">
                     <option value="" disabled selected hidden></option>
                     <option value="update">update</option>
                     <option value="input">input</option>
+                    <option value="next">next</option>
+                    <option value="url">url</option>
+                    <option value="request">request</option>
                   </select>
                 </div>
               </div>
@@ -378,7 +387,8 @@ The number next to each stage represents its id.">
                 </div>
                 <div class="select-wrapper">
                   <select class="input" v-model="backhand">
-                    <option value="" disabled selected hidden><span v-if="!backhands.length">No connections</span></option>
+                    <option value="" disabled selected hidden><span v-if="!backhands.length">No connections</span>
+                    </option>
                     <option v-for="item in backhands" :key="item.id" :value="item.alias">{{ item.alias }}</option>
                   </select>
                 </div>

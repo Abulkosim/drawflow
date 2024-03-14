@@ -19,6 +19,7 @@ import TipEdit from '../components/menus/TipEdit.vue'
 import BotName from '../components/menus/BotName.vue'
 import PlusIcon from '../components/icons/PlusIcon.vue'
 import TipOverlay from '../components/elements/TipOverlay.vue';
+import QAIcon from '../components/icons/QAIcon.vue'
 import transformationMixin from '../mixins/transformationMixin'
 import dragDropMixin from '../mixins/dragDropMixin';
 import mainPageMixin from '../mixins/mainPageMixin';
@@ -45,7 +46,8 @@ export default {
     APIModal,
     BotName,
     PlusIcon,
-    TipOverlay
+    TipOverlay,
+    QAIcon
   },
 
   async mounted() {
@@ -64,6 +66,9 @@ export default {
       this.selectedNode = node;
     });
 
+    document.addEventListener('click', this.handleClickOutside);
+
+
     this.editor.on('nodeMoved', (node) => {
       const nodeData = this.editor.getNodeFromId(node);
       const editData = {
@@ -73,6 +78,10 @@ export default {
       }
       this.updatePosition(editData)
     });
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside);
   },
 
   methods: {
@@ -88,6 +97,10 @@ export default {
 
     getLink(link) {
       this.apiLink = link;
+    },
+
+    handleClickOutside() {
+      this.isOpened = false;
     },
 
     async getStages() {
@@ -271,8 +284,18 @@ export default {
         <PlusIcon />
         <span>Create</span>
       </div>
-
-      <TipOverlay :showTipMenu="x.showTipMenu" :showTipDrag="x.showTipDrag" :showTipEdit="x.showTipEdit"
+      <div @click.prevent.stop="isOpened = !isOpened" v-if="!isOpened" class="question-mark">
+        <div class="question-container">
+          <QAIcon />
+          <div class="animation-container">
+            <span class="outer-span">
+              <span class="inner-span"></span>
+              <span class="dot"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <TipOverlay v-else :showTipMenu="x.showTipMenu" :showTipDrag="x.showTipDrag" :showTipEdit="x.showTipEdit"
         @close="closeModal" />
     </div>
 

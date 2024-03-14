@@ -36,7 +36,8 @@ export default {
       user_id: null,
       bot_name: null,
       link: null,
-      apiLink: ''
+      apiLink: '',
+      isOpened: false
     };
   },
   mounted() {
