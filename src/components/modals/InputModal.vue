@@ -378,7 +378,7 @@ The number next to each stage represents its id.">
                 </div>
                 <div class="select-wrapper">
                   <select class="input" v-model="backhand">
-                    <option value="" disabled selected hidden></option>
+                    <option value="" disabled selected hidden><span v-if="!backhands.length">No connections</span></option>
                     <option v-for="item in backhands" :key="item.id" :value="item.alias">{{ item.alias }}</option>
                   </select>
                 </div>
