@@ -276,7 +276,7 @@ The number next to each stage represents its id.">
               </div>
             </div>
 
-            <div v-if="!stageSelected">
+            <div v-if="!stageSelected" title="Control with an external API">
               <label for="url" class="label" :class="{ required: !stageSelected }">Callback URL</label>
               <div class="buttons">
                 <div class="select-wrapper">
@@ -305,7 +305,8 @@ The number next to each stage represents its id.">
                     <option value="url.">url.</option>
                     <option value="other">other</option>
                   </select>
-                  <button class="clear-button" v-if="stateType" @click.stop.prevent="clearStateType">
+                  <button class="clear-button" v-if="stateType && btn_type == 'INLINE'"
+                    @click.stop.prevent="clearStateType">
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" aria-hidden="true" fill="none"
                       viewBox="0 0 14 14">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

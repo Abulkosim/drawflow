@@ -121,5 +121,44 @@ input:checked + .slider:before {
 }
 
 .tabs button:focus {
-  outline: none; 
+  outline: none;
+}
+
+.url-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.check-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  background-color: #e4eeff;
+  cursor: pointer;
+}
+
+.check-button .check-icon {
+  fill: #226ce6;
+}
+
+.url-container .isToggled {
+  width: calc(100% - 54px);
+}
+
+.url-part .success {
+  display: inline-block;
+  margin-top: 2px;
+  color: green;
+  user-select: none;
+}
+
+.url-part .fail {
+  display: inline-block;
+  margin-top: 2px;
+  color: red;
+  user-select: none;
 }

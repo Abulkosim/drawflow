@@ -20,16 +20,23 @@
                 <button @click.stop.prevent="toggle = false" class="another-url" :class="{ active: !toggle }">Another
                   URL</button>
               </div>
-              <div>
-                <label for="url" class="label required">
+              <div class="url-part">
+                <label for="url-input" class="label required">
                   <span v-if="!toggle">Callback URL</span>
                   <span v-if="toggle">Alias</span>
                 </label>
-                <div>
-                  <input type="text" name="url" id="url" class="input" v-model="url" autocomplete="off" required
-                    :placeholder="placeholder">
-                </div>
+                <div class="url-container">
+                  <input type="text" name="url" id="url-input" class="input" v-model="url"
+                    :class="{ isToggled: !toggle }" autocomplete="off" required :placeholder="placeholder">
 
+                  <div v-if="!toggle" class="check-button" @click="check">
+                    <CheckIcon class="check-icon" />
+                  </div>
+                </div>
+                <transition name="fade">
+                  <span v-show="response && !toggle" :class="{ success: success, fail: fail }">{{ response }}</span>
+                </transition>
+                <span v-if="validity && !response && !toggle" class="output">Make sure that the URL is valid!</span>
                 <span v-if="errors[0]" class="output">Required field!</span>
               </div>
             </div>
@@ -40,8 +47,6 @@
                 autocomplete="off">
               <span v-if="errors[0]" class="output">Required field!</span>
             </div>
-
-
           </div>
           <div class="modal-save">
             <button class="submit-button">
@@ -58,6 +63,8 @@
 import { createURL, createTemplate } from '../../api/api.url'
 import SaveIcon from "../icons/SaveIcon.vue";
 import CloseButton from '../buttons/CloseButton.vue';
+import CheckIcon from '../icons/CheckIcon.vue';
+import http from '../../interceptors/http'
 
 export default {
   props: ['showURLModal', 'bot_id', 'user_id'],
@@ -67,14 +74,77 @@ export default {
       url: '',
       description: '',
       toggle: true,
-      loading: false
+      loading: false,
+      response: '',
+      success: false,
+      fail: false,
+      validity: false
     };
   },
   methods: {
     close() {
       this.$emit('close');
     },
+
+    check() {
+      let info = this.url
+      let data = {
+        user: {
+          id: "248e4b78-8edb-6c86-a663-f0d35b278317",
+          attributes: {},
+          telegram_id: 1456374097,
+          full_name: "async def",
+          username: "greatdestination",
+          phone: "998882690011",
+          lang_id: 1,
+          bot_id: "2267e7b6-92ea-0f9a-cef5-81dbf5b96b85",
+          role_id: 1,
+          user_state: "reply",
+          stage_id: 36,
+          state: 1,
+          created_at: "2024-02-20 17:15:31.790009",
+          updated_at: null,
+          status: "ACTIVE"
+        },
+        msg_data: "Success"
+      }
+      http.post(info, data).then(res => {
+        if (res.data.data.main) {
+          let keys = res.data.data.main;
+          let notPresentKeys = [];
+          let key_list = ['btn_sizes', 'buttons', 'media', 'next', 'text', 'url', 'user_state']
+          key_list.forEach(key => {
+            if (!keys.hasOwnProperty(key)) {
+              notPresentKeys.push(key);
+            }
+          });
+          if (notPresentKeys.length > 0) {
+            this.success = false;
+            this.fail = true;
+            this.response = `Callback url response is invalid! Missing keys: ${notPresentKeys.join(', ')}`
+          } else {
+            this.success = true;
+            this.fail = false;
+            this.response = 'Callback url response is valid!'
+          }
+        } else {
+          this.success = false;
+          this.fail = true;
+          this.response = 'Main stage does not exist in callback url response!'
+        }
+      }).catch(err => {
+        this.success = false;
+        this.fail = true;
+        this.response = 'Callback url response is invalid!'
+      });
+    },
+
     async submit() {
+      if (!this.url.startsWith('https:')) {
+        this.validity = true;
+        return;
+      }
+
       if (!this.toggle) {
         const data = {
           user_id: this.user_id,
@@ -111,7 +181,12 @@ export default {
       return this.toggle ? 'v1/bot/test/api/' : '';
     }
   },
-  components: { SaveIcon, CloseButton }
+  watch: {
+    toggle() {
+      this.url = ''
+    }
+  },
+  components: { SaveIcon, CloseButton, CheckIcon }
 }
 </script>
 <style scoped>
