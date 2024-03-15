@@ -173,6 +173,8 @@ export default {
           this.editor.setValue('if user[\'phone\']: url = "https://example.com/api/"  # callback url ishlatish')
         } else if (current == 'request') {
           this.editor.setValue('request.get("https://example.com/api").json()')
+        } else if (current == 'requests') {
+          this.editor.setValue('requests.get("https://example.com/api").json()')
         }
       }
     },
