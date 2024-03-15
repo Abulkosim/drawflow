@@ -373,6 +373,7 @@ The number next to each stage represents its id.">
                     <option value="next">next</option>
                     <option value="url">url</option>
                     <option value="request">request</option>
+                    <option value="requests">requests</option>
                   </select>
                 </div>
               </div>
