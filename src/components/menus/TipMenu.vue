@@ -19,7 +19,7 @@
         <span>Location</span>
       </div>
     </div>
-    <CloseTipButton @close="close" />
+    <!-- <CloseTipButton @close="close" /> -->
 
   </div>
 </template>

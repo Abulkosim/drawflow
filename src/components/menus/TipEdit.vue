@@ -12,7 +12,7 @@
       </div>
       <span>Right click to edit/delete</span>
     </div>
-    <CloseTipButton @close="close" />
+    <!-- <CloseTipButton @close="close" /> -->
   </div>
 </template>
 <script>

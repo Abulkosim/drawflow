@@ -11,7 +11,7 @@
       </div>
       <span>Drag & drop to create a node</span>
     </div>
-    <CloseTipButton @close="close" />
+    <!-- <CloseTipButton @close="close" /> -->
   </div>
 </template>
 <script>

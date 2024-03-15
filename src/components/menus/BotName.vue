@@ -47,6 +47,7 @@ export default {
 .info-bar a {
   color: #fff;
   text-decoration: none;
+  outline: none
 }
 
 .info-bar:hover:hover {
