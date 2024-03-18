@@ -1,9 +1,9 @@
 import ace from 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/theme-dawn';
+import 'ace-builds/src-noconflict/theme-cobalt';
 
 export default {
-  data() {  
+  data() {
     return {
       editor: null
     };
@@ -19,9 +19,12 @@ export default {
         }
         this.editor = ace.edit(this.$refs.editor);
         this.editor.session.setMode('ace/mode/python');
-        this.editor.setTheme('ace/theme/dawn');
+        this.editor.setTheme('ace/theme/cobalt');
         this.editor.renderer.setPadding(10);
         this.editor.session.setUseWrapMode(true);
+        this.editor.setOptions({
+          fontSize: "9pt"
+        });
       });
     },
   }

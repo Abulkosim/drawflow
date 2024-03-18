@@ -360,3 +360,8 @@ input[type='number'] {
   top: 5px;
   margin-left: 3px;
 }
+
+.null-span {
+  font-style: italic; 
+  color: #929aa2;
+}

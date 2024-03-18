@@ -168,11 +168,9 @@ export default {
         } else if (current == 'update') {
           this.editor.setValue('update_user(id=user["id"], user_state=msg_data)')
         } else if (current == 'next') {
-          this.editor.setValue('if user[\'phone\']: next = 10  # 10 id lik stage ga o’tish')
+          this.editor.setValue('if user[\'phone\']: next = 10  # move to the stage with id=10')
         } else if (current == 'url') {
-          this.editor.setValue('if user[\'phone\']: url = "https://example.com/api/"  # callback url ishlatish')
-        } else if (current == 'request') {
-          this.editor.setValue('request.get("https://example.com/api").json()')
+          this.editor.setValue('if user[\'phone\']: url = "https://example.com/api/"  # using callback url')
         } else if (current == 'requests') {
           this.editor.setValue('requests.get("https://example.com/api").json()')
         }
@@ -206,8 +204,8 @@ export default {
         <h3 class="modal-heading">
           {{ heading }}
           <span v-if="!addMode" class="corner">{{ this.id }}</span>
-          <span class="question-icon" title="Stage - the steps of the bot, each step is cleared by the bot when moving to the next step and moves on to the next step.
-The number next to each stage represents its id.">
+          <span class="question-icon"
+            title="Stage - the steps of the bot, each step is cleared by the bot when moving to the next step and moves on to the next step. The number next to each stage represents its id.">
             <QuestionIcon />
           </span>
         </h3>
@@ -342,41 +340,10 @@ The number next to each stage represents its id.">
             </div>
 
             <div v-if="stageSelected" title="The value for managing user states">
-              <label for="user" class="label">User State</label>
-              <input type="text" name="user" id="user" class="input" :value="user_state" autocomplete="off" disabled>
-            </div>
-
-            <div class="condition" v-if="stageSelected && editorVisible"
-              title="Python code field for executing logical conditions, if necessary.">
-              <label for="condition" class="label">Condition code area <span v-if="output" class="output">{{ output
-                  }}</span></label>
-              <div id="condition" ref="editor" class="editor"></div>
-            </div>
-
-            <div class="dist" v-if="stageSelected" title="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)">
-              <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(\:\d+)?(\:\d+)?$/ }">
-                <div>
-                  <label for="btn-sizes" class="label">Button sizes</label>
-                  <input type="text" name="btn-sizes" id="btn-sizes" class="input" v-model="btn_sizes"
-                    @change="validateSize" autocomplete='off' :class="{ error: error }">
-                  <span v-if="errors[0]" class="output">Invalid format!</span>
-                </div>
-              </ValidationProvider>
-
-              <div title="Choose from the python code templates for the condition code area">
-                <label for="cond-type" class="label">Condition templates</label>
-                <div class="select-wrapper">
-                  <select id="cond-type" class="input" v-model="conditionType">
-                    <option value="" disabled selected hidden></option>
-                    <option value="update">update</option>
-                    <option value="input">input</option>
-                    <option value="next">next</option>
-                    <option value="url">url</option>
-                    <option value="request">request</option>
-                    <option value="requests">requests</option>
-                  </select>
-                </div>
-              </div>
+              <label for="user" class="label">User State:&nbsp;
+                <span v-if="user_state">{{ user_state }}</span>
+                <span v-else class="null-span">null</span>
+              </label>
             </div>
 
             <div v-if="stageSelected && addMode" title="Connect to the previous stage">
@@ -397,6 +364,7 @@ The number next to each stage represents its id.">
                 </div>
               </div>
             </div>
+
           </div>
 
           <div class="table-container" v-if="!addMode && stageSelected"
@@ -404,6 +372,38 @@ The number next to each stage represents its id.">
             <label class="label">Stage buttons</label>
             <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues" :updateTable="updateTable"
               @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
+          </div>
+
+          <div class="dist" v-if="stageSelected" title="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)">
+            <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(\:\d+)?(\:\d+)?$/ }">
+              <div>
+                <label for="btn-sizes" class="label">Button sizes</label>
+                <input type="text" name="btn-sizes" id="btn-sizes" class="input" v-model="btn_sizes"
+                  @change="validateSize" autocomplete='off' :class="{ error: error }">
+                <span v-if="errors[0]" class="output">Invalid format!</span>
+              </div>
+            </ValidationProvider>
+
+            <div title="Choose from the python code templates for the condition code area">
+              <label for="cond-type" class="label">Condition templates</label>
+              <div class="select-wrapper">
+                <select id="cond-type" class="input" v-model="conditionType">
+                  <option value="" disabled selected hidden></option>
+                  <option value="update">update</option>
+                  <option value="input">input</option>
+                  <option value="next">next</option>
+                  <option value="url">url</option>
+                  <option value="requests">requests</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="condition" v-if="stageSelected && editorVisible"
+            title="Python code field for executing logical conditions, if necessary.">
+            <label for="condition" class="label">Condition code area <span v-if="output" class="output">{{ output
+                }}</span></label>
+            <div id="condition" ref="editor" class="editor"></div>
           </div>
 
           <div class="modal-save">
