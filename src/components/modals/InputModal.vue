@@ -9,6 +9,7 @@ import aceEditorMixin from '../../mixins/aceEditorMixin';
 import inputFormStateMixin from '../../mixins/inputFormStateMixin';
 import toggleEditorMixin from '../../mixins/toggleEditorMixin';
 import userStateMixin from '../../mixins/userStateMixin';
+import { fetchButtons } from '../../api/api.table';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
@@ -32,6 +33,8 @@ export default {
     await this.getStages()
     await this.getNum()
     await this.getBackhands()
+    this.getButtons()
+
 
     if (this.addMode) {
       this.heading = 'Add stage'
@@ -60,6 +63,26 @@ export default {
 
     createURL() {
       this.$emit('createURL')
+    },
+
+    async getButtons() {
+      this.buttons = await fetchButtons(this.inputValues.id)
+      this.generateButtonRows(this.btn_sizes)
+      console.log(this.buttons)
+    },
+
+    generateButtonRows(btnString) {
+      const sizes = btnString.split(':').map(Number);
+      let buttonsRemaining = this.buttons.length;
+      let cumulativeButtons = 0;
+
+      this.buttonRows = sizes.map(size => {
+        const rowButtons = Math.min(size, buttonsRemaining);
+        buttonsRemaining -= rowButtons;
+        const startIndex = cumulativeButtons;
+        cumulativeButtons += rowButtons;
+        return startIndex + rowButtons;
+      });
     },
 
     async getNum() {
@@ -131,6 +154,10 @@ export default {
     },
   },
   watch: {
+    btn_sizes(newSizes) {
+      this.generateButtonRows(newSizes);
+    },
+
     inputValues: {
       handler(newValue) {
         this.inputValues = { ...newValue }
@@ -372,6 +399,14 @@ export default {
             <label class="label">Stage buttons</label>
             <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues" :updateTable="updateTable"
               @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
+          </div>
+
+          <div class="button-container" v-if="!addMode">
+            <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
+              <button v-for="(buttonIndex, i) in rowButtons" :key="i" class="btn" disabled>
+                {{ buttons[index * rowButtons + i].alias }}
+              </button>
+            </div>
           </div>
 
           <div class="dist" v-if="stageSelected" title="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)">

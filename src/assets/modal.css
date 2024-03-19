@@ -283,8 +283,14 @@ form select {
 .input.error {
   color: red;
   caret-color: #2e363e;
-  border-color: red;
+  border: none;
+  outline: none;
+  outline: 2px solid red;
   background-color: rgb(255, 230, 230);
+}
+
+.input.error:focus {
+  outline: 2px solid red;
 }
 
 .validationError {
@@ -362,6 +368,18 @@ input[type='number'] {
 }
 
 .null-span {
-  font-style: italic; 
+  font-style: italic;
   color: #929aa2;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.button-row {
+  margin-bottom: 10px;
+}
+.btn {
+  margin-right: 5px;
 }

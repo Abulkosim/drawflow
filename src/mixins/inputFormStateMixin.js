@@ -24,7 +24,9 @@ export default {
       num: '',
       backhands: [],
       stage: '',
-      backhand: ''
+      backhand: '',
+      buttonRows: [],
+      buttons: []
     };
   },
   methods: {
