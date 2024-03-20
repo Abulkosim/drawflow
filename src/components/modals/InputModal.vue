@@ -370,7 +370,8 @@ export default {
 
             <div v-if="stageSelected" title="The value for managing user states">
               <label for="user" class="label">User State:&nbsp;
-                <span v-if="user_state">{{ user_state }}</span>
+                <span v-if="user_state" :class="{ nextChosen: stateType == 'next.', urlChosen: stateType == 'url.' }">{{
+            user_state }}</span>
                 <span v-else class="null-span">null</span>
               </label>
             </div>
@@ -407,7 +408,7 @@ export default {
           <div class="button-container" v-if="!addMode && buttons.length">
             <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
               <button v-for="(buttonIndex, i) in rowButtons" :key="i" class="bot-button" disabled>
-                <span>Button</span>
+                <span>{{ buttons[i].alias }}</span>
               </button>
             </div>
           </div>
@@ -490,5 +491,13 @@ export default {
 .table-container label {
   text-align: center;
   font-size: 18px;
+}
+
+.nextChosen {
+  color: brown;
+}
+
+.urlChosen {
+  color: green;
 }
 </style>

@@ -130,3 +130,7 @@ input:checked + .slider:before {
 label {
   color: #2e363e;
 }
+
+.nextChosen {
+  color: brown;
+}

@@ -85,8 +85,10 @@
             </div>
 
             <div>
-              <label for="back" class="label">Back</label>
-              <input type="text" name="back" id="back" class="input" autocomplete="off" disabled :value="back">
+              <label for="back" class="label">Back:&nbsp;
+                <span v-if="back" :class="{ nextChosen: backType == 'next.' }">{{ back }}</span>
+                <span v-else class="null-span">null</span>
+              </label>
             </div>
 
           </div>
@@ -249,5 +251,5 @@ export default {
 </script>
 <style scoped>
 @import '../../assets/modal.css';
-@import '../../assets/stage.button.css'
+@import '../../assets/stage.button.css';
 </style>
