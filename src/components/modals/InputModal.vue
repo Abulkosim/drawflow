@@ -68,21 +68,19 @@ export default {
     async getButtons() {
       this.buttons = await fetchButtons(this.inputValues.id)
       this.generateButtonRows(this.btn_sizes)
-      console.log(this.buttons)
     },
 
     generateButtonRows(btnString) {
-      const sizes = btnString.split(':').map(Number);
-      let buttonsRemaining = this.buttons.length;
-      let cumulativeButtons = 0;
+      if (this.buttons.length) {
+        const sizes = btnString.split(':').map(Number);
+        let buttonsRemaining = this.buttons.length;
 
-      this.buttonRows = sizes.map(size => {
-        const rowButtons = Math.min(size, buttonsRemaining);
-        buttonsRemaining -= rowButtons;
-        const startIndex = cumulativeButtons;
-        cumulativeButtons += rowButtons;
-        return startIndex + rowButtons;
-      });
+        this.buttonRows = sizes.map(size => {
+          const rowButtons = Math.min(size, buttonsRemaining);
+          buttonsRemaining -= rowButtons;
+          return rowButtons;
+        });
+      }
     },
 
     async getNum() {
@@ -123,7 +121,7 @@ export default {
     },
 
     validateSize() {
-      const regex = /^\d+(\:\d+)?(\:\d+)?$/;
+      const regex = /^\d+(?:\:\d+)*$/;
       this.error = !regex.test(this.btn_sizes);
     },
 
@@ -398,19 +396,20 @@ export default {
             title="Connect to the buttons or user_state of the selected stage">
             <label class="label">Stage buttons</label>
             <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues" :updateTable="updateTable"
-              @openStageButtonModal="openStageButtonModal" :showStageButtonModal="showStageButtonModal" />
+              @updateTable="getButtons" @openStageButtonModal="openStageButtonModal"
+              :showStageButtonModal="showStageButtonModal" />
           </div>
 
-          <div class="button-container" v-if="!addMode">
+          <div class="button-container" v-if="!addMode && buttons.length">
             <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
-              <button v-for="(buttonIndex, i) in rowButtons" :key="i" class="btn" disabled>
-                {{ buttons[index * rowButtons + i].alias }}
+              <button v-for="(buttonIndex, i) in rowButtons" :key="i" class="bot-button" disabled>
+                <span>Button</span>
               </button>
             </div>
           </div>
 
           <div class="dist" v-if="stageSelected" title="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)">
-            <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(\:\d+)?(\:\d+)?$/ }">
+            <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(?:\:\d+)*$/ }">
               <div>
                 <label for="btn-sizes" class="label">Button sizes</label>
                 <input type="text" name="btn-sizes" id="btn-sizes" class="input" v-model="btn_sizes"

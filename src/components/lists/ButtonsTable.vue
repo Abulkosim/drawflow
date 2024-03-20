@@ -102,6 +102,7 @@ export default {
     async deleteButton(id) {
       await deleteButton(id);
       await this.getTableData();
+      this.$emit('updateTable');
     },
     addButton() {
       this.$emit('openStageButtonModal');
@@ -113,6 +114,7 @@ export default {
   watch: {
     updateTable() {
       this.getTableData();
+      this.$emit('updateTable');
     }
   },
   components: { EditIcon, DeleteIcon }
@@ -121,6 +123,7 @@ export default {
 
 <style scoped>
 @import '../../assets/table.css';
+
 table .options span {
   font-weight: 500;
 }

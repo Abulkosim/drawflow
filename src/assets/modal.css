@@ -376,10 +376,43 @@ input[type='number'] {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.button-row {
+  gap: 3px;
   margin-bottom: 10px;
 }
-.btn {
-  margin-right: 5px;
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 3px;
+  width: 100%;
+}
+
+.bot-button {
+  height: 46px;
+  border: none;
+  border-radius: 3px;
+  background-color: #e4eeff;
+  color: #226ce6;
+  outline: none;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  cursor: pointer;
+  padding: 0 15px;
+  font-weight: 500;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.bot-button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bot-button:hover {
+  background-color: #d8e7ff;
+}
+
+.bot-button:active {
+  background-color: #c2d6ff;
 }
