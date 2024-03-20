@@ -80,6 +80,10 @@ export default {
           buttonsRemaining -= rowButtons;
           return rowButtons;
         });
+
+        if (buttonsRemaining > 0) {
+          this.buttonRows.push(buttonsRemaining);
+        }
       }
     },
 
