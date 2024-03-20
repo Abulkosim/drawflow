@@ -21,13 +21,17 @@
                   URL</button>
               </div>
               <div class="url-part">
-                <label for="url-input" class="label required">
-                  <span v-if="!toggle">Callback URL</span>
-                  <span v-if="toggle">Alias</span>
+                <label v-if="toggle" for="template-url" class="label required">
+                  <span>Alias</span>
+                </label>
+                <label v-if="!toggle" for="callback-url" class="label required">
+                  <span>Callback URL</span>
                 </label>
                 <div class="url-container">
-                  <input type="text" name="url" id="url-input" class="input" v-model="url"
-                    :class="{ isToggled: !toggle }" autocomplete="off" required :placeholder="placeholder">
+                  <input v-if="toggle" type="text" name="template-url" id="template-url" class="input"
+                    v-model="templateURL" autocomplete="off" required placeholder="v1/bot/test/api/">
+                  <input v-if="!toggle" type="text" name="callback-url" id="callback-url" class="input isToggled"
+                    v-model="url" autocomplete="off" required>
 
                   <div v-if="!toggle" class="check-button" @click="check">
                     <CheckIcon class="check-icon" />
@@ -36,6 +40,7 @@
                 <transition name="fade">
                   <span v-show="response && !toggle" :class="{ success: success, fail: fail }">{{ response }}</span>
                 </transition>
+                <span v-if="invalidInput && toggle" class="output">Invalid input!</span>
                 <span v-if="validity && !response && !toggle" class="output">Make sure that the URL is valid!</span>
                 <span v-if="errors[0]" class="output">Required field!</span>
               </div>
@@ -72,13 +77,15 @@ export default {
     return {
       heading: 'Create URL',
       url: '',
+      templateURL: '',
       description: '',
       toggle: true,
       loading: false,
       response: '',
       success: false,
       fail: false,
-      validity: false
+      validity: false,
+      invalidInput: false
     };
   },
   methods: {
@@ -140,12 +147,11 @@ export default {
     },
 
     async submit() {
-      if (!this.url.startsWith('https:')) {
-        this.validity = true;
-        return;
-      }
-
       if (!this.toggle) {
+        if (!this.url.startsWith('https:')) {
+          this.validity = true;
+          return;
+        }
         const data = {
           user_id: this.user_id,
           url: this.url,
@@ -155,9 +161,15 @@ export default {
         this.$emit('closed');
         this.close();
       } else {
+        let regex = /^(?!\/)(?:[^/\\]+|(?<!\/)\/){2}[^/\\]+$/
+        if (regex.test(this.templateURL) === false || this.templateURL.includes(' ')) {
+          this.invalidInput = true;
+          return;
+        }
+
         this.loading = true;
         const alias = {
-          alias: this.url
+          alias: this.templateURL
         }
         const response = await createTemplate(alias);
 
@@ -166,7 +178,7 @@ export default {
         if (response.status === 200 && response.data.data.create_main_stage != null) {
           const data = {
             user_id: this.user_id,
-            url: 'https://bot-platon.platon.uz/services/platon-core/api/' + this.url,
+            url: 'https://bot-platon.platon.uz/services/platon-core/api/' + this.templateURL,
             description: this.description
           };
           await createURL(data);
@@ -174,11 +186,6 @@ export default {
           this.close();
         }
       }
-    }
-  },
-  computed: {
-    placeholder() {
-      return this.toggle ? 'v1/bot/test/api/' : '';
     }
   },
   watch: {
