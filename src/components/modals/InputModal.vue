@@ -33,7 +33,9 @@ export default {
     await this.getStages()
     await this.getNum()
     await this.getBackhands()
-    this.getButtons()
+    if (!this.addMode) {
+      this.getButtons()
+    }
 
 
     if (this.addMode) {
@@ -70,20 +72,24 @@ export default {
       this.generateButtonRows(this.btn_sizes)
     },
 
-    generateButtonRows(btnString) {
-      if (this.buttons.length) {
-        const sizes = btnString.split(':').map(Number);
-        let buttonsRemaining = this.buttons.length;
+    generateButtonRows(buttonSizesString) {
 
-        this.buttonRows = sizes.map(size => {
-          const rowButtons = Math.min(size, buttonsRemaining);
-          buttonsRemaining -= rowButtons;
-          return rowButtons;
+      if (!this.buttons.length || !buttonSizesString || buttonSizesString == 0) {
+        return
+      }
+
+      const sizes = buttonSizesString.split(':').map(Number);
+      let buttonsRemaining = this.buttons.length;
+      this.buttonRows = [];
+
+      while (buttonsRemaining > 0) {
+        sizes.forEach(size => {
+          if (buttonsRemaining > 0) {
+            const rowButtons = Math.min(size, buttonsRemaining);
+            buttonsRemaining -= rowButtons;
+            this.buttonRows.push(rowButtons);
+          }
         });
-
-        if (buttonsRemaining > 0) {
-          this.buttonRows.push(buttonsRemaining);
-        }
       }
     },
 
@@ -125,7 +131,7 @@ export default {
     },
 
     validateSize() {
-      const regex = /^\d+(?:\:\d+)*$/;
+      const regex = /^(?!0+\d)[1-5](?::(?!0+\d)[1-5])*$/;
       this.error = !regex.test(this.btn_sizes);
     },
 
@@ -405,7 +411,7 @@ export default {
               :showStageButtonModal="showStageButtonModal" />
           </div>
 
-          <div class="button-container" v-if="!addMode && buttons.length">
+          <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
             <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
               <button v-for="(buttonIndex, i) in rowButtons" :key="i" class="bot-button" disabled>
                 <span>{{ buttons[i].alias }}</span>
@@ -414,11 +420,11 @@ export default {
           </div>
 
           <div class="dist" v-if="stageSelected" title="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)">
-            <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^\d+(?:\:\d+)*$/ }">
+            <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^(?!0+\d)[1-5](?::(?!0+\d)[1-5])*$/ }">
               <div>
                 <label for="btn-sizes" class="label">Button sizes</label>
                 <input type="text" name="btn-sizes" id="btn-sizes" class="input" v-model="btn_sizes"
-                  @change="validateSize" autocomplete='off' :class="{ error: error }">
+                  @input="validateSize" autocomplete='off' :class="{ error: error }">
                 <span v-if="errors[0]" class="output">Invalid format!</span>
               </div>
             </ValidationProvider>
