@@ -148,10 +148,6 @@ export default {
 
     async submit() {
       if (!this.toggle) {
-        if (!this.url.startsWith('https:')) {
-          this.validity = true;
-          return;
-        }
         const data = {
           user_id: this.user_id,
           url: this.url,
@@ -161,7 +157,7 @@ export default {
         this.$emit('closed');
         this.close();
       } else {
-        let regex = /^(?!\/)(?:[^/\\]+|(?<!\/)\/){2}[^/\\]+$/
+        let regex = /^(?!\/\/)(?:[^/\\]+|\/(?!\/))+$/
         if (regex.test(this.templateURL) === false || this.templateURL.includes(' ')) {
           this.invalidInput = true;
           return;
