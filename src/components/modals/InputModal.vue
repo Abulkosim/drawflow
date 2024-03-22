@@ -414,7 +414,7 @@ export default {
           <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
             <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
               <button v-for="(buttonIndex, i) in rowButtons" :key="i" class="bot-button" disabled>
-                <span>{{ buttons[i].alias }}</span>
+                <span>Button</span>
               </button>
             </div>
           </div>
@@ -505,5 +505,9 @@ export default {
 
 .urlChosen {
   color: green;
+}
+
+.dist {
+  margin-top: 10px
 }
 </style>
