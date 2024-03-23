@@ -31,5 +31,5 @@ export default {
 }
 </script>
 <style scoped>
-@import '../assets/error.page.css'
+@import '../assets/error.page.css';
 </style>

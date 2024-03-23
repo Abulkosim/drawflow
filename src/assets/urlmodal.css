@@ -100,24 +100,26 @@ input:checked + .slider:before {
 .tabs button {
   flex-basis: 50%;
   padding: 12px 0;
-  font-size: 17px;
+  font-size: 18px;
   background: #f2f6fa;
   border: none;
+  border-bottom: 2px solid #f2f6fa;
   user-select: none;
   color: #2e363e;
   cursor: pointer;
 }
 
 .tabs .template {
-  border-radius: 8px 0 0 8px;
+  border-radius: 5px 0 0 0;
 }
 
 .tabs .another-url {
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 5px 0 0;
 }
 
 .tabs .active {
   background: #e2eeff;
+  border-bottom: 2px solid #226ce6;
 }
 
 .tabs button:focus {

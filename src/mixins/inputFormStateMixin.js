@@ -26,7 +26,8 @@ export default {
       stage: '',
       backhand: '',
       buttonRows: [],
-      buttons: []
+      buttons: [], 
+      loader: false
     };
   },
   methods: {

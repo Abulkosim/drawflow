@@ -17,8 +17,7 @@
               <div class="tabs">
                 <button @click.stop.prevent="toggle = true" class="template"
                   :class="{ active: toggle }">Template</button>
-                <button @click.stop.prevent="toggle = false" class="another-url" :class="{ active: !toggle }">Another
-                  URL</button>
+                <button @click.stop.prevent="toggle = false" class="another-url" :class="{ active: !toggle }">Another URL</button>
               </div>
               <div class="url-part">
                 <label v-if="toggle" for="template-url" class="label required">

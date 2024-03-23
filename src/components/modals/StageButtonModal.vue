@@ -9,7 +9,12 @@
         <CloseButton @close="close" />
 
       </div>
-      <ValidationObserver ref="observer" v-slot="{ invalid, validate }">
+
+      <div class="loader-container" v-show="loader">
+        <div class="loader"></div>
+      </div>
+
+      <ValidationObserver v-show="!loader" ref="observer" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
 
@@ -123,9 +128,11 @@ export default {
       urls: [],
       stages: [],
       info: {},
+      loader: false
     };
   },
   async created() {
+    this.loader = true
     await this.getOrder();
     await this.getStages();
     await this.getUrls();
@@ -141,6 +148,8 @@ export default {
     } else {
       this.heading = 'Add button to the stage';
     }
+
+    this.loader = false;
   },
   methods: {
     clearBackType() {
@@ -252,4 +261,5 @@ export default {
 <style scoped>
 @import '../../assets/modal.css';
 @import '../../assets/stage.button.css';
+@import '../../assets/loader.css';
 </style>

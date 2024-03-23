@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <div class="modal-content">
-     
+
       <div class="modal-header">
         <h3 class="modal-heading">
           {{ heading }}
@@ -9,7 +9,11 @@
         <CloseButton @close="close" />
       </div>
 
-      <ValidationObserver ref="observer" rules="required" v-slot="{ invalid, validate }">
+      <div class="loader-container" v-show="loader">
+        <div class="loader"></div>
+      </div>
+
+      <ValidationObserver v-show="!loader" ref="observer" rules="required" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
 
@@ -50,6 +54,7 @@ export default {
       },
       locales: [],
       checked: [],
+      loader: false
     };
   },
   computed: {
@@ -58,8 +63,10 @@ export default {
     }
   },
   created() {
+    this.loader = true;
     this.getLocales();
     this.getBotLocales();
+    this.loader = false;
   },
   methods: {
     close() {
@@ -87,5 +94,6 @@ export default {
 
 <style scoped>
 @import '../../assets/modal.css';
-@import '../../assets/locales.modal.css'
+@import '../../assets/locales.modal.css';
+@import '../../assets/loader.css';
 </style>

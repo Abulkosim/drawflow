@@ -28,6 +28,7 @@ export default {
   },
 
   async created() {
+    this.loader = true;
     await this.getAliases()
     await this.getUrls()
     await this.getStages()
@@ -37,13 +38,14 @@ export default {
       this.getButtons()
     }
 
-
     if (this.addMode) {
       this.heading = 'Add stage'
     } else {
       this.heading = 'Edit stage'
       this.editData()
     }
+
+    this.loader = false
   },
 
   async mounted() {
@@ -249,7 +251,11 @@ export default {
         </div>
       </div>
 
-      <ValidationObserver ref="observer" v-slot="{ invalid, validate }">
+      <div class="loader-container" v-show="loader">
+        <div class="loader"></div>
+      </div>
+
+      <ValidationObserver v-show="!loader" ref="observer" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
             <div class="first-row">
@@ -465,6 +471,7 @@ export default {
 
 <style scoped>
 @import '../../assets/modal.css';
+@import '../../assets/loader.css';
 
 .modal-heading .corner {
   background-color: #F2F6FA;
