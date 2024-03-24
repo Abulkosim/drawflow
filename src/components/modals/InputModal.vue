@@ -75,7 +75,6 @@ export default {
     },
 
     generateButtonRows(buttonSizesString) {
-
       if (!this.buttons.length || !buttonSizesString || buttonSizesString == 0) {
         return
       }
@@ -83,15 +82,20 @@ export default {
       const sizes = buttonSizesString.split(':').map(Number);
       let buttonsRemaining = this.buttons.length;
       this.buttonRows = [];
+      let buttonNameIndex = 0;
 
       while (buttonsRemaining > 0) {
-        sizes.forEach(size => {
-          if (buttonsRemaining > 0) {
-            const rowButtons = Math.min(size, buttonsRemaining);
-            buttonsRemaining -= rowButtons;
-            this.buttonRows.push(rowButtons);
+        for (let size of sizes) {
+          const rowButtons = [];
+          for (let i = 0; i < size && buttonNameIndex < this.buttons.length; i++) {
+            rowButtons.push(buttonNameIndex++);
           }
-        });
+          this.buttonRows.push(rowButtons);
+          buttonsRemaining -= size;
+          if (rowButtons.length > 0) {
+            break;
+          }
+        }
       }
     },
 
@@ -417,10 +421,18 @@ export default {
               :showStageButtonModal="showStageButtonModal" />
           </div>
 
-          <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
+          <!-- <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
             <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
               <button v-for="(buttonIndex, i) in rowButtons" :key="i" class="bot-button" disabled>
                 <span>Button</span>
+              </button>
+            </div>
+          </div> -->
+
+          <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
+            <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
+              <button v-for="buttonIndex in rowButtons" :key="buttonIndex" class="bot-button" disabled>
+                <span>{{ buttons[buttonIndex].alias }}</span>
               </button>
             </div>
           </div>

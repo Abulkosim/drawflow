@@ -16,8 +16,7 @@
             <div>
               <div>
                 <label for="url" class="label required">Alias</label>
-                <input type="text" name="url" id="url" class="input" v-model="url" autocomplete="off" required
-                  placeholder="v1/tg/bot/api">
+                <input type="text" name="url" id="url" class="input" v-model="url" autocomplete="off" required>
                 <span v-if="errors[0]" class="output">Required field!</span>
               </div>
             </div>
@@ -47,10 +46,23 @@ export default {
       loading: false
     };
   },
+  created() {
+    this.url = 'v1/temp/' + this.generateRandomString(10);
+  },
   methods: {
     close() {
       this.$emit('close');
     },
+
+    generateRandomString(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return result;
+    },
+
     async submit() {
       this.loading = true;
       const alias = {

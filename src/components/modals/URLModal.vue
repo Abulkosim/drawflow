@@ -17,7 +17,8 @@
               <div class="tabs">
                 <button @click.stop.prevent="toggle = true" class="template"
                   :class="{ active: toggle }">Template</button>
-                <button @click.stop.prevent="toggle = false" class="another-url" :class="{ active: !toggle }">Another URL</button>
+                <button @click.stop.prevent="toggle = false" class="another-url" :class="{ active: !toggle }">Another
+                  URL</button>
               </div>
               <div class="url-part">
                 <label v-if="toggle" for="template-url" class="label required">
@@ -28,7 +29,7 @@
                 </label>
                 <div class="url-container">
                   <input v-if="toggle" type="text" name="template-url" id="template-url" class="input"
-                    v-model="templateURL" autocomplete="off" required placeholder="v1/bot/test/api/">
+                    v-model="templateURL" autocomplete="off" required>
                   <input v-if="!toggle" type="text" name="callback-url" id="callback-url" class="input isToggled"
                     v-model="url" autocomplete="off" required>
 
@@ -87,9 +88,21 @@ export default {
       invalidInput: false
     };
   },
+  created() {
+    this.templateURL = 'v1/temp/' + this.generateRandomString(10);
+  },
   methods: {
     close() {
       this.$emit('close');
+    },
+
+    generateRandomString(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return result;
     },
 
     check() {
@@ -156,8 +169,9 @@ export default {
         this.$emit('closed');
         this.close();
       } else {
-        let regex = /^(?!\/\/)(?:[^/\\]+|\/(?!\/))+$/
-        if (regex.test(this.templateURL) === false || this.templateURL.includes(' ')) {
+        let regex = /^(?!\/\/)(?:[^/:;\\]+|\/(?!\/))+$/
+
+        if (regex.test(this.templateURL) === false || this.templateURL.includes(' ') || this.templateURL.startsWith('/')) {
           this.invalidInput = true;
           return;
         }
