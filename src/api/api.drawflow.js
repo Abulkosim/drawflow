@@ -91,3 +91,11 @@ export async function createBack(data) {
     console.error('Failed to create back:', error)
   }
 }
+
+export async function checkStage(payload) {
+  try {
+    return http.post('tg/bot/stage/check', payload)
+  } catch (error) {
+    console.error('Failed to check stage:', error)
+  }
+}

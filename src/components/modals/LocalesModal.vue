@@ -66,7 +66,7 @@ export default {
     this.loader = true;
     this.getLocales();
     this.getBotLocales();
-    this.loader = false;
+    setTimeout(() => this.loader = false, 300);
   },
   methods: {
     close() {
