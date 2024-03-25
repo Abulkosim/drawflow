@@ -315,7 +315,7 @@ export default {
     <LocalesContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @editNode="openLocaleModal"
       :node="selectedNode" />
 
-    <div v-if="x.showModal" class="overlay"></div>
+    <div v-if="x.showInputModal || x.showModal" class="overlay"></div>
 
     <transition name="fade">
       <ConfirmationModal :showModal="x.showModal" @close="closeModal('showModal')" @confirm="confirmDeletion" />
@@ -324,9 +324,6 @@ export default {
     <transition name="fade">
       <Toast :success="isSuccessful" :show="showToast" :msg="toastMessage" />
     </transition>
-
-    <div v-if="x.showInputModal && !x.showStageButtonModal && !x.showAddButtonModal && !x.showAddTextModal"
-      class="overlay"></div>
 
     <transition name="fade">
       <InputModal v-if="x.showInputModal" :showModal="x.showInputModal" :addMode="addMode" :inputValues="inputValues"
