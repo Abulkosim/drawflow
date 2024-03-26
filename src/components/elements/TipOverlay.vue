@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
     <transition name="fade">
       <TipMenu @close="closeTipMenu" v-if="showTipMenu" />
     </transition>
@@ -10,6 +10,7 @@
     <transition name="fade">
       <TipEdit @close="closeTipEdit" v-if="showTipEdit" :showTipMenu="showTipMenu" :showTipDrag="showTipDrag" />
     </transition>
+    <Documentation />
   </div>
 </template>
 
@@ -17,11 +18,12 @@
 import TipMenu from '../menus/TipMenu.vue';
 import TipDrag from '../menus/TipDrag.vue';
 import TipEdit from '../menus/TipEdit.vue';
+import Documentation from '../menus/Documentation.vue';
 
 export default {
   name: 'TipOverlay',
   components: {
-    TipMenu, TipDrag, TipEdit
+    TipMenu, TipDrag, TipEdit, Documentation
   },
   props: {
     showTipMenu: {
