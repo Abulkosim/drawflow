@@ -36,5 +36,5 @@ export default {
 
 </script>
 <style scoped>
-@import '../../assets/confirmation.css'
+@import '../../assets/confirmation.css';
 </style>
