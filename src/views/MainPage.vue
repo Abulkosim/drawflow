@@ -23,7 +23,7 @@ import QAIcon from '../components/icons/QAIcon.vue'
 import transformationMixin from '../mixins/transformationMixin'
 import dragDropMixin from '../mixins/dragDropMixin';
 import mainPageMixin from '../mixins/mainPageMixin';
-import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack, checkStage } from '../api/api.drawflow'
+import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 import '../assets/app.css';
 
 export default {
@@ -139,16 +139,6 @@ export default {
 
     async save(nodeData) {
       if (this.addMode) {
-        const checkData = {
-          alias: nodeData.alias,
-          bot_id: nodeData.bot_id,
-        }
-        const response = await checkStage(checkData)
-        if (response.data.data) {
-          this.showFailedToast()
-          return;
-        }
-
         const createData = {
           alias: nodeData.alias,
           stage_order: nodeData.stage_order,

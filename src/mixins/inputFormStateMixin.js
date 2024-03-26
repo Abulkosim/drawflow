@@ -27,7 +27,9 @@ export default {
       backhand: '',
       buttonRows: [],
       buttons: [], 
-      loader: false
+      loader: false, 
+      nameExists: false, 
+      title: '', 
     };
   },
   methods: {

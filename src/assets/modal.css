@@ -329,6 +329,11 @@ form select {
   background-color: #1760d7dd;
 }
 
+.submit-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
 .svg-close {
   width: 0.75rem;
   height: 0.75rem;

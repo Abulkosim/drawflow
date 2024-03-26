@@ -10,6 +10,7 @@ import inputFormStateMixin from '../../mixins/inputFormStateMixin';
 import toggleEditorMixin from '../../mixins/toggleEditorMixin';
 import userStateMixin from '../../mixins/userStateMixin';
 import { fetchButtons } from '../../api/api.table';
+import { checkStage } from '../../api/api.drawflow';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
@@ -67,6 +68,21 @@ export default {
 
     createURL() {
       this.$emit('createURL')
+    },
+
+    async checkName() {
+      const checkData = {
+        alias: this.alias,
+        bot_id: this.bot_id,
+      }
+
+      const response = await checkStage(checkData)
+      if (response.data.data) {
+        this.nameExists = true
+        this.title = 'Name already exists!'
+      } else {
+        this.nameExists = false
+      }
     },
 
     async getButtons() {
@@ -267,7 +283,8 @@ export default {
                 <ValidationProvider rules="required" v-slot="{ errors }">
                   <div>
                     <label for="alias" class="label required">Name</label>
-                    <input type="text" name="alias" id="alias" class="input" v-model="alias" autocomplete="off">
+                    <input type="text" name="alias" id="alias" class="input" v-model="alias" autocomplete="off"
+                      @input="checkName">
                     <span v-if="errors[0]" class="output">Required field!</span>
                   </div>
                 </ValidationProvider>
@@ -470,7 +487,7 @@ export default {
           </div>
 
           <div class="modal-save">
-            <button type="submit" class="submit-button">
+            <button type="submit" class="submit-button" :disabled="nameExists" :title="title">
               <SaveIcon />
               <span>Save</span>
             </button>
