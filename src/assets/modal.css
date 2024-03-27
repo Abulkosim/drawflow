@@ -75,6 +75,7 @@
   line-height: 1.75rem;
   font-weight: 600;
   color: #2e363e;
+  user-select: none;
 }
 
 .modal-close {
@@ -238,6 +239,7 @@ form select {
   background-color: #e4eeff;
   color: #226ce6;
   outline: none;
+  user-select: none;
 }
 
 .create-button span {
@@ -313,6 +315,7 @@ form select {
   background-color: #226ce6;
   color: white;
   height: 52px;
+  user-select: none;
 }
 
 .submit-button span {
@@ -383,6 +386,7 @@ input[type='number'] {
   align-items: center;
   gap: 3px;
   margin-bottom: 10px;
+  user-select: none;
 }
 
 .button-row {

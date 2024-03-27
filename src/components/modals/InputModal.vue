@@ -438,14 +438,6 @@ export default {
               :showStageButtonModal="showStageButtonModal" />
           </div>
 
-          <!-- <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
-            <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
-              <button v-for="(buttonIndex, i) in rowButtons" :key="i" class="bot-button" disabled>
-                <span>Button</span>
-              </button>
-            </div>
-          </div> -->
-
           <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
             <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
               <button v-for="buttonIndex in rowButtons" :key="buttonIndex" class="bot-button" disabled>

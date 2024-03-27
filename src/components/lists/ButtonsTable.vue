@@ -124,6 +124,10 @@ export default {
 <style scoped>
 @import '../../assets/table.css';
 
+table {
+  user-select: none;
+}
+
 table .options span {
   font-weight: 500;
 }
