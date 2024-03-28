@@ -115,8 +115,8 @@
 
 .first-row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px;
+  grid-template-columns: 1fr 0.4fr 0.6fr 0.8fr;
+  grid-gap: 7px;
 }
 
 .input-container {
@@ -175,7 +175,7 @@ select {
 form .input {
   display: block;
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 7px;
   border: none;
   width: 100%;
   font-size: 1rem;
