@@ -17,6 +17,9 @@ import MicrophoneIcon from '../icons/MicrophoneIcon.vue';
 import CaretDownIcon from '../icons/CaretDownIcon.vue';
 
 export default {
+  props: {
+    btn_type: String
+  },
   components: {
     ClipIcon,
     MicrophoneIcon,
@@ -39,7 +42,6 @@ export default {
   border-radius: 10px;
   height: 48px;
   width: 100%;
-  margin-bottom: 5px;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
@@ -74,7 +76,7 @@ export default {
   background-color: #f2f6fa;
   outline: none;
   letter-spacing: 1px;
-  color: #777777; 
+  color: #777777;
 }
 
 svg {

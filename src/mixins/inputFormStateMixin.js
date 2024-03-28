@@ -26,10 +26,12 @@ export default {
       stage: '',
       backhand: '',
       buttonRows: [],
-      buttons: [], 
-      loader: false, 
-      nameExists: false, 
-      title: '', 
+      buttons: [],
+      loader: false,
+      nameExists: false,
+      title: '',
+      time: '',
+      bot_text: ''
     };
   },
   methods: {

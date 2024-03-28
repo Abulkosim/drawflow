@@ -11,7 +11,7 @@ import inputFormStateMixin from '../../mixins/inputFormStateMixin';
 import toggleEditorMixin from '../../mixins/toggleEditorMixin';
 import userStateMixin from '../../mixins/userStateMixin';
 import { fetchButtons } from '../../api/api.table';
-import { checkStage } from '../../api/api.drawflow';
+import { checkStage, getBotText } from '../../api/api.drawflow';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
@@ -53,6 +53,10 @@ export default {
 
   async mounted() {
     this.initializeAceEditor()
+    setTimeout(() => {
+      this.getBotText()
+    }, 100);
+    this.time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
   },
 
   methods: {
@@ -70,6 +74,18 @@ export default {
 
     createURL() {
       this.$emit('createURL')
+    },
+
+    async getBotText() {
+      if (this.text_alias.id) {
+        const response = await getBotText(this.text_alias.id)
+        for (let item in response.data) {
+          if (response.data[item]) {
+            this.bot_text = response.data[item]
+            return;
+          }
+        }
+      }
     },
 
     async checkName() {
@@ -328,7 +344,7 @@ export default {
               <label for="text" class="label">Text</label>
               <div class="buttons">
                 <div class="select-wrapper">
-                  <select id="text" class="input" v-model="text_alias">
+                  <select id="text" class="input" v-model="text_alias" @change="getBotText">
                     <option value="" disabled selected hidden></option>
                     <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
                   </select>
@@ -440,13 +456,23 @@ export default {
               :showStageButtonModal="showStageButtonModal" />
           </div>
 
-          <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
-            <label class="label">Telegram View</label>
-            <TelegramMessage />
-            <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
-              <button v-for="buttonIndex in rowButtons" :key="buttonIndex" class="bot-button" disabled>
-                <span>{{ buttons[buttonIndex].alias }}</span>
-              </button>
+          <div v-if="!addMode && buttons.length && stageSelected">
+            <label class="label telegram-view">Telegram View</label>
+            <div class="button-container" :class="{ contTypeInline: btn_type == 'INLINE' }">
+              <TelegramMessage :btn_type="btn_type" />
+              <div class="bot-buttons">
+                <div v-if="btn_type == 'INLINE'" class="text-container">
+                  <p v-if="bot_text">{{ bot_text }}</p>
+                  <p v-else>Default text...</p>
+                  <span class="time-value">{{ time }}</span>
+                </div>
+                <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row"
+                  :class="{ narrower: btn_type == 'INLINE' }">
+                  <button v-for="buttonIndex in rowButtons" :key="buttonIndex" class="bot-button" disabled>
+                    <span>{{ buttons[buttonIndex].alias }}</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -543,9 +569,9 @@ export default {
   margin-top: 10px
 }
 
-.button-container .label {
+.telegram-view {
   text-align: center;
   font-size: 18px;
-  margin-bottom: 10px
+  margin-bottom: 20px
 }
 </style>

@@ -99,3 +99,12 @@ export async function checkStage(payload) {
     console.error('Failed to check stage:', error)
   }
 }
+
+export async function getBotText(text_id) {
+  try {
+    const response = await http.get(`tg/bot/text/values?id=${text_id}`)
+    return response.data
+  } catch (error) {
+    console.error('Failed to get bot text:', error)
+  }
+}
