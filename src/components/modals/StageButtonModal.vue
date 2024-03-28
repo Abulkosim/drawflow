@@ -59,7 +59,7 @@
                     <option value="other">other</option>
                   </select>
                   <button class="clear-button" v-if="backType" @click.stop.prevent="clearBackType">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" aria-hidden="true" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" aria-hidden="true" fill="none"
                       viewBox="0 0 14 14">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />

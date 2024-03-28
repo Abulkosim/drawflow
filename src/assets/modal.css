@@ -174,7 +174,7 @@ select {
 
 form .input {
   display: block;
-  padding: 14px;
+  padding: 10px 14px;
   border-radius: 10px;
   border: none;
   width: 100%;
@@ -194,7 +194,7 @@ form .input {
 .select-wrapper::after {
   content: '\25BE';
   position: absolute;
-  top: 2px;
+  top: -1px;
   right: 5px;
   font-size: 24px;
   color: #929aa2;
@@ -232,8 +232,8 @@ form select {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  width: 46px;
-  height: 46px;
+  width: 37px;
+  height: 37px;
   border: none;
   border-radius: 10px;
   background-color: #e4eeff;
@@ -314,7 +314,7 @@ form select {
   cursor: pointer;
   background-color: #226ce6;
   color: white;
-  height: 52px;
+  height: 46px;
   user-select: none;
 }
 
@@ -333,7 +333,7 @@ form select {
 }
 
 .submit-button:disabled {
-  background-color: #666;
+  background-color: #888;
   cursor: not-allowed;
 }
 

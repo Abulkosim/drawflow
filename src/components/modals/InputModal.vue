@@ -331,7 +331,7 @@ export default {
                     <option v-for="item in aliases" :key="item.id" :value="item">{{ item.name }}</option>
                   </select>
                   <button class="clear-button" v-if="text_alias" @click.stop.prevent="clearTextAlias">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" aria-hidden="true" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" aria-hidden="true" fill="none"
                       viewBox="0 0 14 14">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
@@ -375,7 +375,7 @@ export default {
                   </select>
                   <button class="clear-button" v-if="stateType && btn_type == 'INLINE'"
                     @click.stop.prevent="clearStateType">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" aria-hidden="true" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" aria-hidden="true" fill="none"
                       viewBox="0 0 14 14">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
@@ -506,8 +506,8 @@ export default {
 
 .clear-button {
   position: absolute;
-  top: 11px;
-  right: 20px;
+  top: 7px;
+  right: 18px;
   width: 1.5rem;
   height: 1.5rem;
   cursor: pointer;
