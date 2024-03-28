@@ -392,6 +392,11 @@ input[type='number'] {
   user-select: none;
 }
 
+.posStart {
+  display: flex;
+  align-items: start;
+}
+
 .bot-buttons {
   display: flex;
   flex-direction: column;

@@ -458,7 +458,12 @@ export default {
 
           <div v-if="!addMode && buttons.length && stageSelected">
             <label class="label telegram-view">Telegram View</label>
-            <div class="button-container" :class="{ contTypeInline: btn_type == 'INLINE' }">
+            <div class="button-container" :class="{ contTypeInline: btn_type == 'INLINE', posStart: btn_type != 'INLINE' }">
+              <div v-if="btn_type != 'INLINE'" class="text-container">
+                <p v-if="bot_text">{{ bot_text }}</p>
+                <p v-else>Default text...</p>
+                <span class="time-value">{{ time }}</span>
+              </div>
               <TelegramMessage :btn_type="btn_type" />
               <div class="bot-buttons">
                 <div v-if="btn_type == 'INLINE'" class="text-container">
