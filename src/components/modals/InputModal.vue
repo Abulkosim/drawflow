@@ -3,6 +3,7 @@ import ButtonsTable from '../lists/ButtonsTable.vue';
 import CloseButton from '../buttons/CloseButton.vue';
 import SaveIcon from "../icons/SaveIcon.vue";
 import QuestionIcon from "../icons/QuestionIcon.vue";
+import TelegramMessage from '../elements/TelegramMessage.vue';
 import Toast from '../notifications/Toast.vue';
 import { fetchNum, fetchBackhands, fetchAliases, fetchStages, fetchURLs, checkCode } from '../../api/api.stage';
 import aceEditorMixin from '../../mixins/aceEditorMixin';
@@ -20,6 +21,7 @@ export default {
     Toast,
     SaveIcon,
     CloseButton,
+    TelegramMessage,
     QuestionIcon
   },
   computed: {
@@ -439,6 +441,8 @@ export default {
           </div>
 
           <div class="button-container" v-if="!addMode && buttons.length && stageSelected">
+            <label class="label">Telegram View</label>
+            <TelegramMessage />
             <div v-for="(rowButtons, index) in buttonRows" :key="index" class="button-row">
               <button v-for="buttonIndex in rowButtons" :key="buttonIndex" class="bot-button" disabled>
                 <span>{{ buttons[buttonIndex].alias }}</span>
@@ -537,5 +541,11 @@ export default {
 
 .dist {
   margin-top: 10px
+}
+
+.button-container .label {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 10px
 }
 </style>
