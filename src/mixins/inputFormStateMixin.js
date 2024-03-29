@@ -31,7 +31,9 @@ export default {
       nameExists: false,
       title: '',
       time: '',
-      bot_text: ''
+      bot_text: '',
+      displayTable: false, 
+      displayView: false
     };
   },
   methods: {
@@ -78,5 +80,13 @@ export default {
         this.user_state = this.inputValues.user_state;
       }
     },
+
+    toggleTable() {
+      this.displayTable = !this.displayTable;
+    }, 
+
+    toggleView() {
+      this.displayView = !this.displayView;
+    }
   }
 };

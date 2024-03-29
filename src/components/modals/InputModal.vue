@@ -5,6 +5,8 @@ import SaveIcon from "../icons/SaveIcon.vue";
 import QuestionIcon from "../icons/QuestionIcon.vue";
 import TelegramMessage from '../elements/TelegramMessage.vue';
 import Toast from '../notifications/Toast.vue';
+import DownIcon from '../icons/DownIcon.vue';
+import UpIcon from '../icons/UpIcon.vue';
 import { fetchNum, fetchBackhands, fetchAliases, fetchStages, fetchURLs, checkCode } from '../../api/api.stage';
 import aceEditorMixin from '../../mixins/aceEditorMixin';
 import inputFormStateMixin from '../../mixins/inputFormStateMixin';
@@ -22,7 +24,9 @@ export default {
     SaveIcon,
     CloseButton,
     TelegramMessage,
-    QuestionIcon
+    QuestionIcon,
+    DownIcon,
+    UpIcon
   },
   computed: {
     stageSelected() {
@@ -77,6 +81,9 @@ export default {
     },
 
     async getBotText() {
+      if (this.addMode) {
+        return
+      }
       if (this.text_alias.id) {
         const response = await getBotText(this.text_alias.id)
         for (let item in response.data) {
@@ -450,15 +457,33 @@ export default {
 
           <div class="table-container" v-if="!addMode && stageSelected"
             title="Connect to the buttons or user_state of the selected stage">
-            <label class="label">Stage buttons</label>
-            <ButtonsTable v-if="!addMode && stageSelected" :inputValues="inputValues" :updateTable="updateTable"
-              @updateTable="getButtons" @openStageButtonModal="openStageButtonModal"
-              :showStageButtonModal="showStageButtonModal" />
+            <label class="label lable-icon">
+              <span>Stage Buttons</span>
+              <span @click="toggleTable" v-if="!displayTable">
+                <DownIcon class="pos-icon" />
+              </span>
+              <span @click="toggleTable" v-if="displayTable">
+                <UpIcon class="pos-icon" />
+              </span>
+            </label>
+            <transition name="fade">
+              <ButtonsTable v-show="displayTable" v-if="!addMode && stageSelected" :inputValues="inputValues"
+                :updateTable="updateTable" @updateTable="getButtons" @openStageButtonModal="openStageButtonModal"
+                :showStageButtonModal="showStageButtonModal" />
+            </transition>
           </div>
 
           <div v-if="!addMode && buttons.length && stageSelected">
-            <label class="label telegram-view">Telegram View</label>
-            <div class="button-container"
+            <label class="label telegram-view label-icon">
+              <span>Telegram View</span>
+              <span @click="toggleView" v-if="!displayView">
+                <DownIcon class="pos-icon" />
+              </span>
+              <span @click="toggleView" v-if="displayView">
+                <UpIcon class="pos-icon" />
+              </span>
+            </label>
+            <div v-show="displayView" class="button-container"
               :class="{ contTypeInline: btn_type == 'INLINE', posStart: btn_type != 'INLINE' }">
               <div v-if="btn_type != 'INLINE'" class="text-container">
                 <p v-if="bot_text">{{ bot_text }}</p>
@@ -480,7 +505,8 @@ export default {
                 </div>
               </div>
             </div>
-            <p v-if="(btn_type == 'CONTACT' || btn_type == 'LOCATION') && buttons.length > 1" class="output-error">{{
+            <p v-show="displayView" v-if="(btn_type == 'CONTACT' || btn_type == 'LOCATION') && buttons.length > 1"
+              class="output-error">{{
             btn_type }} button type
               can only have a single button</p>
           </div>
@@ -588,5 +614,17 @@ export default {
   text-align: center;
   color: red;
   font-size: 14px;
+}
+
+.pos-icon {
+  position: relative;
+  top: 3px;
+  left: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pos-icon:hover {
+  fill: #242a2f;
 }
 </style>
