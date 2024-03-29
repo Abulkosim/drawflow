@@ -126,7 +126,7 @@ export default {
           }
           this.buttonRows.push(rowButtons);
           buttonsRemaining -= size;
-          if (rowButtons.length > 0) {
+          if (rowButtons.length > 0 && buttonsRemaining <= 0) {
             break;
           }
         }
@@ -458,7 +458,8 @@ export default {
 
           <div v-if="!addMode && buttons.length && stageSelected">
             <label class="label telegram-view">Telegram View</label>
-            <div class="button-container" :class="{ contTypeInline: btn_type == 'INLINE', posStart: btn_type != 'INLINE' }">
+            <div class="button-container"
+              :class="{ contTypeInline: btn_type == 'INLINE', posStart: btn_type != 'INLINE' }">
               <div v-if="btn_type != 'INLINE'" class="text-container">
                 <p v-if="bot_text">{{ bot_text }}</p>
                 <p v-else>Default text...</p>
@@ -479,6 +480,9 @@ export default {
                 </div>
               </div>
             </div>
+            <p v-if="(btn_type == 'CONTACT' || btn_type == 'LOCATION') && buttons.length > 1" class="output-error">{{
+            btn_type }} button type
+              can only have a single button</p>
           </div>
 
           <div class="dist" v-if="stageSelected" title="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)">
@@ -578,5 +582,11 @@ export default {
   text-align: center;
   font-size: 18px;
   margin-bottom: 20px
+}
+
+.output-error {
+  text-align: center;
+  color: red;
+  font-size: 14px;
 }
 </style>
