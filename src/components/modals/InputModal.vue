@@ -457,12 +457,12 @@ export default {
 
           <div class="table-container" v-if="!addMode && stageSelected"
             title="Connect to the buttons or user_state of the selected stage">
-            <label class="label lable-icon">
+            <label class="label label-icon" @click="toggleTable">
               <span>Stage Buttons</span>
-              <span @click="toggleTable" v-if="!displayTable">
+              <span v-if="!displayTable">
                 <DownIcon class="pos-icon" />
               </span>
-              <span @click="toggleTable" v-if="displayTable">
+              <span v-if="displayTable">
                 <UpIcon class="pos-icon" />
               </span>
             </label>
@@ -474,12 +474,12 @@ export default {
           </div>
 
           <div v-if="!addMode && buttons.length && stageSelected">
-            <label class="label telegram-view label-icon">
+            <label class="label label-icon" @click="toggleView">
               <span>Telegram View</span>
-              <span @click="toggleView" v-if="!displayView">
+              <span v-if="!displayView">
                 <DownIcon class="pos-icon" />
               </span>
-              <span @click="toggleView" v-if="displayView">
+              <span v-if="displayView">
                 <UpIcon class="pos-icon" />
               </span>
             </label>
@@ -587,11 +587,6 @@ export default {
   color: #7a7d80;
 }
 
-.table-container label {
-  text-align: center;
-  font-size: 18px;
-}
-
 .nextChosen {
   color: brown;
 }
@@ -602,12 +597,6 @@ export default {
 
 .dist {
   margin-top: 10px
-}
-
-.telegram-view {
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 20px
 }
 
 .output-error {
@@ -626,5 +615,18 @@ export default {
 
 .pos-icon:hover {
   fill: #242a2f;
+}
+
+.label-icon {
+  display: flex;
+  justify-content: space-between;
+  background: #F2F6FA;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.label-icon:hover {
+  background: #E8F0FE;
 }
 </style>
