@@ -32,7 +32,7 @@ export default {
       title: '',
       time: '',
       bot_text: '',
-      displayTable: false, 
+      displayTable: false,
       displayView: false
     };
   },
@@ -83,7 +83,7 @@ export default {
 
     toggleTable() {
       this.displayTable = !this.displayTable;
-    }, 
+    },
 
     toggleView() {
       this.displayView = !this.displayView;

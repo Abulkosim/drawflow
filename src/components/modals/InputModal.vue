@@ -14,6 +14,7 @@ import toggleEditorMixin from '../../mixins/toggleEditorMixin';
 import userStateMixin from '../../mixins/userStateMixin';
 import { fetchButtons } from '../../api/api.table';
 import { checkStage, getBotText } from '../../api/api.drawflow';
+import ToolTip from '../elements/ToolTip.vue';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
@@ -26,7 +27,8 @@ export default {
     TelegramMessage,
     QuestionIcon,
     DownIcon,
-    UpIcon
+    UpIcon,
+    ToolTip
   },
   computed: {
     stageSelected() {
@@ -80,6 +82,31 @@ export default {
       this.$emit('createURL')
     },
 
+    handleKeydown(e) {
+      switch (e.key) {
+        case 'ArrowUp':
+          this.increment();
+          break;
+        case 'ArrowDown':
+          this.decrement();
+          break;
+        default:
+          break;
+      }
+    },
+
+    increment() {
+      if (!isNaN(this.btn_sizes) && this.btn_sizes.trim() !== '' && this.btn_sizes.length == 1 && this.btn_sizes < 5) {
+        this.btn_sizes = (+this.btn_sizes + 1).toString();
+      }
+    },
+
+    decrement() {
+      if (!isNaN(this.btn_sizes) && this.btn_sizes.trim() !== '' && this.btn_sizes.length == 1 && this.btn_sizes > 1) {
+        this.btn_sizes = (+this.btn_sizes - 1).toString();
+      }
+    },
+
     async getBotText() {
       if (this.addMode) {
         return
@@ -116,6 +143,10 @@ export default {
     },
 
     generateButtonRows(buttonSizesString) {
+      const regex = /^[1-5]/;
+      if (!regex.test(buttonSizesString)) {
+        return
+      }
       if (!this.buttons.length || !buttonSizesString || buttonSizesString == 0) {
         return
       }
@@ -286,10 +317,8 @@ export default {
         <h3 class="modal-heading">
           {{ heading }}
           <span v-if="!addMode" class="corner">{{ this.id }}</span>
-          <span class="question-icon"
-            title="Stage - the steps of the bot, each step is cleared by the bot when moving to the next step and moves on to the next step. The number next to each stage represents its id.">
-            <QuestionIcon />
-          </span>
+          <ToolTip content="?" type="long"
+            ttContent="Stage - the steps of the bot, each step is cleared by the bot when moving to the next step and moves on to the next step. The number next to each stage represents its id." />
         </h3>
         <CloseButton @close="close" />
         <div class="loading" v-if="loading">
@@ -511,12 +540,13 @@ export default {
               can only have a single button</p>
           </div>
 
-          <div class="dist" v-if="stageSelected" title="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)">
+          <div class="dist" v-if="stageSelected">
             <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^(?!0+\d)[1-5](?::(?!0+\d)[1-5])*$/ }">
               <div>
-                <label for="btn-sizes" class="label">Button sizes</label>
-                <input type="text" name="btn-sizes" id="btn-sizes" class="input" v-model="btn_sizes"
-                  @input="validateSize" autocomplete='off' :class="{ error: error }">
+                <ToolTip type="short" content="?" ttContent="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)"
+                  label="Button sizes" />
+                <input type="text" @keydown="handleKeydown" name="btn-sizes" id="btn-sizes" class="input"
+                  v-model="btn_sizes" @input="validateSize" autocomplete='off' :class="{ error: error }">
                 <span v-if="errors[0]" class="output">Invalid format!</span>
               </div>
             </ValidationProvider>
