@@ -95,6 +95,15 @@ export default {
       }
     },
 
+    handleDoubleClick(event) {
+      if (event.target.closest('.drawflow-node').id === 'node-2') {
+        this.openLocaleModal();
+      }
+      if (event.target.closest('.drawflow-node') && event.target.closest('.drawflow-node').id !== 'node-1' && event.target.closest('.drawflow-node').id !== 'node-2') {
+        this.openInputModal('editing');
+      }
+    },
+
     showSuccessToast() {
       this.toastMessage = 'Operation suceeded!';
       this.isSuccessful = true;

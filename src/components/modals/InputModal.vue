@@ -84,7 +84,7 @@ export default {
       if (this.addMode) {
         return
       }
-      if (this.text_alias.id) {
+      if (this.text_alias) {
         const response = await getBotText(this.text_alias.id)
         for (let item in response.data) {
           if (response.data[item]) {

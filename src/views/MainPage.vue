@@ -60,6 +60,7 @@ export default {
 
     this.editor.import(this.data);
     id.addEventListener('contextmenu', this.handleRightClick)
+    id.addEventListener('dblclick', this.handleDoubleClick)
     this.editor.zoom_out()
 
     this.editor.on('nodeSelected', (node) => {
