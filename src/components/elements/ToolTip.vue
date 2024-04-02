@@ -4,9 +4,9 @@
       <label v-if="label" for="btn-sizes" class="label">{{ label }}</label>
       <button type="button" class="tooltip-button">{{ content }}</button>
     </div>
-    <div class="tooltip-content" :class="{ long: type == 'long', short: type == 'short' }">
+    <div class="tooltip-content" :class="{ long: type == 'long', short: type == 'short', contentBottom: posBottom }">
       {{ ttContent }}
-      <div class="tooltip-arrow"></div>
+      <div class="tooltip-arrow" :class="{ arrowBottom: posBottom }"></div>
     </div>
   </div>
 </template>
@@ -14,7 +14,7 @@
 <script>
 export default {
   name: 'ToolTip',
-  props: ['content', 'ttContent', 'label', 'type'],
+  props: ['content', 'ttContent', 'label', 'type', 'posBottom'],
   mounted() {
     const tooltipButton = this.$el.querySelector('.tooltip-button');
     const tooltipContent = this.$el.querySelector('.tooltip-content');
@@ -22,10 +22,15 @@ export default {
     tooltipButton.addEventListener('mouseover', () => {
       tooltipContent.style.display = 'block';
 
-      const buttonHeight = tooltipButton.offsetHeight;
-      const tooltipHeight = tooltipContent.offsetHeight;
-      const spaceBetween = 10;
-      tooltipContent.style.top = `-${tooltipHeight + spaceBetween}px`;
+      if (this.posBottom) {
+        const buttonHeight = tooltipButton.offsetHeight;
+        const spaceBetween = 10;
+        tooltipContent.style.top = `${buttonHeight + spaceBetween}px`;
+      } else {
+        const tooltipHeight = tooltipContent.offsetHeight;
+        const spaceBetween = 10;
+        tooltipContent.style.top = `-${tooltipHeight + spaceBetween}px`;
+      }
     });
 
     tooltipButton.addEventListener('mouseout', () => {
@@ -94,6 +99,21 @@ export default {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.contentBottom {
+  min-height: fit-content;
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 10px;
+}
+
+.arrowBottom {
+  top: auto;
+  bottom: 100%;
+  transform: translateX(-50%);
+  border-top: none;
+  border-bottom: 5px solid #111827;
 }
 
 .label-info {

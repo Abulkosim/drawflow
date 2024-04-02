@@ -317,7 +317,7 @@ export default {
         <h3 class="modal-heading">
           {{ heading }}
           <span v-if="!addMode" class="corner">{{ this.id }}</span>
-          <ToolTip content="?" type="long"
+          <ToolTip content="?" type="long" posBottom="true"
             ttContent="Stage - the steps of the bot, each step is cleared by the bot when moving to the next step and moves on to the next step. The number next to each stage represents its id." />
         </h3>
         <CloseButton @close="close" />
