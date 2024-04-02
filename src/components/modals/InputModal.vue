@@ -544,7 +544,7 @@ export default {
             <ValidationProvider v-slot="{ errors }" :rules="{ regex: /^(?!0+\d)[1-5](?::(?!0+\d)[1-5])*$/ }">
               <div>
                 <ToolTip type="short" content="?" ttContent="Button sorting (e.g. 1:2:3, 1:2, 3:2:1)"
-                  label="Button sizes" />
+                  label="Button sizes" forid="btn-sizes" />
                 <input type="text" @keydown="handleKeydown" name="btn-sizes" id="btn-sizes" class="input"
                   v-model="btn_sizes" @input="validateSize" autocomplete='off' :class="{ error: error }">
                 <span v-if="errors[0]" class="output">Invalid format!</span>

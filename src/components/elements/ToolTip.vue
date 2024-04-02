@@ -1,7 +1,7 @@
 <template>
   <div class="tooltip-container">
     <div class="label-info">
-      <label v-if="label" for="btn-sizes" class="label">{{ label }}</label>
+      <label v-if="label" :for="forid" class="label">{{ label }}</label>
       <button type="button" class="tooltip-button">{{ content }}</button>
     </div>
     <div class="tooltip-content" :class="{ long: type == 'long', short: type == 'short', contentBottom: posBottom }">
@@ -14,7 +14,7 @@
 <script>
 export default {
   name: 'ToolTip',
-  props: ['content', 'ttContent', 'label', 'type', 'posBottom'],
+  props: ['content', 'ttContent', 'label', 'type', 'posBottom', 'forid'],
   mounted() {
     const tooltipButton = this.$el.querySelector('.tooltip-button');
     const tooltipContent = this.$el.querySelector('.tooltip-content');

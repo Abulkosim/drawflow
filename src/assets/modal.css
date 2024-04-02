@@ -117,11 +117,15 @@
   display: grid;
   grid-template-columns: 1fr 0.4fr 0.6fr 0.8fr;
   grid-gap: 7px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .input-container {
   display: flex;
-  gap: 0.8rem;
+  gap: 8px;
   justify-content: space-between;
 }
 
@@ -131,7 +135,7 @@
 
 .state {
   display: flex;
-  gap: 0.8rem;
+  gap: 8px;
 }
 
 .state-type {
@@ -144,7 +148,7 @@
 
 .dist {
   display: flex;
-  gap: 0.8rem;
+  gap: 8px;
   margin-bottom: 12px;
 }
 
