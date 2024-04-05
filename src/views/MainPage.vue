@@ -25,6 +25,7 @@ import dragDropMixin from '../mixins/dragDropMixin';
 import mainPageMixin from '../mixins/mainPageMixin';
 import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 import '../assets/app.css';
+import BotSearch from '../components/elements/BotSearch.vue'
 
 export default {
   name: 'App',
@@ -47,7 +48,8 @@ export default {
     BotName,
     PlusIcon,
     TipOverlay,
-    QAIcon
+    QAIcon,
+    BotSearch
   },
 
   async mounted() {
@@ -299,6 +301,8 @@ export default {
       <TipOverlay v-else :showTipMenu="x.showTipMenu" :showTipDrag="x.showTipDrag" :showTipEdit="x.showTipEdit"
         @close="closeModal" />
     </div>
+
+    <BotSearch v-if="searchPopup" :searchPopup="searchPopup" @close="searchPopup = false" />
 
     <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
       @editNode="openInputModal" :node="selectedNode" />

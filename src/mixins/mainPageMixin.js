@@ -37,7 +37,8 @@ export default {
       bot_name: null,
       link: null,
       apiLink: '',
-      isOpened: false
+      isOpened: false,
+      searchPopup: false,
     };
   },
   mounted() {
@@ -49,6 +50,13 @@ export default {
     this.user_id = url.get('user_id');
 
     window.addEventListener('keydown', this.closeModalsOnEscape);
+
+    window.addEventListener('keydown', (event) => {
+      if (event.ctrlKey && event.key === 'f') {
+        event.preventDefault();
+        this.searchPopup = true;
+      }
+    });
 
     window.addEventListener('click', () => {
       this.showContextMenu = false;
@@ -83,7 +91,7 @@ export default {
           this.x.showInputModal = false;
         } else if (this.x.showModal) {
           this.x.showModal = false;
-        }
+        } 
       }
     },
 
