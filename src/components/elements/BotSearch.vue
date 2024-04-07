@@ -17,7 +17,7 @@
     <div class="search-results" v-if="filteredData.length > 0 && !loader">
       <ul>
         <li v-for="(bot, index) in filteredData" :key="index">
-          <a :href="bot.link" target="_blank" class="search-result-link">
+          <a :href="url(bot)" target="_blank" class="search-result-link">
             <span>{{ bot.name }}</span>
 
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#888" viewBox="0 0 48 48">
@@ -30,12 +30,12 @@
       </ul>
     </div>
     <div class="search-results no-results" v-if="filteredData.length === 0 && !loader">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#888" viewBox="0 0 256 256">
-            <path
-              d="M198.24,62.63l15.68-17.25a8,8,0,0,0-11.84-10.76L186.4,51.86A95.95,95.95,0,0,0,57.76,193.37L42.08,210.62a8,8,0,1,0,11.84,10.76L69.6,204.14A95.95,95.95,0,0,0,198.24,62.63ZM48,128A80,80,0,0,1,175.6,63.75l-107,117.73A79.63,79.63,0,0,1,48,128Zm80,80a79.55,79.55,0,0,1-47.6-15.75l107-117.73A79.95,79.95,0,0,1,128,208Z">
-            </path>
-          </svg>
-          <span>Not found!</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#888" viewBox="0 0 256 256">
+        <path
+          d="M198.24,62.63l15.68-17.25a8,8,0,0,0-11.84-10.76L186.4,51.86A95.95,95.95,0,0,0,57.76,193.37L42.08,210.62a8,8,0,1,0,11.84,10.76L69.6,204.14A95.95,95.95,0,0,0,198.24,62.63ZM48,128A80,80,0,0,1,175.6,63.75l-107,117.73A79.63,79.63,0,0,1,48,128Zm80,80a79.55,79.55,0,0,1-47.6-15.75l107-117.73A79.95,79.95,0,0,1,128,208Z">
+        </path>
+      </svg>
+      <span>Not found!</span>
     </div>
   </div>
 </template>
@@ -72,6 +72,19 @@ export default {
     if (this.isVisible && this.$refs.searchInput) {
       this.$refs.searchInput.focus();
     }
+
+    document.addEventListener('click', (e) => {
+      if (!this.$el.contains(e.target) && this.isVisible) {
+        this.closeSearch();
+      }
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.ctrlKey && event.key === 'f') {
+        event.preventDefault();
+        this.$refs.searchInput.focus();
+      }
+    });
   },
   methods: {
     closeSearch() {
@@ -98,6 +111,10 @@ export default {
     async fetchBots(user_id) {
       const response = await fetchBots(user_id);
       this.searchResults = response;
+    },
+
+    url(bot) {
+      return `https://platonbot.netlify.app/?bot_id=${bot.id}&user_id=${this.user_id}`;
     }
   },
 }
