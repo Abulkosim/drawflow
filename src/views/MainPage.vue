@@ -302,7 +302,7 @@ export default {
         @close="closeModal" />
     </div>
 
-    <BotSearch v-if="searchPopup" :searchPopup="searchPopup" @close="searchPopup = false" />
+    <BotSearch v-if="searchPopup" :searchPopup="searchPopup" @close="searchPopup = false" :user_id="user_id" />
 
     <ContextMenu :position="contextMenuPosition" :showMenu="showContextMenu" @deleteNode="openConfirmationModal"
       @editNode="openInputModal" :node="selectedNode" />
