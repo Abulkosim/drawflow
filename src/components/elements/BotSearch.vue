@@ -57,12 +57,7 @@ export default {
     }
   },
   async mounted() {
-    this.loader = true;
-    await this.fetchBots(this.user_id);
-    this.filteredData = this.searchResults;
-    setTimeout(() => {
-      this.loader = false;
-    }, 300);
+    this.initLoad()
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         this.closeSearch();
@@ -82,11 +77,21 @@ export default {
     window.addEventListener('keydown', (event) => {
       if (event.ctrlKey && event.key === 'f') {
         event.preventDefault();
+        this.initLoad()
         this.$refs.searchInput.focus();
       }
     });
   },
   methods: {
+    async initLoad() {
+      this.loader = true;
+      await this.fetchBots(this.user_id);
+      this.filteredData = this.searchResults;
+      setTimeout(() => {
+        this.loader = false;
+      }, 300);
+    },
+
     closeSearch() {
       this.isVisible = false;
       setTimeout(() => {
