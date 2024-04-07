@@ -255,7 +255,6 @@ export default {
   color: #226ce6;
   text-decoration: none;
   transition: all 0.3s ease;
-  border-radius: 8px;
 }
 
 .search-result-link:hover {
