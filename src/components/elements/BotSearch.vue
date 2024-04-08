@@ -276,6 +276,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   transition: background-color 0.3s ease;
+  font-size: 17px;
 }
 
 .no-results {
@@ -323,7 +324,7 @@ export default {
 }
 
 .username {
-  color: #2166d6aa;
-  font-size: 14px;
+  color: #2166d6bb;
+  font-size: 15px;
 }
 </style>

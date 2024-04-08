@@ -66,7 +66,7 @@ export default {
                     ]
                   }
                 },
-                "pos_x": 240,
+                "pos_x": 270,
                 "pos_y": 250
               },
             }

@@ -654,7 +654,7 @@ export default {
 .label-icon {
   display: flex;
   justify-content: space-between;
-  background: #c6e1ff;
+  background: #cde4ff;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
@@ -662,6 +662,6 @@ export default {
 }
 
 .label-icon:hover {
-  background: #b8daff;
+  background: #bdddff;
 }
 </style>
