@@ -7,7 +7,13 @@
         </path>
       </svg>
       <input type="text" placeholder="Search" ref="searchInput" @input="filterData" v-model="searchQuery" />
-      <button type="button" @click="closeSearch">esc</button>
+      <button type="button" @click="closeSearch">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#888" viewBox="0 0 256 256">
+          <path
+            d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z">
+          </path>
+        </svg>
+      </button>
     </div>
 
     <div class="loader-container" v-if="loader">
@@ -17,8 +23,12 @@
     <div class="search-results" v-if="filteredData.length > 0 && !loader">
       <ul>
         <li v-for="(bot, index) in filteredData" :key="index">
-          <a :href="url(bot)" target="_blank" class="search-result-link">
-            <span>{{ bot.name }}</span>
+          <a :href="url(bot)" class="search-result-link">
+            <p>
+              <span>{{ bot.name }}</span>
+              <span class="username">&nbsp;-&nbsp;@{{ bot.username }}</span>
+            </p>
+
 
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#888" viewBox="0 0 48 48">
               <path
@@ -199,13 +209,17 @@ export default {
   border: none;
   background-color: transparent;
   padding: 6px 8px;
-  margin: 5px;
   cursor: pointer;
-  background-color: #226ce6;
-  color: white;
-  border-radius: 5px;
-  font-family: monospace;
-  font-size: 17px;
+  outline: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.search-container button:hover {
+  background-color: #f4f4f4;
 }
 
 .search-container svg {
@@ -296,5 +310,10 @@ export default {
 .search-result-link:hover svg {
   fill: #333;
   display: inline-block;
+}
+
+.username {
+  color: #2166d6aa;
+  font-size: 14px;
 }
 </style>
