@@ -1,9 +1,14 @@
 <template>
   <div class="search" :class="{ slideOut: !isVisible }">
     <div class="search-container">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 256 256">
+      <svg v-show="!searchQuery" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 256 256">
         <path
           d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z">
+        </path>
+      </svg>
+      <svg v-show="searchQuery" @click="clearQuery" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 256 256">
+        <path
+          d="M216,40H68.53a16.08,16.08,0,0,0-13.72,7.77L9.14,123.88a8,8,0,0,0,0,8.24l45.67,76.11A16.08,16.08,0,0,0,68.53,216H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM61.67,204.12,68.53,200h0ZM216,200H68.53l-43.2-72,43.2-72H216ZM106.34,146.34,124.69,128l-18.35-18.34a8,8,0,0,1,11.32-11.32L136,116.69l18.34-18.35a8,8,0,0,1,11.32,11.32L147.31,128l18.35,18.34a8,8,0,0,1-11.32,11.32L136,139.31l-18.34,18.35a8,8,0,0,1-11.32-11.32Z">
         </path>
       </svg>
       <input type="text" placeholder="Search" ref="searchInput" @input="filterData" v-model="searchQuery" />
@@ -107,6 +112,11 @@ export default {
       setTimeout(() => {
         this.$emit('close');
       }, 500);
+    },
+
+    clearQuery() {
+      this.searchQuery = '';
+      this.filterData();
     },
 
     filterData() {

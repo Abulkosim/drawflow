@@ -458,7 +458,7 @@ export default {
             <div v-if="stageSelected" title="The value for managing user states">
               <label for="user" class="label">User State:&nbsp;
                 <span v-if="user_state" :class="{ nextChosen: stateType == 'next.', urlChosen: stateType == 'url.' }">{{
-            user_state }}</span>
+                  user_state }}</span>
                 <span v-else class="null-span">null</span>
               </label>
             </div>
@@ -536,7 +536,7 @@ export default {
             </div>
             <p v-show="displayView" v-if="(btn_type == 'CONTACT' || btn_type == 'LOCATION') && buttons.length > 1"
               class="output-error">{{
-            btn_type }} button type
+                btn_type }} button type
               can only have a single button</p>
           </div>
 
@@ -647,16 +647,21 @@ export default {
   fill: #242a2f;
 }
 
+.table-container {
+  margin-top: 15px;
+}
+
 .label-icon {
   display: flex;
   justify-content: space-between;
-  background: #F2F6FA;
+  background: #c6e1ff;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.5s ease;
 }
 
 .label-icon:hover {
-  background: #E8F0FE;
+  background: #b8daff;
 }
 </style>

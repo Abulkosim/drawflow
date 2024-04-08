@@ -41,14 +41,7 @@ export default {
       searchPopup: false,
     };
   },
-  mounted() {
-    const url = new URLSearchParams(window.location.search);
-    this.bot_id = url.get('bot_id');
-    if (!this.bot_id) {
-      this.$router.push('/error');
-    }
-    this.user_id = url.get('user_id');
-
+  async mounted() {
     window.addEventListener('keydown', this.closeModalsOnEscape);
 
     window.addEventListener('keydown', (event) => {
@@ -91,7 +84,7 @@ export default {
           this.x.showInputModal = false;
         } else if (this.x.showModal) {
           this.x.showModal = false;
-        } 
+        }
       }
     },
 

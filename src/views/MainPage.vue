@@ -26,6 +26,7 @@ import mainPageMixin from '../mixins/mainPageMixin';
 import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 import '../assets/app.css';
 import BotSearch from '../components/elements/BotSearch.vue'
+import { fetchBots } from '../api/api.botsearch'
 
 export default {
   name: 'App',
@@ -53,6 +54,16 @@ export default {
   },
 
   async mounted() {
+    const url = new URLSearchParams(window.location.search);
+    this.bot_id = url.get('bot_id');
+    this.user_id = url.get('user_id');
+
+    const response = await fetchBots(this.user_id);
+    const botInfo = await fetchBotInfo(this.bot_id);
+    if (!response || !botInfo || !this.bot_id || !this.user_id) {
+      this.$router.push('/error');
+    }
+
     const id = document.getElementById("drawflow");
     this.editor = new Drawflow(id, Vue, this);
     this.editor.start();
