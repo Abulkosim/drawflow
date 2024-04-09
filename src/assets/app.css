@@ -33,19 +33,19 @@
   width: 100%;
   height: calc(100vh);
   background: #f2f6fa;
-  background-size: 50px 50px;
+  background-size: 20px 20px;
   border-radius: 5px;
   background-image: repeating-linear-gradient(
       0deg,
       transparent,
-      transparent 49px,
-      #0c41601f 50px
+      transparent 19px,
+      #0c41601f 20px
     ),
     repeating-linear-gradient(
       90deg,
       transparent,
-      transparent 49px,
-      #0c41601f 50px
+      transparent 19px,
+      #0c41601f 20px
     );
   cursor: grab;
 }
