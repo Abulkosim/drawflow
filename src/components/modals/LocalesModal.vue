@@ -16,7 +16,7 @@
       <ValidationObserver v-show="!loader" ref="observer" rules="required" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
-            <div class="locales-heading">
+            <div class="locales-heading" v-show="!loader">
               <h4 class="locales-heading-text">Select bot languages</h4>
             </div>
 
