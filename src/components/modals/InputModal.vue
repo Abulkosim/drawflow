@@ -654,14 +654,22 @@ export default {
 .label-icon {
   display: flex;
   justify-content: space-between;
-  background: #cde4ff;
+  background: #e3f0ff;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.5s ease;
 }
 
+.label-icon span {
+  font-weight: 500;
+}
+
 .label-icon:hover {
-  background: #bdddff;
+  background: #cee6ff;
+}
+
+.label-icon:active {
+  background: #b9d9ff;
 }
 </style>

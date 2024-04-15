@@ -1,4 +1,5 @@
 .modal {
+  font-family: 'Open Sans', sans-serif;
   max-width: 420px;
   max-height: calc(100% - 80px);
   z-index: 101;
@@ -15,7 +16,7 @@
 }
 
 .label {
-  font-size: 16px;
+  font-size: 15px;
   position: relative;
   top: 2px;
   color: #2e363e;
@@ -28,7 +29,15 @@
 }
 
 .form {
-  padding: 24px 16px;
+  padding: 12px 16px 16px;
+}
+
+.locales-heading-text {
+  font-size: 18px;
+  color: #2e363e;
+  text-align: center;
+  font-weight: 500;
+  user-select: none; 
 }
 
 .checkbox {

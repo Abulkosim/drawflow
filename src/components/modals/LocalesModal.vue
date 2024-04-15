@@ -16,6 +16,9 @@
       <ValidationObserver v-show="!loader" ref="observer" rules="required" v-slot="{ invalid, validate }">
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
+            <div class="locales-heading">
+              <h4 class="locales-heading-text">Select bot languages</h4>
+            </div>
 
             <div v-for="locale in locales" class="check-container">
               <input type="checkbox" :name="locale.locale" :id="locale.id" class="checkbox" autocomplete="off"
@@ -85,6 +88,7 @@ export default {
       };
       await updateBotLocale(data);
       this.$emit('closed');
+      this.$emit('updated');
       this.close();
     }
   },

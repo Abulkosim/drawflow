@@ -310,16 +310,17 @@ form select {
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 5px;
+  gap: 3px;
   width: 100%;
   border-radius: 200px;
-  font-size: 16px;
+  font-size: 18px;
   border: none;
   cursor: pointer;
   background-color: #226ce6;
   color: white;
   height: 46px;
   user-select: none;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
 }
 
 .submit-button span {

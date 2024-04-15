@@ -376,7 +376,7 @@ export default {
 
     <transition name="fade">
       <LocalesModal v-if="x.showLocalesModal" @close="closeModal('showLocalesModal')" @closed="rerender"
-        :bot_id="bot_id" :user_id="user_id" />
+        @updated="showSuccessToast" :bot_id="bot_id" :user_id="user_id" />
     </transition>
   </div>
 </template>
