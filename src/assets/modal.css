@@ -178,17 +178,22 @@ select {
 
 form .input {
   display: block;
-  padding: 10px 14px;
+  padding: 8px 14px;
   border-radius: 7px;
   border: none;
   width: 100%;
   font-size: 1rem;
   background-color: #ebf3fb;
   outline: none;
+  border: 2px solid transparent; 
   letter-spacing: 1px;
   color: #2e363e;
-  outline: none;
-  box-shadow: 0 1px 1px 0 rgb(0 0 0 / 5%);
+  box-shadow: 0 0px 3px 0 rgb(0 0 0 / 10%);
+  transition: border 0.3s;
+}
+
+form .input:focus {
+  border: 2px solid #226ce6;
 }
 
 .select-wrapper {
@@ -245,6 +250,7 @@ form select {
   color: #226ce6;
   outline: none;
   user-select: none;
+  box-shadow: 0 0px 3px 0 rgb(0 0 0 / 10%);
 }
 
 .create-button span {
@@ -267,10 +273,6 @@ form select {
 
 .template-button span {
   font-size: 15px;
-}
-
-.form .input:focus {
-  outline: 2px solid #226ce6;
 }
 
 .datalist {
