@@ -110,7 +110,7 @@
 .form-content {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.3rem;
 }
 
 .first-row {
@@ -170,7 +170,7 @@ select {
 
 .label {
   display: block;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
   font-weight: 500;
   user-select: none;
   color: #2e363e;
@@ -178,22 +178,21 @@ select {
 
 form .input {
   display: block;
-  padding: 8px 14px;
-  border-radius: 7px;
-  border: none;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(228, 228, 231);
+  outline: none; 
   width: 100%;
   font-size: 1rem;
-  background-color: #ebf3fb;
-  outline: none;
-  border: 2px solid transparent; 
-  letter-spacing: 1px;
+  background-color: rgba(250, 250, 250);
   color: #2e363e;
-  box-shadow: 0 0px 3px 0 rgb(0 0 0 / 10%);
-  transition: border 0.3s;
+  letter-spacing: 0.5px;
+  transition: all 0.3s;
 }
 
 form .input:focus {
-  border: 2px solid #226ce6;
+  border: 1px solid #226ce6;
+  box-shadow: 0 0 0 2px rgba(34, 108, 230, 0.5);
 }
 
 .select-wrapper {
@@ -245,12 +244,15 @@ form select {
   width: 37px;
   height: 37px;
   border: none;
-  border-radius: 10px;
+  border-radius: 4px;
   background-color: #e4eeff;
   color: #226ce6;
   outline: none;
   user-select: none;
-  box-shadow: 0 0px 3px 0 rgb(0 0 0 / 10%);
+}
+
+.create-button:focus {
+  box-shadow: 0 0 0 2px rgba(34, 108, 230, 0.5);
 }
 
 .create-button span {
@@ -265,7 +267,7 @@ form select {
   width: 84px;
   height: 38px;
   border: none;
-  border-radius: 10px;
+  border-radius: 4px;
   background-color: #e4eeff;
   color: #226ce6;
   outline: none;
@@ -315,7 +317,7 @@ form select {
   text-align: center;
   gap: 3px;
   width: 100%;
-  border-radius: 200px;
+  border-radius: 4px;
   font-size: 18px;
   border: none;
   cursor: pointer;

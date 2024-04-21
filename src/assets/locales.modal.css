@@ -1,6 +1,6 @@
 .modal {
   font-family: 'Open Sans', sans-serif;
-  max-width: 420px;
+  max-width: 340px;
   max-height: calc(100% - 80px);
   z-index: 101;
 }
@@ -29,15 +29,7 @@
 }
 
 .form {
-  padding: 12px 16px 16px;
-}
-
-.locales-heading-text {
-  font-size: 18px;
-  color: #2e363e;
-  text-align: center;
-  font-weight: 500;
-  user-select: none; 
+  padding: 10px 16px;
 }
 
 .checkbox {
@@ -50,4 +42,13 @@
 .submit-button:disabled {
   cursor: not-allowed;
   background-color: #2f3d4ba1;
+}
+
+.submit-button {
+  font-size: 17px; 
+  height: 42px; 
+}
+
+.modal-save {
+  margin: 1rem 0 0.5rem;
 }

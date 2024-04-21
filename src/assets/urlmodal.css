@@ -99,14 +99,16 @@ input:checked + .slider:before {
 
 .tabs button {
   flex-basis: 50%;
-  padding: 12px 0;
-  font-size: 18px;
+  padding: 10px 0;
+  letter-spacing: 0.5px;
+  font-size: 17px;
   background: #f2f6fa;
   border: none;
   border-bottom: 2px solid #f2f6fa;
   user-select: none;
   color: #2e363e;
   cursor: pointer;
+  transition: all 0.3s;
 }
 
 .tabs .template {
@@ -136,11 +138,16 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
+  width: 37px;
+  height: 37px;
   border-radius: 8px;
   background-color: #e4eeff;
   cursor: pointer;
+}
+
+.check-button:focus, 
+.check-button:active {
+  box-shadow: 0 0 0 2px rgba(34, 108, 230, 0.5);
 }
 
 .check-button .check-icon {
@@ -148,7 +155,7 @@ input:checked + .slider:before {
 }
 
 .url-container .isToggled {
-  width: calc(100% - 54px);
+  width: calc(100% - 45px);
 }
 
 .url-part .success {

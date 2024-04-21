@@ -17,7 +17,6 @@
         <form class="form" @submit.prevent="validate().then(submit)">
           <div class="form-content">
             <div class="locales-heading" v-show="!loader">
-              <h4 class="locales-heading-text">Select bot languages</h4>
             </div>
 
             <div v-for="locale in locales" class="check-container">
