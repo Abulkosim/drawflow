@@ -61,8 +61,7 @@ export default {
     const response = await fetchBots(this.user_id);
     const botInfo = await fetchBotInfo(this.bot_id);
 
-
-    if (!response.length || !botInfo) {
+    if (!response || !response.length || !botInfo || !botInfo.id) {
       this.$router.push('/error');
     }
 
