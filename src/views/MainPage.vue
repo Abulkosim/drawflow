@@ -61,10 +61,9 @@ export default {
     const response = await fetchBots(this.user_id);
     const botInfo = await fetchBotInfo(this.bot_id);
 
-    if (response) {
-      if (!response.length || !botInfo || !this.bot_id || !this.user_id) {
-        this.$router.push('/error');
-      }
+
+    if (!response.length || !botInfo) {
+      this.$router.push('/error');
     }
 
     const id = document.getElementById("drawflow");
