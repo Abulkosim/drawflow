@@ -23,10 +23,10 @@ import QAIcon from '../components/icons/QAIcon.vue'
 import transformationMixin from '../mixins/transformationMixin'
 import dragDropMixin from '../mixins/dragDropMixin';
 import mainPageMixin from '../mixins/mainPageMixin';
-import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 import '../assets/app.css';
 import BotSearch from '../components/elements/BotSearch.vue'
 import { fetchBots } from '../api/api.botsearch'
+import { updatePos, fetchStages, fetchBotInfo, deleteStage, updateStage, updateCallback, fetchStage, fetchConnections, fetchBotLocales, createStage, createBack } from '../api/api.drawflow'
 
 export default {
   name: 'App',

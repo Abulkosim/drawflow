@@ -13,8 +13,8 @@ import inputFormStateMixin from '../../mixins/inputFormStateMixin';
 import toggleEditorMixin from '../../mixins/toggleEditorMixin';
 import userStateMixin from '../../mixins/userStateMixin';
 import { fetchButtons } from '../../api/api.table';
-import { checkStage, getBotText } from '../../api/api.drawflow';
 import ToolTip from '../elements/ToolTip.vue';
+import { checkStage, getBotText } from '../../api/api.d rawflow';
 
 export default {
   props: ['showInputModal', 'addMode', 'inputValues', 'showStageButtonModal', 'getTexts', 'getCallbacks', 'updateTable', 'bot_id', 'user_id'],
