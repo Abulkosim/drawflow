@@ -601,7 +601,7 @@ export default {
 
 .clear-button {
   position: absolute;
-  top: 7px;
+  top: 5px;
   right: 18px;
   width: 1.5rem;
   height: 1.5rem;

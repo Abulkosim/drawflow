@@ -1,10 +1,9 @@
 table {
-  margin: 10px 0 40px;
+  margin: 10px 0 60px;
   border-collapse: collapse;
   width: 100%;
   text-align: center;
   position: relative;
-  border-bottom: 1px solid #226ce655;
 }
 
 tbody.empty-body {
@@ -12,7 +11,7 @@ tbody.empty-body {
 }
 
 th {
-  background-color: #f2f6fa;
+  background-color: rgba(250, 250, 250);
   color: #434b53;
   font-weight: 500;
   padding: 10px;
@@ -26,23 +25,33 @@ td {
 }
 
 button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  outline: none;
-  font-size: 24px;
-  background-color: #e4eeff;
-  color: #226ce6;
-  box-shadow: 0 0 0 2px rgba(34, 108, 230, 0.3);
-  border: none;
   position: absolute;
-  bottom: -18px;
   left: 50%;
   transform: translateX(-50%);
+  display: block;
+  cursor: pointer;
+  outline: none;
+  color: #226ce6;
+  background-color: #e4eeff99;
+  padding: 7px 14px;
+  font-weight: 500;
+  font-size: 17px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 2px rgba(34, 108, 230, 0.3);
+  margin-top: 8px;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #e4eeffdd;
+  box-shadow: 0 0 0 2px rgba(34, 108, 230, 0.5);
+}
+
+button:focus,
+button:active {
+  background-color: #e4eeff;
+  box-shadow: 0 0 0 2px rgba(34, 108, 230, 0.7);
 }
 
 .svg svg {

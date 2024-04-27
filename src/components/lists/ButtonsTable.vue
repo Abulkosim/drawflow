@@ -42,7 +42,7 @@
         <td :colspan="columns.length">No data available</td>
       </tr>
     </tbody>
-    <button @click.stop.prevent="addButton" type="button" title="Add Button">+</button>
+    <button @click.stop.prevent="addButton" type="button" title="Add Button">Add button</button>
   </table>
 </template>
 
